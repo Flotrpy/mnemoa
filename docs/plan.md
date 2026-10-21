@@ -36,10 +36,11 @@ and `cargo test --workspace`.
 - [x] 27. feat(api): axum server with scan, budget, drift, promote, forget, rules, health and stats
 - [x] 28. feat: Dockerfile, docker-compose with optional Ollama, .env.example and mnemoa.example.toml
 - [x] 29. feat(sdk): python sdk with sync and async clients, tests and examples/basic_usage.py
-- [ ] 30. feat(bench): mnemoa-bench with 12 suites, --filter and --json
-- [ ] 31. test: fixture corpus, insta snapshots, proptest parser fuzzing and coverage target
-- [ ] 32. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
-- [ ] 33. docs: architecture, api and rules docs; CONTRIBUTING; action.yml
-- [ ] 34. docs: README in mnemo format with real numbers and TBDs
+- [x] 30. fix(core): forget moves a procedure only when its pointer costs fewer tokens
+- [ ] 31. feat(bench): mnemoa-bench with 12 suites, --filter and --json
+- [ ] 32. test: fixture corpus, insta snapshots, proptest parser fuzzing and coverage target
+- [ ] 33. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
+- [ ] 34. docs: architecture, api and rules docs; CONTRIBUTING; action.yml
+- [ ] 35. docs: README in mnemo format with real numbers and TBDs
 
 If an item splits, renumber this list and keep going.
