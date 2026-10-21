@@ -1,0 +1,9 @@
+# mnemoa scans its own repo memory in CI (see .github/workflows/ci.yml).
+targets = ["claude-code", "codex", "cursor", "copilot", "kiro", "cline", "gemini"]
+
+[scan]
+# Fixture repos contain deliberate problems.
+exclude = ["fixtures/**", "crates/*/tests/fixtures/**"]
+# CONTEXT.md is read on demand, so check it too.
+include = ["CONTEXT.md"]
+strict = true

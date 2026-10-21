@@ -2,6 +2,42 @@
 //!
 //! This crate never touches the network.
 
+pub mod budget;
+pub mod catalog;
+pub mod config;
+pub mod diag;
+pub mod discover;
+pub mod doc;
+pub mod drafter;
+pub mod drift;
+pub mod enforcers;
+pub mod forget;
+pub mod frontmatter;
+pub mod history;
+pub mod init;
+pub mod ledger;
+#[cfg(feature = "llm")]
+pub mod llm;
+pub mod plans;
+pub mod promote;
+pub mod rationale;
+pub mod repo;
+pub mod report;
+pub mod retire;
+pub mod rules;
+pub mod scan;
+pub mod symbols;
+pub mod tokens;
+pub mod workspace;
+
+pub use config::Config;
+pub use diag::{Finding, Severity, Summary};
+pub use discover::{DiscoverOptions, Discovery, Loading, Surface, SurfaceKind, Target, discover};
+pub use doc::Doc;
+pub use scan::{Error, ScanOptions, ScanReport, scan};
+pub use tokens::Tokenizer;
+pub use workspace::Workspace;
+
 /// Crate version, reported by the CLI and the API.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 

@@ -1,0 +1,4 @@
+- [x] 1. Create `src/parser.rs`
+  - _Requirements: 1.1_
+- [ ] 2. Add fuzzing
+- [ ] tidy up

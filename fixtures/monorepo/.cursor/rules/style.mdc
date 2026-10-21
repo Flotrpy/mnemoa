@@ -1,0 +1,6 @@
+---
+description: Code style for TypeScript files
+globs: packages/**/*.ts
+alwaysApply: false
+---
+- Prefer named exports.

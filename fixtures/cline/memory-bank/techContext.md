@@ -1,0 +1,3 @@
+# techContext
+
+Notes.

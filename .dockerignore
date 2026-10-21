@@ -1,0 +1,7 @@
+target/
+.git/
+**/__pycache__/
+**/.venv/
+**/*.egg-info/
+notebooks/results/
+.env

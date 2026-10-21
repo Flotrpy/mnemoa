@@ -1,0 +1,5 @@
+---
+source: crates/mnemoa-core/tests/fixtures.rs
+expression: "scan_pretty(\"monorepo\", &ALL)"
+---
+0 errors, 0 warnings, 0 infos in 8 files (claude-code, codex, cursor, copilot, kiro, cline, gemini)

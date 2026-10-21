@@ -1,0 +1,50 @@
+---
+source: crates/mnemoa-core/tests/fixtures.rs
+expression: "scan_pretty(\"smelly\", &Target::DEFAULT)"
+---
+.cursor/rules/style.md
+     1:1   info  MNA013 unloaded-file  cursor never loads .cursor/rules/style.md: Cursor reads `.mdc` files in `.cursor/rules/`; plain `.md` is ignored.
+
+AGENTS.md
+     4:1   warn  MNA002 lint-leakage  Restates what EditorConfig already enforces (indentation width or tabs versus spaces; configured in .editorconfig).
+             help: Delete the line, or run `mnemoa promote` to record the check in the ledger.
+     5:1   info  MNA006 blind-reference  Reference to `docs/api.md` says nothing about when or why to read it.
+             help: Say when it matters, for example: "Read `docs/api.md` before changing ...".
+     6:1   info  MNA011 missing-rationale  Rule has no rationale (why it exists, when it can go).
+             help: Add `<!-- why: ... | retire-when: ... -->` on the line above, or an entry in .mnemoa/rationale.toml.
+     6:8   error MNA007 broken-reference  Link target `docs/setup.md` does not exist.
+             help: Fix the path or remove the link.
+     7:1   info  MNA011 missing-rationale  Rule has no rationale (why it exists, when it can go).
+             help: Add `<!-- why: ... | retire-when: ... -->` on the line above, or an entry in .mnemoa/rationale.toml.
+     7:7   warn  MNA008 stale-command  `make check`: no target `check` in Makefile (has: lint, test).
+             help: Update the command to one the repo defines, or remove it.
+     8:1   info  MNA011 missing-rationale  Rule has no rationale (why it exists, when it can go).
+             help: Add `<!-- why: ... | retire-when: ... -->` on the line above, or an entry in .mnemoa/rationale.toml.
+     9:1   info  MNA004 conflicting-instructions  Uses pnpm as the JavaScript package manager, but AGENTS.md:8 uses npm.
+             help: Pick one and update the other instruction.
+     9:1   info  MNA011 missing-rationale  Rule has no rationale (why it exists, when it can go).
+             help: Add `<!-- why: ... | retire-when: ... -->` on the line above, or an entry in .mnemoa/rationale.toml.
+    13:1   info  MNA009 discoverable-content  Stack list repeats what the manifests declare (3 of 3 items).
+             help: Delete it; keep only versions or choices the manifests do not show.
+    17:1   info  MNA009 discoverable-content  Directory tree repeats the repo layout (4 of 4 entries exist); the agent can list the tree itself.
+             help: Delete it, or keep one line per directory that says what is non-obvious about it.
+    25:1   info  MNA003 skill-leakage  A 4-step procedure ("Adding a new endpoint") is loaded on every task, but only some tasks need it.
+             help: Move it to `.cursor/rules/<topic>.mdc` with `globs`, or `docs/agents/<topic>.md` with a one-line pointer.
+    27:21  error MNA007 broken-reference  Path `src/routes.ts` does not exist, though `src/` does.
+             help: The file may have moved. Update the path or remove the line.
+    30:1   warn  MNA001 context-bloat  AGENTS.md has 30 lines; always-loaded files should stay under 30.
+             help: Run `mnemoa forget` to see what can be deleted, promoted or moved on demand.
+
+CLAUDE.md
+     1:1   warn  MNA002 lint-leakage  Restates what EditorConfig already enforces (indentation width or tabs versus spaces; configured in .editorconfig).
+             help: Delete the line, or run `mnemoa promote` to record the check in the ledger.
+     1:1   warn  MNA010 cross-file-divergence  Claude Code reads CLAUDE.md and skips AGENTS.md when both exist; 12 rule(s) only in AGENTS.md never reach Claude Code, and 1 rule(s) only in CLAUDE.md never reach other agents.
+             help: Make CLAUDE.md start with `@AGENTS.md` and keep only Claude-specific additions below it.
+     1:1   info  MNA011 missing-rationale  Rule has no rationale (why it exists, when it can go).
+             help: Add `<!-- why: ... | retire-when: ... -->` on the line above, or an entry in .mnemoa/rationale.toml.
+     2:1   info  MNA011 missing-rationale  Rule has no rationale (why it exists, when it can go).
+             help: Add `<!-- why: ... | retire-when: ... -->` on the line above, or an entry in .mnemoa/rationale.toml.
+     2:1   warn  MNA012 promoted-but-present  Promoted to check `promoted-example` (ast-grep) but the prose is still loaded.
+             help: Delete the line; the check enforces it. `mnemoa forget --apply` does this.
+
+2 errors, 6 warnings, 12 infos in 3 files (claude-code, codex, cursor)
