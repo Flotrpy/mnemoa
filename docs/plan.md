@@ -15,7 +15,7 @@ and `cargo test --workspace`.
 - [x] 6. feat(core): markdown document model with source offsets, rules and front matter
 - [x] 7. feat(core): token estimation and always-loaded budget per target
 - [x] 8. feat(core): diagnostics, rule registry and .mnemoa.toml config
-- [ ] 9. feat(core): MNA006 blind-reference and MNA007 broken-reference
+- [x] 9. feat(core): MNA006 blind-reference and MNA007 broken-reference
 - [ ] 10. feat(core): MNA008 stale-command across Makefile, justfile, package.json, cargo and pyproject
 - [ ] 11. feat(core): MNA001 context-bloat and MNA009 discoverable-content
 - [ ] 12. feat(core): MNA002 lint-leakage with enforcer detection catalog

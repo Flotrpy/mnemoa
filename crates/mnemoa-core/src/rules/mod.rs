@@ -2,6 +2,8 @@
 
 use serde::Serialize;
 
+pub mod references;
+
 use crate::config::Config;
 use crate::diag::{self, Finding, Severity};
 use crate::discover::Target;
@@ -257,7 +259,10 @@ pub fn finding_file(info: &RuleInfo, path: &str, message: impl Into<String>) -> 
 
 /// Every implemented rule.
 pub fn registry() -> Vec<Box<dyn Check>> {
-    Vec::new()
+    vec![
+        Box::new(references::BlindReference),
+        Box::new(references::BrokenReference),
+    ]
 }
 
 /// Run every enabled rule and apply severity overrides. Findings are sorted.
