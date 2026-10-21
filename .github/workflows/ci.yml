@@ -45,3 +45,20 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: scan
         run: cargo run -q -p mnemoa-cli -- scan . --format github
+
+  python-sdk:
+    name: python sdk
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: build binaries for integration tests
+        run: cargo build -p mnemoa-cli -p mnemoa-api
+      - name: test
+        run: |
+          pip install -e 'sdk/python[test]'
+          cd sdk/python && python -m pytest -q
