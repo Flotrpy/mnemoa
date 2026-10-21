@@ -26,9 +26,13 @@ jobs:
       - name: fmt
         run: cargo fmt --all --check
       - name: clippy
-        run: cargo clippy --workspace --all-targets -- -D warnings
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+      - name: install ast-grep (validates drafted and promoted rules in tests)
+        run: python3 -m pip install --user ast-grep-cli || pip3 install --user --break-system-packages ast-grep-cli
       - name: test
         run: cargo test --workspace
+      - name: test (llm feature)
+        run: cargo test -p mnemoa-core --features llm
 
   dogfood:
     name: mnemoa scan (this repo)

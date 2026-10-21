@@ -8,11 +8,14 @@ pub mod config;
 pub mod diag;
 pub mod discover;
 pub mod doc;
+pub mod drafter;
 pub mod drift;
 pub mod enforcers;
 pub mod frontmatter;
 pub mod history;
 pub mod ledger;
+#[cfg(feature = "llm")]
+pub mod llm;
 pub mod plans;
 pub mod promote;
 pub mod rationale;

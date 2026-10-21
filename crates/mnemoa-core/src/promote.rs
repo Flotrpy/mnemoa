@@ -16,6 +16,7 @@ use serde::Serialize;
 use crate::catalog::{Catalog, Topic};
 use crate::config::Config;
 use crate::doc::{Doc, Polarity, Rule, RuleKind};
+use crate::drafter::{DraftRequest, Drafter, Validation};
 use crate::enforcers::{self, Enforcer};
 use crate::ledger::{self, Entry, LEDGER_FILE, Ledger, State};
 use crate::rationale::{self, RetireWhen};
@@ -82,6 +83,17 @@ pub struct Unmatched {
     pub source: String,
     pub line: usize,
     pub rule: String,
+    /// What the LLM drafter produced, when it ran.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub draft: Option<DraftOutcome>,
+}
+
+/// A draft that was not applied, and why.
+#[derive(Debug, Clone, Serialize)]
+pub struct DraftOutcome {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule: Option<String>,
+    pub validation: Validation,
 }
 
 /// The full plan.
@@ -853,8 +865,19 @@ fn removal_range(doc: &Doc, rule: &Rule) -> Option<std::ops::Range<usize>> {
     Some(start..end)
 }
 
-/// Build a promotion plan for the workspace.
+/// Build a promotion plan for the workspace with the deterministic catalog only.
 pub fn plan(ws: &Workspace, config: &Config) -> PromotionPlan {
+    plan_with(ws, config, None, None)
+}
+
+/// Build a promotion plan. With a drafter, rules the catalog cannot match are sent to it, and
+/// drafts that pass validation with `ast_grep` become promotions.
+pub fn plan_with(
+    ws: &Workspace,
+    config: &Config,
+    drafter: Option<&dyn Drafter>,
+    ast_grep: Option<&std::path::Path>,
+) -> PromotionPlan {
     let ledger = ws
         .read_file(LEDGER_FILE)
         .and_then(|t| Ledger::parse(&t).ok())
@@ -942,13 +965,47 @@ pub fn plan(ws: &Workspace, config: &Config) -> PromotionPlan {
                 push(id, None, enforcer, Status::Emit, arts);
                 continue;
             }
-            if looks_enforceable(rule, doc) {
-                unmatched.push(Unmatched {
-                    source: doc.path.clone(),
-                    line,
-                    rule: rule.text.clone(),
-                });
+            if !looks_enforceable(rule, doc) {
+                continue;
             }
+            let mut outcome = None;
+            if let Some(d) = drafter
+                && let Some(lang) = dominant_language(ws, &scope)
+            {
+                let req = DraftRequest {
+                    rule: rule.text.clone(),
+                    language: lang.to_string(),
+                    scope: scope.clone(),
+                };
+                match d.draft(&req) {
+                    Ok(draft) => match crate::drafter::validate(&draft, lang, ast_grep) {
+                        Validation::Passed => {
+                            let id = p.id(&format!("draft-{}", rule.text));
+                            let arts = p.ast_grep(&id, lang, &rule.text, &draft.rule, &scope);
+                            push(id, None, "ast-grep".into(), Status::Drafted, arts);
+                            continue;
+                        }
+                        v => {
+                            outcome = Some(DraftOutcome {
+                                rule: Some(draft.rule),
+                                validation: v,
+                            })
+                        }
+                    },
+                    Err(e) => {
+                        outcome = Some(DraftOutcome {
+                            rule: None,
+                            validation: Validation::Failed(e.to_string()),
+                        })
+                    }
+                }
+            }
+            unmatched.push(Unmatched {
+                source: doc.path.clone(),
+                line,
+                rule: rule.text.clone(),
+                draft: outcome,
+            });
         }
     }
     finish(ws, p.vfs.overlay, p.ledger, promotions, unmatched)
@@ -1270,6 +1327,31 @@ mod tests {
         // Running again finds nothing new.
         let w = Workspace::load(dir.path(), &Default::default()).unwrap();
         assert!(plan(&w, &Config::default()).promotions.is_empty());
+    }
+
+    #[test]
+    fn drafter_results_need_validation() {
+        let w = ws(&[
+            ("app/main.py", "x = 1\n"),
+            ("AGENTS.md", "- Never edit `settings.SECRET` directly.\n"),
+        ]);
+        let d = crate::drafter::StaticDrafter {
+            reply: r#"{"rule": "pattern: settings.SECRET = $V", "positive": ["settings.SECRET = 1"], "negative": ["x = settings.SECRET"]}"#.into(),
+        };
+        // Without ast-grep the draft stays unmatched and unapplied.
+        let p = plan_with(&w, &Config::default(), Some(&d), None);
+        assert!(p.promotions.is_empty());
+        assert!(matches!(
+            p.unmatched[0].draft.as_ref().unwrap().validation,
+            Validation::Unvalidated(_)
+        ));
+        assert!(!p.files.contains_key("AGENTS.md"));
+        if let Some(ag) = crate::drafter::find_ast_grep() {
+            let p = plan_with(&w, &Config::default(), Some(&d), Some(&ag));
+            assert_eq!(p.promotions.len(), 1, "{:?}", p.unmatched);
+            assert_eq!(p.promotions[0].status, Status::Drafted);
+            assert_eq!(p.files["AGENTS.md"], "");
+        }
     }
 
     #[test]

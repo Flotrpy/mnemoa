@@ -5,10 +5,11 @@ fmt:
 
 lint:
 	cargo fmt --all --check
-	cargo clippy --workspace --all-targets -- -D warnings
+	cargo clippy --workspace --all-targets --all-features -- -D warnings
 
 test:
 	cargo test --workspace
+	cargo test -p mnemoa-core --features llm
 
 check: lint test
 
