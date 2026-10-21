@@ -11,6 +11,7 @@ pub mod doc;
 pub mod enforcers;
 pub mod frontmatter;
 pub mod history;
+pub mod rationale;
 pub mod repo;
 pub mod rules;
 pub mod tokens;
