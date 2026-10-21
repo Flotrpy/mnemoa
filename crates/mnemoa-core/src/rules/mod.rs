@@ -7,6 +7,7 @@ pub mod conflicts;
 pub mod history_rules;
 pub mod lint;
 pub mod loading;
+pub mod promoted;
 pub mod references;
 pub mod size;
 pub mod skills;
@@ -296,6 +297,7 @@ pub fn registry() -> Vec<Box<dyn Check>> {
         Box::new(size::DiscoverableContent),
         Box::new(loading::CrossFileDivergence),
         Box::new(loading::MissingRationale),
+        Box::new(promoted::PromotedButPresent),
         Box::new(loading::UnloadedFile),
     ]
 }

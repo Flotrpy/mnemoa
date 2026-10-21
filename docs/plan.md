@@ -28,7 +28,7 @@ and `cargo test --workspace`.
 - [x] 19. feat(core): reference drift and diff-aware --base mode
 - [x] 20. feat(core): plan drift for Spec Kit, Kiro tasks and Cline memory bank
 - [x] 21. feat(cli): mnemoa drift and mnemoa budget
-- [ ] 22. feat(core): promotion catalog, artifact emitters and ledger; MNA012
+- [x] 22. feat(core): promotion catalog, artifact emitters and ledger; MNA012
 - [ ] 23. feat(core): optional LLM drafter for ast-grep rules with sample validation
 - [ ] 24. feat(cli): mnemoa promote (dry-run diff, --apply) and mnemoa retire
 - [ ] 25. feat(core,cli): mnemoa forget prune plan and mnemoa init scaffolding
