@@ -11,3 +11,12 @@ description = "Keep repo memory for coding agents small, true and enforced (libr
 workspace = true
 
 [dependencies]
+globset = "0.4.19"
+ignore = "0.4.30"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+serde_yaml_ng = "0.10.0"
+thiserror = "2.0.21"
+
+[dev-dependencies]
+tempfile = "3.27.0"

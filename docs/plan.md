@@ -11,7 +11,7 @@ and `cargo test --workspace`.
 - [x] 2. docs: add minimal CONTEXT.md, AGENTS.md and CLAUDE.md (@AGENTS.md)
 - [x] 3. docs: add verified research notes
 - [x] 4. ci: add GitHub Actions for fmt, clippy and tests on linux and macos
-- [ ] 5. feat(core): discover agent context surfaces with per-target loading model
+- [x] 5. feat(core): discover agent context surfaces with per-target loading model
 - [ ] 6. feat(core): markdown document model with source offsets, rules and front matter
 - [ ] 7. feat(core): token estimation and always-loaded budget per target
 - [ ] 8. feat(core): diagnostics, rule registry and .mnemoa.toml config
