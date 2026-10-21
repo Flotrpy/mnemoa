@@ -24,7 +24,7 @@ and `cargo test --workspace`.
 - [x] 15. feat(core): MNA010 cross-file-divergence, MNA013 unloaded-file and rationale parser (MNA011)
 - [x] 16. feat(cli): mnemoa scan with pretty, json, sarif and github formats plus baseline
 - [x] 17. fix(core): treat existing directories in code spans as paths, not stale commands
-- [ ] 18. ci: dogfood mnemoa scan on this repo
+- [x] 18. ci: dogfood mnemoa scan on this repo
 - [ ] 19. feat(core): reference drift and diff-aware --base mode
 - [ ] 20. feat(core): plan drift for Spec Kit, Kiro tasks and Cline memory bank
 - [ ] 21. feat(cli): mnemoa drift and mnemoa budget
