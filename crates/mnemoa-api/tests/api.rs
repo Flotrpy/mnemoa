@@ -173,6 +173,54 @@ async fn apply_with_allow_write_writes() {
     assert!(v["tokens"].is_array());
 }
 
+/// A repo whose AGENTS.md is a symlink to a file outside MNEMOA_ROOT must not be written through.
+#[cfg(unix)]
+#[tokio::test]
+async fn apply_refuses_to_write_through_symlinks_that_leave_the_root() {
+    let root = tempfile::tempdir().unwrap();
+    let outside = tempfile::tempdir().unwrap();
+    let victim = outside.path().join("AGENTS.md");
+    let original = "- Use 2 spaces for indentation.\n";
+    std::fs::write(&victim, original).unwrap();
+    let repo = root.path().join("repo");
+    std::fs::create_dir_all(&repo).unwrap();
+    std::os::unix::fs::symlink(&victim, repo.join("AGENTS.md")).unwrap();
+    let mut config = Config::default();
+    config.api.root = root.path().to_path_buf();
+    config.api.allow_write = true;
+    let app = router(Arc::new(AppState::new(config).unwrap()));
+
+    let (s, plan) = call(&app, "POST", "/promote", Some(json!({"path": "repo"}))).await;
+    assert_eq!(s, StatusCode::OK, "{plan}");
+    let planned: Vec<&str> = plan["files_changed"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|v| v.as_str().unwrap())
+        .collect();
+    assert!(planned.contains(&"AGENTS.md"), "{planned:?}");
+
+    for endpoint in ["/promote", "/forget"] {
+        let (s, v) = call(
+            &app,
+            "POST",
+            endpoint,
+            Some(json!({"path": "repo", "apply": true})),
+        )
+        .await;
+        if endpoint == "/promote" {
+            assert_eq!(s, StatusCode::FORBIDDEN, "{v}");
+            assert!(
+                v["error"]
+                    .as_str()
+                    .unwrap()
+                    .contains("outside the repository")
+            );
+        }
+        assert_eq!(std::fs::read_to_string(&victim).unwrap(), original);
+    }
+}
+
 #[tokio::test]
 async fn rules_endpoints() {
     let f = fixture(false);

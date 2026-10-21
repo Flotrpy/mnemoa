@@ -1118,11 +1118,7 @@ fn finish(
 pub fn apply(ws: &Workspace, plan: &PromotionPlan) -> std::io::Result<Vec<String>> {
     let mut written = Vec::new();
     for (path, content) in &plan.files {
-        let full = ws.root.join(path);
-        if let Some(parent) = full.parent() {
-            std::fs::create_dir_all(parent)?;
-        }
-        std::fs::write(&full, content)?;
+        std::fs::write(ws.writable_path(path)?, content)?;
         written.push(path.clone());
     }
     Ok(written)

@@ -1,7 +1,7 @@
 //! A loaded repository: discovery, parsed documents, and the per-target context set.
 
 use std::collections::{BTreeMap, BTreeSet};
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 
 use serde::Serialize;
 
@@ -107,6 +107,42 @@ impl Workspace {
             Some(m) => m.get(path).cloned(),
             None => std::fs::read_to_string(self.root.join(path)).ok(),
         }
+    }
+
+    /// Resolve the relative path `rel` for a write and create its parent directories.
+    ///
+    /// Refuses absolute paths, `..`, and any symlink (on the file or a parent directory) that
+    /// leads outside the repository, so applying a plan never writes outside the root.
+    pub fn writable_path(&self, rel: &str) -> std::io::Result<PathBuf> {
+        let outside = || {
+            std::io::Error::new(
+                std::io::ErrorKind::PermissionDenied,
+                format!("refusing to write `{rel}`: it resolves outside the repository"),
+            )
+        };
+        let p = Path::new(rel);
+        if rel.is_empty()
+            || p.components()
+                .any(|c| !matches!(c, Component::Normal(_) | Component::CurDir))
+        {
+            return Err(outside());
+        }
+        let root = self.root.canonicalize()?;
+        let full = root.join(p);
+        // The deepest part of the path that already exists decides where the write lands.
+        let existing = full
+            .ancestors()
+            .find(|a| a.symlink_metadata().is_ok())
+            .unwrap_or(&root);
+        // A dangling symlink cannot be canonicalized; writing through it could land anywhere.
+        let resolved = existing.canonicalize().map_err(|_| outside())?;
+        if !resolved.starts_with(&root) {
+            return Err(outside());
+        }
+        if let Some(parent) = full.parent() {
+            std::fs::create_dir_all(parent)?;
+        }
+        Ok(full)
     }
 
     pub fn doc(&self, path: &str) -> Option<&Doc> {
@@ -315,5 +351,43 @@ pub(crate) mod tests {
     fn import_cycles_terminate() {
         let w = ws(&[("CLAUDE.md", "@a.md"), ("a.md", "@CLAUDE.md")]);
         assert_eq!(w.always_loaded(Target::ClaudeCode).len(), 2);
+    }
+
+    #[test]
+    fn writable_path_creates_parents_inside_the_root() {
+        let dir = tempfile::tempdir().unwrap();
+        std::fs::write(dir.path().join("AGENTS.md"), "- x\n").unwrap();
+        let w = Workspace::load(dir.path(), &Default::default()).unwrap();
+        let p = w.writable_path("rules/new/x.yml").unwrap();
+        assert!(p.parent().unwrap().is_dir());
+        assert!(w.writable_path("AGENTS.md").is_ok());
+        for bad in ["../x.md", "/etc/passwd", ""] {
+            let e = w.writable_path(bad).unwrap_err();
+            assert_eq!(e.kind(), std::io::ErrorKind::PermissionDenied, "{bad}");
+        }
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn writable_path_refuses_symlinks_that_leave_the_root() {
+        let outside = tempfile::tempdir().unwrap();
+        let target = outside.path().join("victim.md");
+        std::fs::write(&target, "keep\n").unwrap();
+        let dir = tempfile::tempdir().unwrap();
+        std::os::unix::fs::symlink(&target, dir.path().join("AGENTS.md")).unwrap();
+        std::os::unix::fs::symlink(outside.path(), dir.path().join("docs")).unwrap();
+        std::os::unix::fs::symlink(outside.path().join("gone.md"), dir.path().join("CLAUDE.md"))
+            .unwrap();
+        std::fs::write(dir.path().join("real.md"), "x").unwrap();
+        std::os::unix::fs::symlink("real.md", dir.path().join("alias.md")).unwrap();
+        let w = Workspace::load(dir.path(), &Default::default()).unwrap();
+        for bad in ["AGENTS.md", "docs/new.md", "docs/victim.md", "CLAUDE.md"] {
+            let e = w.writable_path(bad).unwrap_err();
+            assert_eq!(e.kind(), std::io::ErrorKind::PermissionDenied, "{bad}");
+        }
+        // A symlink that stays inside the repository is fine.
+        assert!(w.writable_path("alias.md").is_ok());
+        assert_eq!(std::fs::read_to_string(&target).unwrap(), "keep\n");
+        assert!(!outside.path().join("new.md").exists());
     }
 }
