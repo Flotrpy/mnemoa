@@ -4,6 +4,7 @@ use serde::Serialize;
 
 pub mod commands;
 pub mod references;
+pub mod size;
 
 use crate::config::Config;
 use crate::diag::{self, Finding, Severity};
@@ -269,9 +270,11 @@ pub fn finding_file(info: &RuleInfo, path: &str, message: impl Into<String>) -> 
 /// Every implemented rule.
 pub fn registry() -> Vec<Box<dyn Check>> {
     vec![
+        Box::new(size::ContextBloat),
         Box::new(references::BlindReference),
         Box::new(references::BrokenReference),
         Box::new(commands::StaleCommand),
+        Box::new(size::DiscoverableContent),
     ]
 }
 

@@ -17,7 +17,7 @@ and `cargo test --workspace`.
 - [x] 8. feat(core): diagnostics, rule registry and .mnemoa.toml config
 - [x] 9. feat(core): MNA006 blind-reference and MNA007 broken-reference
 - [x] 10. feat(core): MNA008 stale-command across Makefile, justfile, package.json, cargo and pyproject
-- [ ] 11. feat(core): MNA001 context-bloat and MNA009 discoverable-content
+- [x] 11. feat(core): MNA001 context-bloat and MNA009 discoverable-content
 - [ ] 12. feat(core): MNA002 lint-leakage with enforcer detection catalog
 - [ ] 13. feat(core): MNA003 skill-leakage and MNA004 conflicting-instructions
 - [ ] 14. feat(core): git history trait with gix backend; MNA005 init-fossilization
