@@ -1,0 +1,5 @@
+targets = ["claude-code", "codex", "cursor"]
+
+[rules]
+max_lines = 30
+enable = ["MNA011"]

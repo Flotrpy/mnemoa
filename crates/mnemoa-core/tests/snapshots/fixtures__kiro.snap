@@ -1,0 +1,8 @@
+---
+source: crates/mnemoa-core/tests/fixtures.rs
+expression: "scan_pretty(\"kiro\", &ALL)"
+---
+.kiro/steering/broken.md
+     1:1   warn  MNA013 unloaded-file  kiro never loads .kiro/steering/broken.md: `inclusion: fileMatch` without `fileMatchPattern` never matches.
+
+0 errors, 1 warning, 0 infos in 4 files (claude-code, codex, cursor, copilot, kiro, cline, gemini)

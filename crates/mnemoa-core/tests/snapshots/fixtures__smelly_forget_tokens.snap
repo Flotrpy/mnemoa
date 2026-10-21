@@ -1,0 +1,7 @@
+---
+source: crates/mnemoa-core/tests/fixtures.rs
+expression: "tokens.join(\"\\n\")"
+---
+claude-code: 16 -> 84
+codex: 153 -> 79
+cursor: 153 -> 79

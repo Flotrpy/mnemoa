@@ -1,0 +1,11 @@
+---
+source: crates/mnemoa-core/tests/fixtures.rs
+expression: "actions.join(\"\\n\")"
+---
+AGENTS.md:4 Promote promote to editorconfig check `indentation`
+AGENTS.md:5 AddPointer say when to read `docs/api.md`
+AGENTS.md:13 Delete delete content the agent can discover
+AGENTS.md:17 Delete delete content the agent can discover
+AGENTS.md:25 Move move "Adding a new endpoint" to docs/agents/adding-a-new-endpoint.md
+CLAUDE.md:1 Promote remove copy of rule promoted to `indentation`
+CLAUDE.md:2 Delete delete promoted rule: Prefer plan mode for refactors.
