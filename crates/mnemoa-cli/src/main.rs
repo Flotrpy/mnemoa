@@ -12,6 +12,8 @@ use mnemoa_core::rules;
 use mnemoa_core::scan::{self, BASELINE_FILE, Baseline, ScanOptions};
 use mnemoa_core::{Target, VERSION};
 
+mod remote;
+
 #[derive(Parser, Debug)]
 #[command(name = "mnemoa", version = VERSION, about = "Stateless agents. Durable repos.", long_about = None)]
 struct Cli {
@@ -32,6 +34,9 @@ struct Global {
     /// Color output.
     #[arg(long, global = true, value_enum, default_value_t = ColorChoice::Auto)]
     color: ColorChoice,
+    /// Send the command to a running mnemoa-api (paths are relative to its MNEMOA_ROOT).
+    #[arg(long, global = true, env = "MNEMOA_SERVER")]
+    server: Option<String>,
 }
 
 #[derive(ValueEnum, Clone, Copy, Debug)]
@@ -571,6 +576,9 @@ fn cmd_explain(id: &str) -> Result<i32> {
 }
 
 fn run(cli: Cli) -> Result<i32> {
+    if let Some(url) = &cli.global.server {
+        return remote::run(url, &cli);
+    }
     match &cli.command {
         Command::Scan(a) => cmd_scan(a, &cli.global),
         Command::Drift(a) => cmd_drift(a, &cli.global),
