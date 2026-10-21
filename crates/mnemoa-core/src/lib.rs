@@ -2,9 +2,12 @@
 //!
 //! This crate never touches the network.
 
+pub mod budget;
 pub mod discover;
 pub mod doc;
 pub mod frontmatter;
+pub mod tokens;
+pub mod workspace;
 
 pub use discover::{DiscoverOptions, Discovery, Loading, Surface, SurfaceKind, Target, discover};
 
