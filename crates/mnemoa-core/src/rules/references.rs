@@ -94,7 +94,7 @@ pub(crate) fn looks_like_path(code: &str) -> bool {
 }
 
 /// Whether the last path segment has a file extension or the path ends with `/`.
-fn has_extension_or_slash(path: &str) -> bool {
+pub(crate) fn has_extension_or_slash(path: &str) -> bool {
     if path.ends_with('/') {
         return true;
     }
@@ -107,7 +107,7 @@ fn has_extension_or_slash(path: &str) -> bool {
     }
 }
 
-fn percent_decode(s: &str) -> String {
+pub(crate) fn percent_decode(s: &str) -> String {
     let bytes = s.as_bytes();
     let mut out = Vec::with_capacity(bytes.len());
     let mut i = 0;

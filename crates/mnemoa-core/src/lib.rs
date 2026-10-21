@@ -8,6 +8,7 @@ pub mod config;
 pub mod diag;
 pub mod discover;
 pub mod doc;
+pub mod drift;
 pub mod enforcers;
 pub mod frontmatter;
 pub mod history;
@@ -16,6 +17,7 @@ pub mod repo;
 pub mod report;
 pub mod rules;
 pub mod scan;
+pub mod symbols;
 pub mod tokens;
 pub mod workspace;
 
