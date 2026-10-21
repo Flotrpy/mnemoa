@@ -4,6 +4,7 @@ use serde::Serialize;
 
 pub mod commands;
 pub mod conflicts;
+pub mod history_rules;
 pub mod lint;
 pub mod references;
 pub mod size;
@@ -13,6 +14,7 @@ use crate::config::Config;
 use crate::diag::{self, Finding, Severity};
 use crate::discover::Target;
 use crate::doc::Doc;
+use crate::history::History;
 use crate::repo::RepoFacts;
 use crate::workspace::Workspace;
 
@@ -196,6 +198,8 @@ pub struct Context<'a> {
     pub ws: &'a Workspace,
     pub config: &'a Config,
     pub targets: &'a [Target],
+    /// Git history, when the root is inside a repository.
+    pub history: Option<&'a dyn History>,
     facts: std::sync::OnceLock<RepoFacts>,
 }
 
@@ -205,8 +209,15 @@ impl<'a> Context<'a> {
             ws,
             config,
             targets,
+            history: None,
             facts: std::sync::OnceLock::new(),
         }
+    }
+
+    /// Attach git history.
+    pub fn with_history(mut self, history: Option<&'a dyn History>) -> Self {
+        self.history = history;
+        self
     }
 
     /// Repository facts (task runners, enforcers, dependencies), computed on first use.
@@ -277,6 +288,7 @@ pub fn registry() -> Vec<Box<dyn Check>> {
         Box::new(lint::LintLeakage),
         Box::new(skills::SkillLeakage),
         Box::new(conflicts::ConflictingInstructions),
+        Box::new(history_rules::InitFossilization),
         Box::new(references::BlindReference),
         Box::new(references::BrokenReference),
         Box::new(commands::StaleCommand),
