@@ -3,9 +3,11 @@
 use serde::Serialize;
 
 pub mod commands;
+pub mod conflicts;
 pub mod lint;
 pub mod references;
 pub mod size;
+pub mod skills;
 
 use crate::config::Config;
 use crate::diag::{self, Finding, Severity};
@@ -273,6 +275,8 @@ pub fn registry() -> Vec<Box<dyn Check>> {
     vec![
         Box::new(size::ContextBloat),
         Box::new(lint::LintLeakage),
+        Box::new(skills::SkillLeakage),
+        Box::new(conflicts::ConflictingInstructions),
         Box::new(references::BlindReference),
         Box::new(references::BrokenReference),
         Box::new(commands::StaleCommand),
