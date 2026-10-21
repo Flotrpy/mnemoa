@@ -1,0 +1,13 @@
+[package]
+name = "mnemoa-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "Keep repo memory for coding agents small, true and enforced (library)."
+
+[lints]
+workspace = true
+
+[dependencies]
