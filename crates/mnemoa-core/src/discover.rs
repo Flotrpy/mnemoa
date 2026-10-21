@@ -444,7 +444,12 @@ pub(crate) fn classify(d: &mut Discovery, include: &GlobSet, read: &dyn Fn(&str)
             if !is_override {
                 // Claude Code reads AGENTS.md only when no root Claude file exists.
                 let claude_agents = dir.is_empty() || dir == ".claude";
-                let claude = if claude_shadows_agents {
+                let claude = if claude_shadows_agents && !claude_agents {
+                    not_loaded(format!(
+                        "Claude Code skips nested AGENTS.md files when {} exists; add `{dir}/CLAUDE.md` containing `@AGENTS.md`",
+                        claude_root_files.join(", ")
+                    ))
+                } else if claude_shadows_agents {
                     not_loaded(format!(
                         "Claude Code reads {} instead, unless one imports `@AGENTS.md`",
                         claude_root_files.join(", ")
