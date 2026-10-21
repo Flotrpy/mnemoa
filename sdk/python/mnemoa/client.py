@@ -67,9 +67,13 @@ class Client:
         targets: Optional[List[str]] = None,
         rules: Optional[List[str]] = None,
         strict: Optional[bool] = None,
+        history: Optional[bool] = None,
     ) -> ScanReport:
         return ScanReport.from_dict(
-            self._post("/scan", {"path": path, "targets": targets, "rules": rules, "strict": strict})
+            self._post(
+                "/scan",
+                {"path": path, "targets": targets, "rules": rules, "strict": strict, "history": history},
+            )
         )
 
     def budget(self, path: str = ".", *, targets: Optional[List[str]] = None) -> Dict[str, Any]:
@@ -131,9 +135,13 @@ class AsyncClient:
         targets: Optional[List[str]] = None,
         rules: Optional[List[str]] = None,
         strict: Optional[bool] = None,
+        history: Optional[bool] = None,
     ) -> ScanReport:
         return ScanReport.from_dict(
-            await self._post("/scan", {"path": path, "targets": targets, "rules": rules, "strict": strict})
+            await self._post(
+                "/scan",
+                {"path": path, "targets": targets, "rules": rules, "strict": strict, "history": history},
+            )
         )
 
     async def budget(self, path: str = ".", *, targets: Optional[List[str]] = None) -> Dict[str, Any]:

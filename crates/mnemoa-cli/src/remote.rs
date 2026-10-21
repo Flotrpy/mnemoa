@@ -55,7 +55,13 @@ pub fn run(url: &str, cli: &Cli) -> Result<i32> {
             let v = post(
                 url,
                 "scan",
-                json!({"path": path_str(&a.path), "targets": targets, "rules": a.rules, "strict": a.strict.then_some(true)}),
+                json!({
+                    "path": path_str(&a.path),
+                    "targets": targets,
+                    "rules": a.rules,
+                    "strict": a.strict.then_some(true),
+                    "history": !a.no_history,
+                }),
             )?;
             let r: mnemoa_core::ScanReport = serde_json::from_value(v)?;
             print(&report::render(&r, format, color))?;
@@ -70,7 +76,7 @@ pub fn run(url: &str, cli: &Cli) -> Result<i32> {
             )?;
             let r: mnemoa_core::budget::BudgetReport = serde_json::from_value(v)?;
             print(&report::render_budget(&r, format, color))?;
-            Ok(0)
+            Ok(if a.check && r.over_budget() { 1 } else { 0 })
         }
         Command::Drift(a) => {
             let format: Format = a.format.parse().map_err(anyhow::Error::msg)?;

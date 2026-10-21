@@ -46,11 +46,27 @@ pub struct TargetBudget {
 pub struct BudgetReport {
     pub tokenizer: String,
     pub targets: Vec<TargetBudget>,
+    /// The configured `rules.token_budget`, when the caller attached one.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub token_budget: Option<usize>,
 }
 
 impl BudgetReport {
     pub fn get(&self, target: Target) -> Option<&TargetBudget> {
         self.targets.iter().find(|t| t.target == target)
+    }
+
+    /// Attach the configured token budget so `over_budget` can be judged from the report alone.
+    pub fn with_token_budget(mut self, limit: usize) -> Self {
+        self.token_budget = Some(limit);
+        self
+    }
+
+    /// True when a target loads more than `token_budget` tokens or drops bytes past Codex's cap.
+    pub fn over_budget(&self) -> bool {
+        self.targets.iter().any(|t| {
+            self.token_budget.is_some_and(|b| t.total_tokens > b) || t.dropped_bytes.is_some()
+        })
     }
 }
 
@@ -133,6 +149,7 @@ pub fn budget(ws: &Workspace, targets: &[Target], tok: Tokenizer) -> BudgetRepor
     BudgetReport {
         tokenizer: tok.label().to_string(),
         targets,
+        token_budget: None,
     }
 }
 
