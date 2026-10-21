@@ -138,7 +138,11 @@ impl Check for MissingRationale {
             .and_then(|t| Sidecar::parse(&t).ok());
         for doc in cx.always_docs() {
             for rule in doc.rules.iter().filter(|r| r.imperative) {
-                let crate::doc::RuleKind::ListItem { depth: 0, .. } = rule.kind else {
+                let crate::doc::RuleKind::ListItem {
+                    depth: 0,
+                    ordered: false,
+                } = rule.kind
+                else {
                     continue;
                 };
                 match rationale::rationale_for(doc, rule, sidecar.as_ref()) {
@@ -349,6 +353,16 @@ mod tests {
                 ("AGENTS.md", "- Never run migrations by hand.\n"),
                 (".mnemoa/rationale.toml", sidecar.as_str()),
             ],
+            &enabled(),
+        );
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn procedure_steps_need_no_rationale() {
+        let f = check_with(
+            &MissingRationale,
+            &[("AGENTS.md", "1. Bump the version.\n2. Tag it.\n")],
             &enabled(),
         );
         assert!(f.is_empty(), "{f:?}");

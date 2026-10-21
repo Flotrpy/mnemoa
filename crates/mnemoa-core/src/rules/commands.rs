@@ -438,6 +438,18 @@ fn stale(
                 }
             }
             p if p.contains('/') && !p.starts_with('/') && !p.contains(['*', '~']) => {
+                // A bare path with no arguments is only a command if it looks executable;
+                // otherwise it is a file reference (MNA007's job).
+                let ext = p
+                    .rsplit('/')
+                    .next()
+                    .and_then(|f| f.rsplit_once('.'))
+                    .map(|(_, e)| e);
+                let script_ext =
+                    matches!(ext, None | Some("sh" | "bash" | "zsh" | "py" | "rb" | "pl"));
+                if args.is_empty() && !p.starts_with("./") && !script_ext {
+                    continue;
+                }
                 let path = join(&cwd, p)?;
                 let parent = parent_of(&path);
                 if !cx.ws.discovery.exists(&path) && cx.ws.discovery.has_dir(parent) {
@@ -648,6 +660,23 @@ mod tests {
             ],
         );
         assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn bare_source_file_paths_are_not_commands() {
+        let f = check(
+            &StaleCommand,
+            &[
+                ("src/a.rs", ""),
+                ("scripts/other.sh", ""),
+                (
+                    "AGENTS.md",
+                    "1. Add the route in `src/routes.ts`.\n2. Run `scripts/gen.sh`.\n",
+                ),
+            ],
+        );
+        assert_eq!(f.len(), 1, "{f:?}");
+        assert!(f[0].message.contains("scripts/gen.sh"));
     }
 
     #[test]

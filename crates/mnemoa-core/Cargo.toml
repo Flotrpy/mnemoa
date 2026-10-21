@@ -33,5 +33,8 @@ tiktoken-rs = { version = "0.12.1", optional = true }
 toml = "1.1.8"
 
 [dev-dependencies]
+insta = { version = "1.49.0", features = ["json"] }
+jsonschema = { version = "0.59.0", default-features = false }
+proptest = "1.11.0"
 tempfile = "3.27.0"
 
