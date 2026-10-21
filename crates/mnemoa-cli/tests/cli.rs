@@ -310,3 +310,33 @@ fn forget_dry_run_and_apply() {
     let v: serde_json::Value = serde_json::from_slice(&out.stdout).unwrap();
     assert_eq!(v["actions"].as_array().unwrap().len(), 0);
 }
+
+#[test]
+fn init_creates_scaffold_and_never_overwrites() {
+    let dir = repo(&[("Makefile", "test:\n\tcargo test\n")]);
+    mnemoa()
+        .arg("init")
+        .arg(dir.path())
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("created  AGENTS.md"));
+    let agents = std::fs::read_to_string(dir.path().join("AGENTS.md")).unwrap();
+    assert!(agents.contains("`make test`"));
+    mnemoa()
+        .args(["scan", "--no-history"])
+        .arg(dir.path())
+        .assert()
+        .success();
+    std::fs::write(dir.path().join("AGENTS.md"), "mine\n").unwrap();
+    mnemoa()
+        .args(["init", "--ci"])
+        .arg(dir.path())
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("skipped  AGENTS.md"));
+    assert_eq!(
+        std::fs::read_to_string(dir.path().join("AGENTS.md")).unwrap(),
+        "mine\n"
+    );
+    assert!(dir.path().join(".github/workflows/mnemoa.yml").is_file());
+}

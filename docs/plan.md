@@ -32,7 +32,7 @@ and `cargo test --workspace`.
 - [x] 23. feat(core): optional LLM drafter for ast-grep rules with sample validation
 - [x] 24. feat(cli): mnemoa promote (dry-run diff, --apply) and mnemoa retire
 - [x] 25. feat(core,cli): mnemoa forget prune plan with before/after budget
-- [ ] 26. feat(core,cli): mnemoa init scaffolding
+- [x] 26. feat(core,cli): mnemoa init scaffolding
 - [ ] 27. feat(api): axum server with scan, budget, drift, promote, forget, rules, health and stats
 - [ ] 28. feat: Dockerfile, docker-compose with optional Ollama, .env.example and mnemoa.example.toml
 - [ ] 29. feat(sdk): python sdk with sync and async clients, tests and examples/basic_usage.py
