@@ -37,7 +37,7 @@ and `cargo test --workspace`.
 - [x] 28. feat: Dockerfile, docker-compose with optional Ollama, .env.example and mnemoa.example.toml
 - [x] 29. feat(sdk): python sdk with sync and async clients, tests and examples/basic_usage.py
 - [x] 30. fix(core): forget moves a procedure only when its pointer costs fewer tokens
-- [ ] 31. feat(bench): mnemoa-bench with 12 suites, --filter and --json
+- [x] 31. feat(bench): mnemoa-bench with 12 suites, --filter and --json
 - [ ] 32. test: fixture corpus, insta snapshots, proptest parser fuzzing and coverage target
 - [ ] 33. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
 - [ ] 34. docs: architecture, api and rules docs; CONTRIBUTING; action.yml
