@@ -43,9 +43,10 @@ and `cargo test --workspace`.
 - [x] 34. fix(core): keep a moved section's heading; import AGENTS.md into an emptied CLAUDE.md
 - [x] 35. test: fixture corpus, insta snapshots, proptest parser fuzzing and coverage target
 - [x] 36. fix(core): MNA005 skips files that only import others
-- [ ] 37. docs: refresh AGENTS.md and CONTEXT.md (flagged by MNA005 on this repo)
-- [ ] 38. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
-- [ ] 39. docs: architecture, api and rules docs; CONTRIBUTING; action.yml
-- [ ] 40. docs: README in mnemo format with real numbers and TBDs
+- [x] 37. fix(core): MNA008 treats a bare path ending in / as a directory
+- [ ] 38. docs: refresh AGENTS.md and CONTEXT.md (flagged by MNA005 on this repo)
+- [ ] 39. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
+- [ ] 40. docs: architecture, api and rules docs; CONTRIBUTING; action.yml
+- [ ] 41. docs: README in mnemo format with real numbers and TBDs
 
 If an item splits, renumber this list and keep going.

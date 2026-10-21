@@ -447,7 +447,8 @@ fn stale(
                     .map(|(_, e)| e);
                 let script_ext =
                     matches!(ext, None | Some("sh" | "bash" | "zsh" | "py" | "rb" | "pl"));
-                if args.is_empty() && !p.starts_with("./") && !script_ext {
+                // A path ending in `/` with no arguments names a directory, not a program.
+                if args.is_empty() && (p.ends_with('/') || (!p.starts_with("./") && !script_ext)) {
                     continue;
                 }
                 let path = join(&cwd, p)?;
@@ -677,6 +678,21 @@ mod tests {
         );
         assert_eq!(f.len(), 1, "{f:?}");
         assert!(f[0].message.contains("scripts/gen.sh"));
+    }
+
+    #[test]
+    fn directory_with_trailing_slash_is_not_a_command() {
+        let f = check(
+            &StaleCommand,
+            &[
+                ("src/a.rs", ""),
+                (
+                    "AGENTS.md",
+                    "- Files under `fixtures/` are test data.\n- `src/gone/` too.\n",
+                ),
+            ],
+        );
+        assert!(f.is_empty(), "{f:?}");
     }
 
     #[test]
