@@ -316,3 +316,183 @@ mod tests {
         assert!("xml".parse::<Format>().is_err());
     }
 }
+
+/// Render a drift report as pretty text, JSON or GitHub annotations.
+pub fn render_drift(report: &crate::drift::DriftReport, format: Format, color: bool) -> String {
+    match format {
+        Format::Json | Format::Sarif => {
+            serde_json::to_string_pretty(report).expect("drift serializes") + "\n"
+        }
+        Format::Github => {
+            let mut out = String::new();
+            for i in &report.items {
+                let kind = match i.severity {
+                    Severity::Error => "error",
+                    Severity::Warn => "warning",
+                    Severity::Info => "notice",
+                };
+                let _ = writeln!(
+                    out,
+                    "::{kind} file={},line={},col={},title={}::{}",
+                    escape_prop(&i.path),
+                    i.line,
+                    i.column,
+                    escape_prop(&format!(
+                        "drift {}",
+                        serde_json::to_value(i.kind)
+                            .ok()
+                            .and_then(|v| v.as_str().map(str::to_string))
+                            .unwrap_or_default()
+                    )),
+                    escape_data(&i.message)
+                );
+            }
+            out
+        }
+        Format::Pretty => {
+            let mut out = String::new();
+            let mut current = "";
+            for i in &report.items {
+                if i.path != current {
+                    if !current.is_empty() {
+                        out.push('\n');
+                    }
+                    current = &i.path;
+                    let _ = writeln!(out, "{}", paint(&i.path, "1;4", color));
+                }
+                let kind = serde_json::to_value(i.kind)
+                    .ok()
+                    .and_then(|v| v.as_str().map(str::to_string))
+                    .unwrap_or_default();
+                let _ = writeln!(
+                    out,
+                    "  {:>4}:{:<3} {} {}  {}",
+                    i.line,
+                    i.column,
+                    sev_label(i.severity, color),
+                    paint(&kind, "2", color),
+                    i.message
+                );
+            }
+            let stale: Vec<&crate::drift::Freshness> = report
+                .freshness
+                .iter()
+                .filter(|f| f.commits_since > 0)
+                .collect();
+            if !stale.is_empty() {
+                if !report.items.is_empty() {
+                    out.push('\n');
+                }
+                let _ = writeln!(
+                    out,
+                    "{}",
+                    paint(
+                        "Freshness (commits touching referenced paths since the doc last changed)",
+                        "1",
+                        color
+                    )
+                );
+                for f in stale {
+                    let _ = writeln!(out, "  {:>4}  {}", f.commits_since, f.path);
+                }
+            }
+            if !out.is_empty() {
+                out.push('\n');
+            }
+            let s = &report.summary;
+            let _ = write!(
+                out,
+                "drift: {} error(s), {} warning(s), {} info",
+                s.errors, s.warnings, s.infos
+            );
+            if let Some(b) = &report.base {
+                let _ = write!(out, " against {b}");
+            }
+            if !report.history {
+                out.push_str(" (no git history: freshness and plan checks limited)");
+            }
+            out.push('\n');
+            out
+        }
+    }
+}
+
+/// Render a budget report as a pretty table or JSON.
+pub fn render_budget(report: &crate::budget::BudgetReport, format: Format, color: bool) -> String {
+    if matches!(format, Format::Json | Format::Sarif | Format::Github) {
+        return serde_json::to_string_pretty(report).expect("budget serializes") + "\n";
+    }
+    let mut out = String::new();
+    let _ = writeln!(
+        out,
+        "Always-loaded context per target ({}).\n",
+        report.tokenizer
+    );
+    for t in &report.targets {
+        let _ = writeln!(
+            out,
+            "{}  {} tokens, {} lines, {} bytes",
+            paint(t.target.as_str(), "1", color),
+            t.total_tokens,
+            t.total_lines,
+            t.total_bytes
+        );
+        if t.always.is_empty() {
+            let _ = writeln!(out, "    (nothing loaded at start)");
+        }
+        for c in &t.always {
+            let via = c
+                .via
+                .as_ref()
+                .map(|v| format!("  (imported by {v})"))
+                .unwrap_or_default();
+            let _ = writeln!(out, "    {:>6}  {}{via}", c.tokens, c.path);
+        }
+        if !t.on_demand.is_empty() {
+            let _ = writeln!(out, "    on demand:");
+            for o in &t.on_demand {
+                let _ = writeln!(out, "    {:>6}  {}  — {}", o.tokens, o.path, o.trigger);
+            }
+        }
+        if let Some(d) = t.dropped_bytes {
+            let _ = writeln!(
+                out,
+                "    {} {d} bytes are past the cap and never load",
+                paint("!", "33;1", color)
+            );
+        }
+        for n in &t.notes {
+            let _ = writeln!(out, "    note: {n}");
+        }
+        out.push('\n');
+    }
+    out
+}
+
+#[cfg(test)]
+mod more_tests {
+    use super::*;
+    use crate::config::Config;
+    use crate::discover::Target;
+    use crate::drift::{DriftOptions, drift};
+    use crate::tokens::Tokenizer;
+    use crate::workspace::tests::ws;
+
+    #[test]
+    fn drift_and_budget_render() {
+        let w = ws(&[
+            ("AGENTS.md", "- See [x](gone.md) when stuck.\n"),
+            ("CLAUDE.md", "@AGENTS.md\n"),
+        ]);
+        let d = drift(&w, &Config::default(), None, &DriftOptions::default()).unwrap();
+        let p = render_drift(&d, Format::Pretty, false);
+        assert!(p.contains("missing-path") && p.contains("drift: 1 error(s)"));
+        assert!(render_drift(&d, Format::Github, false).starts_with("::error file=AGENTS.md"));
+        let b = crate::budget::budget(&w, &[Target::ClaudeCode], Tokenizer::Heuristic);
+        let s = render_budget(&b, Format::Pretty, false);
+        assert!(s.contains("claude-code") && s.contains("(imported by CLAUDE.md)"));
+        let j: serde_json::Value =
+            serde_json::from_str(&render_budget(&b, Format::Json, false)).unwrap();
+        assert_eq!(j["targets"][0]["target"], "claude-code");
+    }
+}

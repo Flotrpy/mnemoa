@@ -45,6 +45,10 @@ enum ColorChoice {
 enum Command {
     /// Lint agent context files (rules MNA001–MNA013).
     Scan(ScanArgs),
+    /// Check docs and plans against the code (paths, symbols, commands, tasks).
+    Drift(DriftArgs),
+    /// Show always-loaded context per target agent.
+    Budget(BudgetArgs),
     /// List all rules.
     Rules {
         /// Output format: pretty or json.
@@ -81,6 +85,35 @@ struct ScanArgs {
     /// Skip reading git history (disables MNA005).
     #[arg(long)]
     no_history: bool,
+}
+
+#[derive(Args, Debug)]
+struct DriftArgs {
+    /// Repository root.
+    #[arg(default_value = ".")]
+    path: PathBuf,
+    /// Base revision: references to files or symbols removed or renamed since it fail.
+    #[arg(long)]
+    base: Option<String>,
+    /// Output format: pretty, json or github.
+    #[arg(long, short, default_value = "pretty")]
+    format: String,
+    /// Fail on warnings as well as errors.
+    #[arg(long)]
+    strict: bool,
+}
+
+#[derive(Args, Debug)]
+struct BudgetArgs {
+    /// Repository root.
+    #[arg(default_value = ".")]
+    path: PathBuf,
+    /// Output format: pretty or json.
+    #[arg(long, short, default_value = "pretty")]
+    format: String,
+    /// Exit 1 if any target is over `rules.token_budget`.
+    #[arg(long)]
+    check: bool,
 }
 
 fn use_color(choice: ColorChoice) -> bool {
@@ -157,6 +190,47 @@ fn cmd_scan(a: &ScanArgs, g: &Global) -> Result<i32> {
     Ok(report.exit_code())
 }
 
+fn cmd_drift(a: &DriftArgs, g: &Global) -> Result<i32> {
+    if !a.path.is_dir() {
+        bail!("`{}` is not a directory", a.path.display());
+    }
+    let config = load_config(&a.path, g)?;
+    let format: Format = a.format.parse().map_err(anyhow::Error::msg)?;
+    let ws = scan::load_workspace(&a.path, &config)?;
+    let history = scan::open_history(&a.path, &config)?;
+    if a.base.is_some() && history.is_none() {
+        bail!("--base needs a git repository");
+    }
+    let report = mnemoa_core::drift::drift(
+        &ws,
+        &config,
+        history
+            .as_ref()
+            .map(|h| h as &dyn mnemoa_core::history::History),
+        &mnemoa_core::drift::DriftOptions {
+            base: a.base.clone(),
+        },
+    )?;
+    print(&report::render_drift(&report, format, use_color(g.color)))?;
+    Ok(report.exit_code(a.strict || config.scan.strict))
+}
+
+fn cmd_budget(a: &BudgetArgs, g: &Global) -> Result<i32> {
+    if !a.path.is_dir() {
+        bail!("`{}` is not a directory", a.path.display());
+    }
+    let config = load_config(&a.path, g)?;
+    let format: Format = a.format.parse().map_err(anyhow::Error::msg)?;
+    let ws = scan::load_workspace(&a.path, &config)?;
+    let report = mnemoa_core::budget::budget(&ws, &config.targets, mnemoa_core::Tokenizer::best());
+    print(&report::render_budget(&report, format, use_color(g.color)))?;
+    let over = report
+        .targets
+        .iter()
+        .any(|t| t.total_tokens > config.rules.token_budget || t.dropped_bytes.is_some());
+    Ok(if a.check && over { 1 } else { 0 })
+}
+
 fn cmd_rules(format: &str) -> Result<i32> {
     if format == "json" {
         print(&(serde_json::to_string_pretty(&rules::RULES)? + "\n"))?;
@@ -203,6 +277,8 @@ fn cmd_explain(id: &str) -> Result<i32> {
 fn run(cli: Cli) -> Result<i32> {
     match &cli.command {
         Command::Scan(a) => cmd_scan(a, &cli.global),
+        Command::Drift(a) => cmd_drift(a, &cli.global),
+        Command::Budget(a) => cmd_budget(a, &cli.global),
         Command::Rules { format } => cmd_rules(format),
         Command::Explain { id } => cmd_explain(id),
     }

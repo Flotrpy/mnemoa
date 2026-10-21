@@ -126,3 +126,84 @@ fn bad_target_is_a_usage_error() {
         .assert()
         .code(2);
 }
+
+#[test]
+fn budget_lists_targets() {
+    let dir = repo(&[
+        ("CLAUDE.md", "@AGENTS.md\n"),
+        ("AGENTS.md", "- Use pnpm.\n"),
+    ]);
+    mnemoa()
+        .args([
+            "budget",
+            "--color",
+            "never",
+            "--targets",
+            "claude-code,codex",
+        ])
+        .arg(dir.path())
+        .assert()
+        .success()
+        .stdout(
+            predicate::str::contains("claude-code")
+                .and(predicate::str::contains("imported by CLAUDE.md")),
+        );
+    let out = mnemoa()
+        .args(["budget", "-f", "json"])
+        .arg(dir.path())
+        .output()
+        .unwrap();
+    let v: serde_json::Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert!(v["tokenizer"].as_str().unwrap().contains("estimate"));
+}
+
+#[test]
+fn budget_check_fails_over_budget() {
+    let dir = repo(&[
+        ("AGENTS.md", "- Use pnpm.\n"),
+        (".mnemoa.toml", "[rules]\ntoken_budget = 1\n"),
+    ]);
+    mnemoa()
+        .args(["budget", "--check"])
+        .arg(dir.path())
+        .assert()
+        .code(1);
+}
+
+#[test]
+fn drift_reports_missing_symbol() {
+    let dir = repo(&[
+        ("AGENTS.md", "- Call `load_config()` at startup.\n"),
+        ("src/lib.rs", "pub fn other() {}\n"),
+    ]);
+    mnemoa()
+        .args(["drift", "--color", "never"])
+        .arg(dir.path())
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("missing-symbol"));
+    mnemoa()
+        .args(["drift", "--strict"])
+        .arg(dir.path())
+        .assert()
+        .code(1);
+}
+
+#[test]
+fn drift_base_needs_git() {
+    let dir = repo(&[("AGENTS.md", "x\n")]);
+    if std::process::Command::new("git")
+        .arg("-C")
+        .arg(dir.path())
+        .args(["rev-parse", "--git-dir"])
+        .output()
+        .map(|o| !o.status.success())
+        .unwrap_or(true)
+    {
+        mnemoa()
+            .args(["drift", "--base", "main"])
+            .arg(dir.path())
+            .assert()
+            .code(2);
+    }
+}

@@ -25,6 +25,10 @@ pub mod workspace;
 pub use config::Config;
 pub use diag::{Finding, Severity, Summary};
 pub use discover::{DiscoverOptions, Discovery, Loading, Surface, SurfaceKind, Target, discover};
+pub use doc::Doc;
+pub use scan::{Error, ScanOptions, ScanReport, scan};
+pub use tokens::Tokenizer;
+pub use workspace::Workspace;
 
 /// Crate version, reported by the CLI and the API.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
