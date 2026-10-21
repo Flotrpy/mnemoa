@@ -206,11 +206,15 @@ pub fn plan(ws: &Workspace, config: &Config, today: &str, ast_grep: Option<&Path
                 } else {
                     format!("# {title}\n\n{body}")
                 };
-                new_files.insert(target.clone(), content.trim_end().to_string() + "\n");
                 let pointer = format!(
                     "- When the task involves {}, read `{target}`.\n",
                     title.to_lowercase()
                 );
+                // Only move when the pointer is cheaper than what it replaces.
+                if tok.count(&pointer) >= tok.count(&body) {
+                    continue;
+                }
+                new_files.insert(target.clone(), content.trim_end().to_string() + "\n");
                 add(
                     &f.path,
                     range,
@@ -623,6 +627,12 @@ mod tests {
             ("docs/x.md", "# X\n"),
         ]);
         assert!(p.actions.is_empty() && p.files.is_empty() && p.diff.is_empty());
+    }
+
+    #[test]
+    fn tiny_procedures_are_not_moved() {
+        let p = run(&[("AGENTS.md", "## Releasing\n\n1. a\n2. b\n3. c\n")]);
+        assert!(p.actions.is_empty(), "{:?}", p.actions);
     }
 
     #[test]
