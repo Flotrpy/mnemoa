@@ -901,6 +901,11 @@ pub fn plan_with(
     let mut seen_hashes = BTreeSet::new();
 
     for doc in cx.instruction_docs() {
+        let stale_spans: Vec<std::ops::Range<usize>> =
+            crate::rules::commands::stale_commands(&cx, doc)
+                .into_iter()
+                .map(|(_, span, _)| span)
+                .collect();
         for rule in doc.rules.iter().filter(|r| r.imperative) {
             let hash = rationale::rule_hash(&rule.text);
             if p.ledger.by_hash(&hash).is_some() || !seen_hashes.insert(hash.clone()) {
@@ -961,7 +966,10 @@ pub fn plan_with(
             if handled {
                 continue;
             }
-            if let Some((id, enforcer, arts)) = p.emit_structural(rule, doc, &scope) {
+            // Never turn a command the repo does not define into a hook (MNA008 reports it).
+            let stale_here = stale_spans.iter().any(|r| rule.span.contains(&r.start));
+            if !stale_here && let Some((id, enforcer, arts)) = p.emit_structural(rule, doc, &scope)
+            {
                 push(id, None, enforcer, Status::Emit, arts);
                 continue;
             }
@@ -1211,6 +1219,19 @@ mod tests {
         assert!(pc.contains("entry: \"make lint\""));
         let v: serde_yaml_ng::Value = serde_yaml_ng::from_str(pc).unwrap();
         assert_eq!(v["repos"].as_sequence().unwrap().len(), 1);
+    }
+
+    #[test]
+    fn stale_process_command_is_not_promoted() {
+        let p = plan_for(&[
+            ("Makefile", "lint:\n\tx\n"),
+            (
+                "AGENTS.md",
+                "- Always run `make check` before committing.\n",
+            ),
+        ]);
+        assert!(p.promotions.is_empty(), "{:?}", p.promotions);
+        assert!(!p.files.contains_key(".pre-commit-config.yaml"));
     }
 
     #[test]
