@@ -3,6 +3,7 @@
 //! This crate never touches the network.
 
 pub mod discover;
+pub mod doc;
 pub mod frontmatter;
 
 pub use discover::{DiscoverOptions, Discovery, Loading, Surface, SurfaceKind, Target, discover};

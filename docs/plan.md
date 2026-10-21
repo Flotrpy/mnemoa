@@ -12,7 +12,7 @@ and `cargo test --workspace`.
 - [x] 3. docs: add verified research notes
 - [x] 4. ci: add GitHub Actions for fmt, clippy and tests on linux and macos
 - [x] 5. feat(core): discover agent context surfaces with per-target loading model
-- [ ] 6. feat(core): markdown document model with source offsets, rules and front matter
+- [x] 6. feat(core): markdown document model with source offsets, rules and front matter
 - [ ] 7. feat(core): token estimation and always-loaded budget per target
 - [ ] 8. feat(core): diagnostics, rule registry and .mnemoa.toml config
 - [ ] 9. feat(core): MNA006 blind-reference and MNA007 broken-reference
