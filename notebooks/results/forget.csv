@@ -1,0 +1,10 @@
+repo,target,before,after,actions
+openai/openai-agents-python,claude-code,7128,7128,0
+openai/openai-agents-python,codex,7128,7128,0
+openai/openai-agents-python,cursor,7128,7128,0
+openai/openai-agents-js,claude-code,7599,7456,4
+openai/openai-agents-js,codex,7599,7456,4
+openai/openai-agents-js,cursor,7599,7456,4
+anthropics/claude-code,claude-code,548,276,1
+anthropics/claude-code,codex,0,0,1
+anthropics/claude-code,cursor,0,0,1

@@ -45,7 +45,7 @@ mnemoa keeps repo memory **small, true and enforced**. It finds context no agent
 | | mnemoa | Most alternatives |
 |---|---|---|
 | Runtime | One offline Rust binary; optional HTTP API; LLM only if you turn it on | Node or Python CLIs, or model-driven audits that need an API call |
-| Detection | 13 deterministic rules that under-match by design, per-agent loading model | Per-tool schema and smell checks, or an LLM's judgment |
+| Detection | 13 deterministic rules and a per-agent loading model; precision on real repos is uneven ([measured](#measured-on-real-repositories)) | Per-tool schema and smell checks, or an LLM's judgment |
 | Fixes | Promotes enforceable rules into real checks, then deletes the prose; moves procedures on demand | Report, or propose text edits (agnix and Claude Code's `/doctor prompt-audit` do propose fixes) |
 | Drift | Paths, symbols, commands, Spec Kit / Kiro tasks, Cline memory bank, diff-aware `--base` | Mostly broken links and stale commands |
 | Scope | Instructions **and** plans/specs across seven agents | Usually instruction files for one or a few tools |
@@ -347,9 +347,44 @@ Current test counts: **265 Rust tests** (269 with `--features llm`) · **9 Pytho
 - [Chakrabarti (2026)](https://arxiv.org/abs/2608.11095): instruction files grew 226% across 1,867 repos; rules are cheap to add and hard to delete once their reason is lost. Recording the reason removed 99.3% of excess rules in a controlled test.
 - [Claude Code's memory docs](https://code.claude.com/docs/en/memory): stay under 200 lines per file; imports still cost context; block-level HTML comments are stripped (so rationale comments are free there); AGENTS.md is skipped when a CLAUDE.md exists.
 - [Codex](https://developers.openai.com/codex/guides/agents-md) reads one guidance file per directory and stops at 32 KiB by default.
-- Corpus prevalence and precision of mnemoa's own rules: **TBD — run [notebooks/mnemoa_colab.ipynb](notebooks/mnemoa_colab.ipynb)**; results land in `notebooks/results/`.
+- How mnemoa's own rules do on real repositories: see [Measured on real repositories](#measured-on-real-repositories) below.
 
 Every claim, its verification status and the sources that could not be reached are in [docs/research.md](docs/research.md).
+
+### Measured on real repositories
+
+On 2026-10-21 [notebooks/mnemoa_colab.ipynb](notebooks/mnemoa_colab.ipynb) scanned shallow clones of the 99 public repositories it lists, using mnemoa 0.1.0 with all seven targets. 77 had agent instruction files at the root (AGENTS.md, CLAUDE.md, GEMINI.md, `.cursorrules`, Copilot instructions, or rule directories), and 77.9% of those had at least one finding. Up to 30 findings per rule were then sampled and labeled by hand.
+
+| Rule | Repos flagged | Findings | Labeled | Precision |
+|---|---|---|---|---|
+| MNA001 context-bloat | 40.3% | 133 | 30 | **100.0%** |
+| MNA002 lint-leakage | 13.0% | 23 | 23 | **4.3%** |
+| MNA003 skill-leakage | 18.2% | 30 | 30 | **43.3%** |
+| MNA004 conflicting-instructions | 6.5% | 28 | 28 | **0.0%** |
+| MNA006 blind-reference | 27.3% | 115 | 30 | **16.7%** |
+| MNA007 broken-reference | 32.5% | 123 | 30 | **33.3%** |
+| MNA008 stale-command | 40.3% | 179 | 30 | **6.7%** |
+| MNA009 discoverable-content | 16.9% | 14 | 14 | **64.3%** |
+| MNA010 cross-file-divergence | 11.7% | 11 | 11 | **45.5%** |
+| MNA013 unloaded-file | 16.9% | 91 | 30 | **36.7%** |
+
+Overall, 86 of 256 labeled findings (33.6%) were correct. MNA005 needs git history, so it was not measured on shallow clones. MNA011 is opt-in and MNA012 needs a promotion ledger; neither fired.
+
+**Read this before quoting the numbers:**
+- Precision is low for most rules, so "repos flagged" overstates how common each smell is. It is not comparable to SCAM's prevalence figures, which used different detectors on a different sample.
+- The labels come from Claude, the same model that wrote mnemoa. There was one labeler per finding, and ties went against the tool. Every label has a one-line reason in [notebooks/results/labels.csv](notebooks/results/labels.csv), so you can check or relabel them.
+- The repos were read a few minutes after the scan, at their newest commit.
+- Raw data is in [notebooks/results/](notebooks/results/).
+
+**Main false-positive causes, to fix next:**
+- **MNA008 stale-command:** commands in a nested AGENTS.md are checked against the root `package.json`, not the package the file lives in. Paths and `<placeholder>` arguments are also treated as commands.
+- **MNA004 conflicting-instructions:** `npm install -g pnpm` and `npm run <script>` are read as choosing npm. A "never X" inside a command line is ignored.
+- **MNA002 lint-leakage:** keywords are matched out of context, e.g. a commit-message length limit is taken as code line length. A rule also counts as enforced when the tool is configured but doesn't enforce that rule, or only warns.
+- **MNA006 blind-reference:** it flags table-of-contents anchors and inline code that isn't a pointer, and ignores triggers given in a lead-in sentence or heading.
+- **MNA007 broken-reference:** paths written relative to a sub-project root, paths in the user's own project, and other repos are reported as missing.
+- **MNA013 unloaded-file:** Copilot `.instructions.md` files with only a `description` are reported as never loaded, but VS Code loads them on demand. Nested AGENTS.md files are flagged even when an always-loaded file tells the agent to read them.
+- **MNA010 cross-file-divergence:** a CLAUDE.md that tells the agent in prose to read AGENTS.md (rather than importing it) counts as divergence.
+- **MNA003 skill-leakage:** any numbered list of 8+ items is flagged, as are generic "new ..." headings.
 
 ---
 
