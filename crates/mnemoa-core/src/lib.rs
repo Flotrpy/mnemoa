@@ -8,6 +8,7 @@ pub mod diag;
 pub mod discover;
 pub mod doc;
 pub mod frontmatter;
+pub mod repo;
 pub mod rules;
 pub mod tokens;
 pub mod workspace;
