@@ -334,7 +334,7 @@ cd sdk/python && pip install -e '.[test]' && pytest -q
 cargo run -p mnemoa-bench --release -- --quick
 ```
 
-Current test counts: **258 Rust tests** (262 with `--features llm`) · **9 Python tests** · **12 benchmarks**. Line coverage: **90.6%** (cargo-llvm-cov, same machine).
+Current test counts: **265 Rust tests** (269 with `--features llm`) · **9 Python tests** · **12 benchmarks**. Line coverage: **90.5%** (cargo-llvm-cov, same machine).
 
 ---
 
