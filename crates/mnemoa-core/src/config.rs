@@ -372,3 +372,16 @@ exclude = ["fixtures/**"]
         );
     }
 }
+
+#[cfg(test)]
+mod example_tests {
+    use super::*;
+
+    #[test]
+    fn example_config_parses_and_matches_defaults() {
+        let text = include_str!("../../../mnemoa.example.toml");
+        let mut c = Config::from_toml(text, Path::new("mnemoa.example.toml")).unwrap();
+        c.source = "defaults".into();
+        assert_eq!(c, Config::default());
+    }
+}
