@@ -3,10 +3,12 @@
 //! This crate never touches the network.
 
 pub mod budget;
+pub mod catalog;
 pub mod config;
 pub mod diag;
 pub mod discover;
 pub mod doc;
+pub mod enforcers;
 pub mod frontmatter;
 pub mod repo;
 pub mod rules;
