@@ -420,7 +420,7 @@ fn stale(
                 if script.contains('/') && !script.contains(['*', '$']) && !script.starts_with('/')
                 {
                     let p = join(&cwd, script)?;
-                    if !cx.ws.discovery.has_file(&p) && cx.ws.discovery.has_dir(parent_of(&p)) {
+                    if !cx.ws.discovery.exists(&p) && cx.ws.discovery.has_dir(parent_of(&p)) {
                         return Some(format!("`{seg}`: script `{script}` does not exist."));
                     }
                 }
@@ -428,7 +428,7 @@ fn stale(
             p if p.contains('/') && !p.starts_with('/') && !p.contains(['*', '~']) => {
                 let path = join(&cwd, p)?;
                 let parent = parent_of(&path);
-                if !cx.ws.discovery.has_file(&path) && cx.ws.discovery.has_dir(parent) {
+                if !cx.ws.discovery.exists(&path) && cx.ws.discovery.has_dir(parent) {
                     return Some(format!("`{seg}`: `{p}` does not exist."));
                 }
             }
@@ -621,6 +621,21 @@ mod tests {
             ],
         );
         assert_eq!(f.len(), 2, "{f:?}");
+    }
+
+    #[test]
+    fn directory_paths_in_code_spans_are_not_commands() {
+        let f = check(
+            &StaleCommand,
+            &[
+                ("crates/core/src/lib.rs", ""),
+                (
+                    "AGENTS.md",
+                    "- `crates/core`: the library.\n- `crates/core/` too.\n",
+                ),
+            ],
+        );
+        assert!(f.is_empty(), "{f:?}");
     }
 
     #[test]
