@@ -8,7 +8,7 @@ Branch: `claude/tender-planck-m6x8b5`. Every commit must pass
 and `cargo test --workspace`.
 
 - [x] 1. chore: init cargo workspace with core, cli, api, bench crates
-- [ ] 2. docs: add minimal CONTEXT.md, AGENTS.md and CLAUDE.md (@AGENTS.md)
+- [x] 2. docs: add minimal CONTEXT.md, AGENTS.md and CLAUDE.md (@AGENTS.md)
 - [ ] 3. docs: add verified research notes
 - [ ] 4. ci: add GitHub Actions for fmt, clippy and tests on linux and macos
 - [ ] 5. feat(core): discover agent context surfaces with per-target loading model
