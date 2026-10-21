@@ -1,0 +1,44 @@
+---
+source: crates/mnemoa-core/tests/fixtures.rs
+expression: "report::render_budget(&b, Format::Pretty, false)"
+---
+Always-loaded context per target (bytes/4 estimate).
+
+claude-code  52 tokens, 7 lines, 208 bytes
+        15  CLAUDE.md
+        37  AGENTS.md  (imported by CLAUDE.md)
+    on demand:
+         9  .claude/rules/web.md  — when Claude works with files matching packages/web/**
+         3  packages/api/CLAUDE.md  — when Claude touches a file under `packages/api/`
+         3  packages/web/CLAUDE.md  — when Claude touches a file under `packages/web/`
+
+codex  37 tokens, 4 lines, 148 bytes
+        37  AGENTS.md
+    on demand:
+        11  packages/api/AGENTS.md  — when Codex is started in `packages/api/` or below
+        11  packages/web/AGENTS.md  — when Codex is started in `packages/web/` or below
+    note: Codex is assumed not to strip HTML comments (unverified)
+
+cursor  37 tokens, 4 lines, 148 bytes
+        37  AGENTS.md
+    on demand:
+         6  .cursor/rules/style.mdc  — when files matching packages/**/*.ts are in context
+        11  packages/api/AGENTS.md  — when the agent edits files under `packages/api/`
+        11  packages/web/AGENTS.md  — when the agent edits files under `packages/web/`
+
+copilot  37 tokens, 4 lines, 148 bytes
+        37  AGENTS.md
+    on demand:
+        11  packages/api/AGENTS.md  — when the agent edits files under `packages/api/`
+        11  packages/web/AGENTS.md  — when the agent edits files under `packages/web/`
+    note: Copilot file layout is modeled from common usage and is unverified
+
+kiro  37 tokens, 4 lines, 148 bytes
+        37  AGENTS.md
+    note: Kiro CLI handling of inclusion modes is unverified; on-demand steering may load at start
+
+cline  0 tokens, 0 lines, 0 bytes
+    (nothing loaded at start)
+
+gemini  0 tokens, 0 lines, 0 bytes
+    (nothing loaded at start)

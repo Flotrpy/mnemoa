@@ -1,0 +1,51 @@
+# Example server and repository configuration for mnemoa.
+# For a repository, save as .mnemoa.toml at its root.
+# For mnemoa-api, pass with `mnemoa-api --config mnemoa.example.toml` or MNEMOA_CONFIG.
+# Environment variables (MNEMOA_*) override every value here.
+
+# Agents to model: claude-code, codex, cursor, copilot, kiro, cline, gemini.
+targets = ["claude-code", "codex", "cursor"]
+
+[scan]
+# Glob patterns to skip (fixtures, vendored code).
+exclude = []
+# Extra Markdown files to check as on-demand docs.
+include = []
+# Fail on warnings as well as errors.
+strict = false
+
+[rules]
+# MNA001: line threshold for one always-loaded file.
+max_lines = 200
+# MNA001: always-loaded token budget per target (o200k_base estimate).
+token_budget = 4000
+# MNA005: later code commits before a single-commit file counts as fossilized.
+fossil_commits = 25
+# Rule IDs to turn off, and opt-in rules to turn on.
+disable = []
+enable = []
+
+# Severity overrides by rule ID: "info", "warn" or "error".
+[rules.severity]
+# MNA006 = "warn"
+
+[drift]
+# Code commits since activeContext.md / progress.md last changed before they count as stale.
+memory_bank_max_commits = 10
+# Upper bound on commits read from history.
+max_history = 5000
+
+[llm]
+enabled = false
+# ollama | openai | anthropic | custom
+provider = "ollama"
+base_url = "http://localhost:11434/v1"
+model = "qwen2.5-coder:7b"
+api_key = "ollama"
+
+[api]
+# Root directory the API may read (MNEMOA_ROOT).
+root = "."
+port = 8080
+# Allow `apply: true` over HTTP (MNEMOA_API_ALLOW_WRITE).
+allow_write = false

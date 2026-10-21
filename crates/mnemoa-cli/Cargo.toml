@@ -11,8 +11,24 @@ description = "Command-line interface for mnemoa."
 name = "mnemoa"
 path = "src/main.rs"
 
+[features]
+# Enable the LLM drafter for `mnemoa promote --llm` (network access).
+llm = ["mnemoa-core/llm"]
+
 [lints]
 workspace = true
 
 [dependencies]
+anyhow = "1.0.104"
+clap = { version = "4.6.7", features = ["derive", "env"] }
 mnemoa-core = { version = "0.1.0", path = "../mnemoa-core" }
+reqwest = { version = "0.13.5", default-features = false, features = ["blocking", "json", "rustls"] }
+serde_json = "1.0.154"
+
+[dev-dependencies]
+assert_cmd = "2.2.2"
+axum = "0.8.9"
+mnemoa-api = { path = "../mnemoa-api" }
+predicates = "3.1.4"
+tempfile = "3.27.0"
+tokio = { version = "1.54.0", features = ["rt-multi-thread", "net"] }
