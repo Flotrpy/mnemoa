@@ -1,0 +1,117 @@
+# mnemoa promotion catalog.
+#
+# Each topic maps prose rules (matched by `patterns`, case-insensitive, run on the rule text
+# with backticks removed) to the enforcers that can check them.
+#
+# `enforcers` lists enforcer ids (see crates/mnemoa-core/src/enforcers.rs). An entry written as
+# "id:regex" counts only when the enforcer's configuration text matches the regex, for lints
+# that are off by default.
+#
+# `named = true` means only enforcers whose name appears in the rule count.
+#
+# MNA002 (lint-leakage) fires when a rule matches a topic and one of its enforcers is configured.
+# `mnemoa promote` uses the same topics to emit a check when no enforcer is configured yet.
+
+[[topic]]
+id = "indentation"
+summary = "indentation width or tabs versus spaces"
+patterns = ['\bindent(ation|ed|s)?\b', '\b(two|four|eight|2|4|8)[- ]spaces?\b', '\btabs?\b.{0,30}\bspaces?\b', '\bspaces?\b.{0,30}\btabs?\b']
+enforcers = ["editorconfig:indent_(style|size)", "prettier", "biome", "rustfmt", "black", "ruff", "gofmt", "clang-format"]
+
+[[topic]]
+id = "line-length"
+summary = "maximum line length"
+patterns = ['\bline[- ]length\b', '\bmax(imum)?\s+line\b', '\blines?\s+(under|over|longer than|shorter than|at most|no more than|max(imum)?( of)?)\s+\d+', '\b\d+\s+(char|character|column)s?\b']
+enforcers = ["editorconfig:max_line_length", "prettier", "biome", "rustfmt", "black", "ruff", "clang-format", "eslint:max-len"]
+
+[[topic]]
+id = "whitespace"
+summary = "trailing whitespace, final newlines or line endings"
+patterns = ['\btrailing\s+white\s*space\b', '\btrailing\s+spaces?\b', '\b(final|trailing|terminating)\s+newline\b', '\bnewline\s+at\s+(the\s+)?end\b', '\bend\s+(each|every|all)\s+files?\s+with\s+(a\s+)?newline\b', '\bline\s+endings?\b', '\bcrlf\b']
+enforcers = ["editorconfig:(trim_trailing_whitespace|insert_final_newline|end_of_line)", "prettier", "biome", "rustfmt", "black", "ruff", "gofmt", "pre-commit-whitespace"]
+
+[[topic]]
+id = "quotes"
+summary = "single versus double quotes"
+patterns = ['\b(single|double)[- ]quot(es?|ed|ing)\b']
+enforcers = ["prettier", "biome", "black", "ruff", "eslint:quotes"]
+
+[[topic]]
+id = "semicolons"
+summary = "semicolon style"
+patterns = ['\bsemi-?colons?\b']
+enforcers = ["prettier", "biome", "eslint:\\bsemi\\b"]
+
+[[topic]]
+id = "trailing-commas"
+summary = "trailing commas"
+patterns = ['\btrailing\s+commas?\b']
+enforcers = ["prettier", "biome", "black", "ruff", "rustfmt", "eslint:comma-dangle"]
+
+[[topic]]
+id = "import-order"
+summary = "import sorting and grouping"
+patterns = ['\b(sort|order|group|organi[sz]e|alphabeti[sz]e)(d|s|ed|ing)?\s+(the\s+|all\s+|your\s+)?imports?\b', '\bimports?\s+(must\s+be\s+|should\s+be\s+|are\s+)?(sorted|ordered|grouped|alphabeti[sz]ed)\b', '\bimport\s+order(ing)?\b']
+enforcers = ["rustfmt", "isort", "ruff:([\"']I[\"']|isort)", "biome", "eslint:(import/order|simple-import-sort|sort-imports)"]
+
+[[topic]]
+id = "unused"
+summary = "unused imports, variables or code"
+patterns = ['\bunused\s+(imports?|variables?|vars?|code|functions?|parameters?|params?|locals?)\b', '\b(dead|unused)\s+code\b']
+enforcers = ["ruff", "eslint:(no-unused-vars|recommended)", "rustc-deny-warnings", "go", "tsc:noUnused(Locals|Parameters)"]
+
+[[topic]]
+id = "naming-case"
+summary = "identifier naming case"
+patterns = ['\b(snake_case|camelcase|camel\s+case|pascalcase|pascal\s+case|screaming_snake_case|upper_snake_case)\b.{0,40}\b(functions?|variables?|methods?|types?|structs?|classes|constants?|fields?|identifiers?|names?)\b', '\b(functions?|variables?|methods?|types?|structs?|classes|constants?|fields?)\b.{0,40}\b(snake_case|camelcase|camel\s+case|pascalcase|pascal\s+case|screaming_snake_case)\b']
+enforcers = ["rustc-deny-warnings", "ruff:([\"']N[\"']|pep8-naming)", "eslint:naming-convention", "golangci-lint:(revive|stylecheck)"]
+
+[[topic]]
+id = "unwrap"
+summary = "unwrap or expect in Rust"
+patterns = ['\.?unwrap\(\)', '\bunwrap\b', '\.expect\(']
+enforcers = ["clippy:unwrap_used|expect_used"]
+
+[[topic]]
+id = "console-log"
+summary = "console.log calls"
+patterns = ['\bconsole\.(log|debug|info)\b', '\bconsole\s+statements?\b']
+enforcers = ["eslint:no-console", "biome:noConsole"]
+
+[[topic]]
+id = "print-calls"
+summary = "print calls in Python"
+patterns = ['\bprint\(\)', '\bprint\s+(statements?|calls?)\b']
+enforcers = ["ruff:([\"']T20|[\"']T201)"]
+
+[[topic]]
+id = "explicit-any"
+summary = "the TypeScript any type"
+patterns = ['\b(explicit|implicit)\s+any\b', '\bany\s+type\b', '\btype\s+any\b', '\b(no|never|avoid|don.t\s+use)\s+any\b']
+enforcers = ["eslint:no-explicit-any", "tsc:\"(strict|noImplicitAny)\"\\s*:\\s*true", "biome:noExplicitAny"]
+
+[[topic]]
+id = "type-hints"
+summary = "Python type annotations"
+patterns = ['\btype\s+(hints?|annotations?)\b', '\bannotate\s+(all\s+)?(functions?|parameters|arguments)\b']
+enforcers = ["mypy:(disallow_untyped_defs|strict)", "ruff:[\"']ANN"]
+
+[[topic]]
+id = "strict-equality"
+summary = "=== instead of =="
+patterns = ['===', '\bstrict\s+equality\b', '\btriple[- ]equals\b']
+enforcers = ["eslint:eqeqeq", "biome"]
+
+[[topic]]
+id = "no-var"
+summary = "var declarations in JavaScript"
+patterns = ['\b(no|never\s+use|avoid|don.t\s+use)\s+var\b', '\buse\s+(let|const)\s+(or|and|instead)\b']
+enforcers = ["eslint:no-var", "biome"]
+
+[[topic]]
+id = "format-with-tool"
+summary = "formatting with a named formatter"
+# Only the formatter named in the rule counts.
+named = true
+patterns = ['\bformat(ted|ting)?\b.{0,40}\b(prettier|black|rustfmt|gofmt|ruff|biome|clang-format)\b', '\b(prettier|black|rustfmt|gofmt|biome|clang-format)\b.{0,20}\bformat(ted|ting|s)?\b']
+enforcers = ["prettier", "black", "rustfmt", "gofmt", "ruff", "biome", "clang-format"]

@@ -3,6 +3,7 @@
 use serde::Serialize;
 
 pub mod commands;
+pub mod lint;
 pub mod references;
 pub mod size;
 
@@ -271,6 +272,7 @@ pub fn finding_file(info: &RuleInfo, path: &str, message: impl Into<String>) -> 
 pub fn registry() -> Vec<Box<dyn Check>> {
     vec![
         Box::new(size::ContextBloat),
+        Box::new(lint::LintLeakage),
         Box::new(references::BlindReference),
         Box::new(references::BrokenReference),
         Box::new(commands::StaleCommand),
