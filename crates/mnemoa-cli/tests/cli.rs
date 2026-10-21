@@ -277,7 +277,7 @@ fn retire_dry_run_then_apply() {
 fn forget_dry_run_and_apply() {
     let dir = repo(&[(
         "AGENTS.md",
-        "# P\n\n## Releasing\n\n1. Bump.\n2. Tag.\n3. Push.\n\n- Use 4 spaces for indentation.\n",
+        "# P\n\n- Use 4 spaces for indentation.\n\n## Releasing\n\n1. Bump the version in Cargo.toml and update the changelog with every user-facing change.\n2. Tag the release commit with the new version and push the tag to origin.\n3. Wait for the release workflow, then check the published artifacts and the docs site.\n",
     )]);
     mnemoa()
         .args(["forget", "--color", "never", "--targets", "claude-code"])
