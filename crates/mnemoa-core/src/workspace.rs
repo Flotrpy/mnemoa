@@ -39,6 +39,8 @@ pub struct Workspace {
     pub discovery: Discovery,
     /// Parsed documents by relative path: every Markdown surface plus imported files.
     pub docs: BTreeMap<String, Doc>,
+    /// In-memory file contents; when set, [`Workspace::read_file`] reads from here instead of disk.
+    pub mem: Option<BTreeMap<String, String>>,
 }
 
 /// Resolve an import or link target relative to the importing file's directory.
@@ -95,6 +97,15 @@ impl Workspace {
             root: discovery.root.clone(),
             discovery,
             docs,
+            mem: None,
+        }
+    }
+
+    /// Read any repository file (not just surfaces) by relative path.
+    pub fn read_file(&self, path: &str) -> Option<String> {
+        match &self.mem {
+            Some(m) => m.get(path).cloned(),
+            None => std::fs::read_to_string(self.root.join(path)).ok(),
         }
     }
 
@@ -244,7 +255,9 @@ pub(crate) mod tests {
         }
         let inc = b.build().unwrap();
         crate::discover::classify(&mut d, &inc, &|p| map.get(p).cloned().unwrap_or_default());
-        Workspace::from_discovery(d, |p| map.get(p).cloned())
+        let mut w = Workspace::from_discovery(d, |p| map.get(p).cloned());
+        w.mem = Some(map.into_iter().collect());
+        w
     }
 
     #[test]

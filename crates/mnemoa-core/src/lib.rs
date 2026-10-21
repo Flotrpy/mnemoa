@@ -3,12 +3,17 @@
 //! This crate never touches the network.
 
 pub mod budget;
+pub mod config;
+pub mod diag;
 pub mod discover;
 pub mod doc;
 pub mod frontmatter;
+pub mod rules;
 pub mod tokens;
 pub mod workspace;
 
+pub use config::Config;
+pub use diag::{Finding, Severity, Summary};
 pub use discover::{DiscoverOptions, Discovery, Loading, Surface, SurfaceKind, Target, discover};
 
 /// Crate version, reported by the CLI and the API.
