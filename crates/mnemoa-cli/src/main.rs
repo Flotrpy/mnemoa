@@ -55,6 +55,15 @@ enum Command {
     Retire(RetireArgs),
     /// One prune plan: delete, move, promote, retire and fix, with before/after token cost.
     Forget(ForgetArgs),
+    /// Create minimal AGENTS.md, CLAUDE.md and .mnemoa.toml (never overwrites).
+    Init {
+        /// Repository root.
+        #[arg(default_value = ".")]
+        path: PathBuf,
+        /// Also add a GitHub workflow that runs mnemoa.
+        #[arg(long)]
+        ci: bool,
+    },
     /// List all rules.
     Rules {
         /// Output format: pretty or json.
@@ -499,6 +508,25 @@ fn cmd_forget(a: &ForgetArgs, g: &Global) -> Result<i32> {
     Ok(0)
 }
 
+fn cmd_init(path: &Path, ci: bool) -> Result<i32> {
+    if !path.is_dir() {
+        bail!("`{}` is not a directory", path.display());
+    }
+    let ws = mnemoa_core::Workspace::load(path, &Default::default())?;
+    let plan = mnemoa_core::init::plan(&ws, &mnemoa_core::init::InitOptions { ci });
+    let written = mnemoa_core::init::apply(&ws, &plan)?;
+    let mut s = String::new();
+    for w in &written {
+        s.push_str(&format!("created  {w}\n"));
+    }
+    for k in &plan.skipped {
+        s.push_str(&format!("skipped  {k} (exists)\n"));
+    }
+    s.push_str("Next: edit the one-sentence description in AGENTS.md, then run `mnemoa scan`.\n");
+    print(&s)?;
+    Ok(0)
+}
+
 fn cmd_rules(format: &str) -> Result<i32> {
     if format == "json" {
         print(&(serde_json::to_string_pretty(&rules::RULES)? + "\n"))?;
@@ -550,6 +578,7 @@ fn run(cli: Cli) -> Result<i32> {
         Command::Promote(a) => cmd_promote(a, &cli.global),
         Command::Retire(a) => cmd_retire(a, &cli.global),
         Command::Forget(a) => cmd_forget(a, &cli.global),
+        Command::Init { path, ci } => cmd_init(path, *ci),
         Command::Rules { format } => cmd_rules(format),
         Command::Explain { id } => cmd_explain(id),
     }

@@ -14,6 +14,7 @@ pub mod enforcers;
 pub mod forget;
 pub mod frontmatter;
 pub mod history;
+pub mod init;
 pub mod ledger;
 #[cfg(feature = "llm")]
 pub mod llm;
