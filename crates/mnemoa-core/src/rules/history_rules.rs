@@ -18,6 +18,14 @@ impl Check for InitFossilization {
         }
         let threshold = cx.config.rules.fossil_commits;
         for doc in cx.always_docs() {
+            // A file that only imports others (`@AGENTS.md`) has nothing of its own to go stale.
+            let import_only = doc.text.lines().all(|l| {
+                let t = l.trim();
+                t.is_empty() || (t.starts_with('@') && !t.contains(' '))
+            });
+            if import_only {
+                continue;
+            }
             let touching = h.touching(&doc.path);
             let [only] = touching.as_slice() else {
                 continue;
@@ -82,6 +90,31 @@ mod tests {
         let f = run(&history(30, 0), 25);
         assert_eq!(f.len(), 1);
         assert!(f[0].message.contains("30 later commits"));
+    }
+
+    #[test]
+    fn import_only_file_is_not_fossil() {
+        let w = ws(&[
+            ("CLAUDE.md", "@AGENTS.md\n"),
+            ("AGENTS.md", "- x\n"),
+            ("src/a.rs", ""),
+        ]);
+        let mut commits: Vec<(String, Vec<&str>)> =
+            vec![("init".into(), vec!["CLAUDE.md", "AGENTS.md", "src/a.rs"])];
+        for i in 0..30 {
+            commits.push((format!("c{i}"), vec!["src/a.rs"]));
+        }
+        commits.push(("d".into(), vec!["AGENTS.md"]));
+        let refs: Vec<(&str, &[&str])> = commits
+            .iter()
+            .map(|(id, p)| (id.as_str(), p.as_slice()))
+            .collect();
+        let h = MemoryHistory::linear(&refs);
+        let c = Config::default();
+        let cx = Context::new(&w, &c, &c.targets).with_history(Some(&h));
+        let mut out = Vec::new();
+        InitFossilization.check(&cx, &mut out);
+        assert!(out.is_empty(), "{out:?}");
     }
 
     #[test]
