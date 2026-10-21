@@ -11,6 +11,10 @@ description = "Command-line interface for mnemoa."
 name = "mnemoa"
 path = "src/main.rs"
 
+[features]
+# Enable the LLM drafter for `mnemoa promote --llm` (network access).
+llm = ["mnemoa-core/llm"]
+
 [lints]
 workspace = true
 

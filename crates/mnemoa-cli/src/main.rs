@@ -49,6 +49,10 @@ enum Command {
     Drift(DriftArgs),
     /// Show always-loaded context per target agent.
     Budget(BudgetArgs),
+    /// Turn enforceable prose rules into executable checks (dry run unless --apply).
+    Promote(PromoteArgs),
+    /// Remove rules whose retire-when condition is met (dry run unless --apply).
+    Retire(RetireArgs),
     /// List all rules.
     Rules {
         /// Output format: pretty or json.
@@ -114,6 +118,35 @@ struct BudgetArgs {
     /// Exit 1 if any target is over `rules.token_budget`.
     #[arg(long)]
     check: bool,
+}
+
+#[derive(Args, Debug)]
+struct PromoteArgs {
+    /// Repository root.
+    #[arg(default_value = ".")]
+    path: PathBuf,
+    /// Write artifacts, the ledger and the doc edits.
+    #[arg(long)]
+    apply: bool,
+    /// Ask the configured LLM to draft ast-grep rules for prose the catalog cannot match.
+    #[arg(long)]
+    llm: bool,
+    /// Output format: pretty or json.
+    #[arg(long, short, default_value = "pretty")]
+    format: String,
+}
+
+#[derive(Args, Debug)]
+struct RetireArgs {
+    /// Repository root.
+    #[arg(default_value = ".")]
+    path: PathBuf,
+    /// Delete the rules whose condition is met.
+    #[arg(long)]
+    apply: bool,
+    /// Output format: pretty or json.
+    #[arg(long, short, default_value = "pretty")]
+    format: String,
 }
 
 fn use_color(choice: ColorChoice) -> bool {
@@ -231,6 +264,157 @@ fn cmd_budget(a: &BudgetArgs, g: &Global) -> Result<i32> {
     Ok(if a.check && over { 1 } else { 0 })
 }
 
+#[cfg(feature = "llm")]
+fn drafter(config: &Config) -> Result<Box<dyn mnemoa_core::drafter::Drafter>> {
+    Ok(Box::new(mnemoa_core::llm::HttpDrafter::new(&config.llm)?))
+}
+
+#[cfg(not(feature = "llm"))]
+fn drafter(_config: &Config) -> Result<Box<dyn mnemoa_core::drafter::Drafter>> {
+    bail!("this build has no LLM support; rebuild with `--features llm`")
+}
+
+fn cmd_promote(a: &PromoteArgs, g: &Global) -> Result<i32> {
+    if !a.path.is_dir() {
+        bail!("`{}` is not a directory", a.path.display());
+    }
+    let config = load_config(&a.path, g)?;
+    let ws = scan::load_workspace(&a.path, &config)?;
+    let ast_grep = mnemoa_core::drafter::find_ast_grep();
+    let d = if a.llm { Some(drafter(&config)?) } else { None };
+    let plan = mnemoa_core::promote::plan_with(&ws, &config, d.as_deref(), ast_grep.as_deref());
+    if a.format == "json" {
+        print(&(serde_json::to_string_pretty(&plan)? + "\n"))?;
+    } else {
+        let color = use_color(g.color);
+        let mut s = String::new();
+        for p in &plan.promotions {
+            let status = match p.status {
+                mnemoa_core::promote::Status::AlreadyEnforced => "already enforced",
+                mnemoa_core::promote::Status::Emit => "emit check",
+                mnemoa_core::promote::Status::Drafted => "drafted (validated)",
+            };
+            s.push_str(&format!(
+                "{}:{}  {}  [{}] {}\n",
+                p.source, p.line, p.rule, p.enforcer, status
+            ));
+            for art in &p.artifacts {
+                let action = match art.action {
+                    mnemoa_core::promote::Action::Create => "create",
+                    mnemoa_core::promote::Action::Update => "update",
+                    mnemoa_core::promote::Action::Manual => "manual",
+                };
+                s.push_str(&format!("    {action:<6} {}  {}\n", art.path, art.note));
+            }
+        }
+        for u in &plan.unmatched {
+            let note = match &u.draft {
+                Some(d) => format!(" (draft {:?})", d.validation),
+                None => String::new(),
+            };
+            s.push_str(&format!(
+                "{}:{}  {}  [no catalog match]{note}\n",
+                u.source, u.line, u.rule
+            ));
+        }
+        if !plan.diff.is_empty() && !a.apply {
+            s.push('\n');
+            s.push_str(&colorize_diff(&plan.diff, color));
+        }
+        s.push_str(&format!(
+            "\n{} promotion(s), {} unmatched; {} file(s) {}.\n",
+            plan.promotions.len(),
+            plan.unmatched.len(),
+            plan.files_changed.len(),
+            if a.apply {
+                "written"
+            } else {
+                "would change (run with --apply)"
+            }
+        ));
+        print(&s)?;
+    }
+    if a.apply {
+        mnemoa_core::promote::apply(&ws, &plan)?;
+    }
+    Ok(0)
+}
+
+fn colorize_diff(diff: &str, color: bool) -> String {
+    if !color {
+        return diff.to_string();
+    }
+    diff.lines()
+        .map(|l| {
+            if l.starts_with("+++") || l.starts_with("---") {
+                format!("\x1b[1m{l}\x1b[0m")
+            } else if l.starts_with('+') {
+                format!("\x1b[32m{l}\x1b[0m")
+            } else if l.starts_with('-') {
+                format!("\x1b[31m{l}\x1b[0m")
+            } else if l.starts_with("@@") {
+                format!("\x1b[36m{l}\x1b[0m")
+            } else {
+                l.to_string()
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
+        + "\n"
+}
+
+fn cmd_retire(a: &RetireArgs, g: &Global) -> Result<i32> {
+    if !a.path.is_dir() {
+        bail!("`{}` is not a directory", a.path.display());
+    }
+    let config = load_config(&a.path, g)?;
+    let ws = scan::load_workspace(&a.path, &config)?;
+    let ast_grep = mnemoa_core::drafter::find_ast_grep();
+    let plan = mnemoa_core::retire::plan(
+        &ws,
+        &config,
+        &mnemoa_core::ledger::today(),
+        ast_grep.as_deref(),
+    );
+    if a.format == "json" {
+        print(&(serde_json::to_string_pretty(&plan)? + "\n"))?;
+    } else {
+        let mut s = String::new();
+        for c in &plan.candidates {
+            let mark = if c.met && !c.protected && c.removable {
+                "retire"
+            } else if c.met {
+                "keep (protected or nested)"
+            } else {
+                "keep"
+            };
+            s.push_str(&format!(
+                "{}:{}  {}  [{}] {mark}: {}\n",
+                c.source, c.line, c.rule, c.condition, c.reason
+            ));
+        }
+        if !plan.diff.is_empty() && !a.apply {
+            s.push('\n');
+            s.push_str(&colorize_diff(&plan.diff, use_color(g.color)));
+        }
+        s.push_str(&format!(
+            "\n{} rule(s) with a retire condition; {} {}.\n",
+            plan.candidates.len(),
+            plan.retiring().count(),
+            if a.apply {
+                "retired"
+            } else {
+                "would be retired (run with --apply)"
+            }
+        ));
+        print(&s)?;
+    }
+    if a.apply {
+        mnemoa_core::retire::apply(&ws, &plan)?;
+    }
+    Ok(0)
+}
+
 fn cmd_rules(format: &str) -> Result<i32> {
     if format == "json" {
         print(&(serde_json::to_string_pretty(&rules::RULES)? + "\n"))?;
@@ -279,6 +463,8 @@ fn run(cli: Cli) -> Result<i32> {
         Command::Scan(a) => cmd_scan(a, &cli.global),
         Command::Drift(a) => cmd_drift(a, &cli.global),
         Command::Budget(a) => cmd_budget(a, &cli.global),
+        Command::Promote(a) => cmd_promote(a, &cli.global),
+        Command::Retire(a) => cmd_retire(a, &cli.global),
         Command::Rules { format } => cmd_rules(format),
         Command::Explain { id } => cmd_explain(id),
     }

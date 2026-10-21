@@ -207,3 +207,68 @@ fn drift_base_needs_git() {
             .code(2);
     }
 }
+
+#[test]
+fn promote_dry_run_then_apply() {
+    let dir = repo(&[(
+        "AGENTS.md",
+        "- Use 2 spaces for indentation.\n- Keep PRs small.\n",
+    )]);
+    mnemoa()
+        .args(["promote", "--color", "never"])
+        .arg(dir.path())
+        .assert()
+        .success()
+        .stdout(
+            predicate::str::contains("+++ b/.editorconfig")
+                .and(predicate::str::contains("would change")),
+        );
+    assert!(!dir.path().join(".editorconfig").exists());
+    mnemoa()
+        .args(["promote", "--apply"])
+        .arg(dir.path())
+        .assert()
+        .success();
+    assert!(
+        std::fs::read_to_string(dir.path().join(".editorconfig"))
+            .unwrap()
+            .contains("indent_size = 2")
+    );
+    assert_eq!(
+        std::fs::read_to_string(dir.path().join("AGENTS.md")).unwrap(),
+        "- Keep PRs small.\n"
+    );
+    assert!(dir.path().join(".mnemoa/ledger.toml").is_file());
+}
+
+#[test]
+fn promote_llm_without_feature_or_config_fails() {
+    let dir = repo(&[("AGENTS.md", "- Never edit `gen/x.rs` by hand.\n")]);
+    mnemoa()
+        .args(["promote", "--llm"])
+        .arg(dir.path())
+        .assert()
+        .code(2);
+}
+
+#[test]
+fn retire_dry_run_then_apply() {
+    let dir = repo(&[(
+        "AGENTS.md",
+        "<!-- why: freeze | retire-when: date:2020-01-01 -->\n- Keep PRs tiny.\n<!-- why: outage | retire-when: date:2020-01-01 -->\n- Never touch prod data.\n",
+    )]);
+    let out = mnemoa()
+        .args(["retire", "-f", "json"])
+        .arg(dir.path())
+        .output()
+        .unwrap();
+    let v: serde_json::Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(v["candidates"].as_array().unwrap().len(), 2);
+    mnemoa()
+        .args(["retire", "--apply"])
+        .arg(dir.path())
+        .assert()
+        .success();
+    let after = std::fs::read_to_string(dir.path().join("AGENTS.md")).unwrap();
+    assert!(!after.contains("PRs tiny") && after.contains("prod data"));
+}

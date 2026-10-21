@@ -21,6 +21,7 @@ pub mod promote;
 pub mod rationale;
 pub mod repo;
 pub mod report;
+pub mod retire;
 pub mod rules;
 pub mod scan;
 pub mod symbols;

@@ -834,7 +834,7 @@ fn looks_enforceable(rule: &Rule, doc: &Doc) -> bool {
 
 /// Byte range of the whole list item for `rule` if it can be removed cleanly: a list item with
 /// no nested list. Includes a rationale comment on the line above.
-fn removal_range(doc: &Doc, rule: &Rule) -> Option<std::ops::Range<usize>> {
+pub(crate) fn removal_range(doc: &Doc, rule: &Rule) -> Option<std::ops::Range<usize>> {
     let RuleKind::ListItem { .. } = rule.kind else {
         return None;
     };
