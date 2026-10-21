@@ -139,20 +139,32 @@ impl Check for StaleCommand {
     }
 
     fn check(&self, cx: &Context<'_>, out: &mut Vec<Finding>) {
-        let facts = cx.facts();
-        let any_makefile = !facts.make.is_empty();
-        let any_justfile = !facts.just.is_empty();
         for doc in cx.instruction_docs() {
-            for (cmd, span) in commands(doc) {
-                if let Some(msg) = stale(cx, facts, &cmd, any_makefile, any_justfile) {
-                    out.push(
-                        finding_at(self.info(), doc, span, msg)
-                            .with_help("Update the command to one the repo defines, or remove it."),
-                    );
-                }
+            for (_, span, msg) in stale_commands(cx, doc) {
+                out.push(
+                    finding_at(self.info(), doc, span, msg)
+                        .with_help("Update the command to one the repo defines, or remove it."),
+                );
             }
         }
     }
+}
+
+/// Stale commands in one document: (command, span, reason).
+pub(crate) fn stale_commands(
+    cx: &Context<'_>,
+    doc: &Doc,
+) -> Vec<(String, std::ops::Range<usize>, String)> {
+    let facts = cx.facts();
+    let any_makefile = !facts.make.is_empty();
+    let any_justfile = !facts.just.is_empty();
+    commands(doc)
+        .into_iter()
+        .filter_map(|(cmd, span)| {
+            let msg = stale(cx, facts, &cmd, any_makefile, any_justfile)?;
+            Some((cmd, span, msg))
+        })
+        .collect()
 }
 
 /// Every command line in a document with its span: whole code spans and lines of shell blocks.

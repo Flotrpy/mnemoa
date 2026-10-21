@@ -101,6 +101,9 @@ pub trait History: Send + Sync {
     /// this compares the two trees directly).
     fn diff_from(&self, base: &str) -> Result<Vec<FileChange>, HistoryError>;
 
+    /// Contents of `path` (relative to the scanned root) at revision `rev`, if it existed there.
+    fn file_at(&self, rev: &str, path: &str) -> Result<Option<String>, HistoryError>;
+
     /// Indices (into [`History::commits`]) of commits that touch `path`, newest first.
     fn touching(&self, path: &str) -> Vec<usize> {
         self.commits()
@@ -142,6 +145,8 @@ pub struct MemoryHistory {
     pub commits: Vec<CommitInfo>,
     pub shallow: bool,
     pub diffs: BTreeMap<String, Vec<FileChange>>,
+    /// File contents by (revision, path).
+    pub files: BTreeMap<(String, String), String>,
 }
 
 impl MemoryHistory {
@@ -173,6 +178,7 @@ impl MemoryHistory {
             commits: out,
             shallow: false,
             diffs: BTreeMap::new(),
+            files: BTreeMap::new(),
         }
     }
 }
@@ -189,6 +195,12 @@ impl History for MemoryHistory {
             .get(base)
             .cloned()
             .ok_or_else(|| HistoryError::UnknownRevision(base.to_string()))
+    }
+    fn file_at(&self, rev: &str, path: &str) -> Result<Option<String>, HistoryError> {
+        Ok(self
+            .files
+            .get(&(rev.to_string(), path.to_string()))
+            .cloned())
     }
 }
 
@@ -409,6 +421,30 @@ impl History for GixHistory {
             &self.prefix,
         )
     }
+
+    fn file_at(&self, rev: &str, path: &str) -> Result<Option<String>, HistoryError> {
+        let repo = gix::discover(&self.root).map_err(git_err)?;
+        let id = repo
+            .rev_parse_single(rev)
+            .map_err(|_| HistoryError::UnknownRevision(rev.to_string()))?;
+        let tree = id
+            .object()
+            .map_err(git_err)?
+            .peel_to_commit()
+            .map_err(git_err)?
+            .tree()
+            .map_err(git_err)?;
+        let full = if self.prefix.is_empty() {
+            path.to_string()
+        } else {
+            format!("{}/{path}", self.prefix)
+        };
+        let Some(entry) = tree.lookup_entry_by_path(&full).map_err(git_err)? else {
+            return Ok(None);
+        };
+        let obj = entry.object().map_err(git_err)?;
+        Ok(Some(String::from_utf8_lossy(&obj.data).into_owned()))
+    }
 }
 
 #[cfg(test)]
@@ -512,6 +548,12 @@ pub(crate) mod tests {
             h.diff_from("nope"),
             Err(HistoryError::UnknownRevision(_))
         ));
+        assert_eq!(
+            h.file_at("base", "AGENTS.md").unwrap().as_deref(),
+            Some("a")
+        );
+        assert!(h.file_at("base", "src/b.rs").unwrap().is_none());
+        assert!(h.file_at("HEAD", "src/b.rs").unwrap().is_some());
     }
 
     #[test]
