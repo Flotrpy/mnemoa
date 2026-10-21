@@ -1,0 +1,9 @@
+# Local development overrides, picked up automatically by `docker compose`.
+# Delete this file (or use `-f docker-compose.yml`) for a production-like setup.
+services:
+  mnemoa:
+    environment:
+      RUST_LOG: ${RUST_LOG:-debug}
+  ollama:
+    ports:
+      - "11434:11434"
