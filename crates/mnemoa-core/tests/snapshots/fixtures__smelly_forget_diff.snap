@@ -1,0 +1,77 @@
+---
+source: crates/mnemoa-core/tests/fixtures.rs
+expression: diff
+---
+--- a/.mnemoa/ledger.toml
++++ b/.mnemoa/ledger.toml
+@@ -1,3 +1,5 @@
++# Managed by `mnemoa promote`. Each entry maps a prose rule to the check that enforces it.
++
+ [[check]]
+ id = "promoted-example"
+ hash = "4141c2bf70555371"
+@@ -7,3 +9,14 @@
+ artifacts = []
+ date = "2026-01-01"
+ state = "applied"
++
++[[check]]
++id = "indentation"
++hash = "be78bdfb73c0abe1"
++text = "Use 2 spaces for indentation."
++source = "AGENTS.md"
++enforcer = "editorconfig"
++artifacts = []
++date = "<today>"
++state = "applied"
++retire-when = "check:indentation"
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -1,30 +1,11 @@
+ # Smelly project
+ 
+-<!-- why: reviewers kept asking | retire-when: check:indentation -->
+-- Use 2 spaces for indentation.
+-- [API docs](docs/api.md)
++- Read [API docs](docs/api.md) when working on api reference.
+ - Read [setup](docs/setup.md) before onboarding.
+ - Run `make check` before committing.
+ - Install with `npm install`.
+ - Use pnpm for everything.
+ 
+-## Stack
+-
+-- TypeScript
+-- React
+-- Vitest
+-
+-```
+-.
+-├── src/
+-│   └── index.ts
+-├── docs/
+-└── package.json
+-```
+-
+ ## Adding a new endpoint
+ 
+-1. Add the route in `src/routes.ts`.
+-2. Add the handler next to it.
+-3. Add a test.
+-4. Update the API reference.
++- Before starting, read `docs/agents/adding-a-new-endpoint.md`.
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -1,2 +1 @@
+-- Use 2 spaces for indentation.
+-- Prefer plan mode for refactors.
++@AGENTS.md
+--- /dev/null
++++ b/docs/agents/adding-a-new-endpoint.md
+@@ -0,0 +1,6 @@
++# Adding a new endpoint
++
++1. Add the route in `src/routes.ts`.
++2. Add the handler next to it.
++3. Add a test.
++4. Update the API reference.

@@ -1,0 +1,33 @@
+---
+source: crates/mnemoa-core/tests/fixtures.rs
+expression: d.items
+---
+[
+  {
+    "kind": "done-task-missing-file",
+    "severity": "error",
+    "path": "specs/001-auth/tasks.md",
+    "line": 4,
+    "column": 1,
+    "reference": "tests/contract/test_login.py",
+    "message": "Task is checked off, but `tests/contract/test_login.py` does not exist."
+  },
+  {
+    "kind": "malformed-task",
+    "severity": "info",
+    "path": "specs/001-auth/tasks.md",
+    "line": 6,
+    "column": 1,
+    "reference": "T4 bad task id",
+    "message": "Spec Kit task does not match `T### [P] [US#] Description` (ID needs three digits; only [P] and [US#] markers)."
+  },
+  {
+    "kind": "malformed-task",
+    "severity": "info",
+    "path": "specs/001-auth/tasks.md",
+    "line": 7,
+    "column": 1,
+    "reference": "Write the docs",
+    "message": "Spec Kit task has no task ID (expected `- [ ] T001 Description`)."
+  }
+]

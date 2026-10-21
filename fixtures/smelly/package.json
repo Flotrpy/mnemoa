@@ -1,0 +1,1 @@
+{"name": "smelly", "scripts": {"test": "vitest"}, "devDependencies": {"typescript": "5", "vitest": "1", "react": "18"}}

@@ -1,0 +1,9 @@
+[[check]]
+id = "promoted-example"
+hash = "4141c2bf70555371"
+text = "Prefer plan mode for refactors."
+source = "CLAUDE.md"
+enforcer = "ast-grep"
+artifacts = []
+date = "2026-01-01"
+state = "applied"
