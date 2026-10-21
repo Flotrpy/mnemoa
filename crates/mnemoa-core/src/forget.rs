@@ -206,10 +206,18 @@ pub fn plan(ws: &Workspace, config: &Config, today: &str, ast_grep: Option<&Path
                 } else {
                     format!("# {title}\n\n{body}")
                 };
-                let pointer = format!(
-                    "- When the task involves {}, read `{target}`.\n",
-                    title.to_lowercase()
-                );
+                // Keep a section heading in place and point from it; otherwise leave a pointer line.
+                let heading_line = body
+                    .trim_start()
+                    .starts_with('#')
+                    .then(|| body.trim_start().lines().next().unwrap_or("").to_string());
+                let pointer = match &heading_line {
+                    Some(h) => format!("{h}\n\n- Before starting, read `{target}`.\n"),
+                    None => format!(
+                        "- When the task involves {}, read `{target}`.\n",
+                        title.to_lowercase()
+                    ),
+                };
                 // Only move when the pointer is cheaper than what it replaces.
                 if tok.count(&pointer) >= tok.count(&body) {
                     continue;
@@ -467,7 +475,16 @@ pub fn plan(ws: &Workspace, config: &Config, today: &str, ast_grep: Option<&Path
             actions.push(e.action);
         }
         out.push_str(&doc.text[pos..]);
-        files.insert(path.clone(), drop_emptied_headings(doc, &out));
+        let mut out = drop_emptied_headings(doc, &out);
+        // An empty CLAUDE.md would hide AGENTS.md from Claude Code; import it instead.
+        let dir = path.rfind('/').map(|i| &path[..=i]).unwrap_or("");
+        if path.ends_with("CLAUDE.md")
+            && out.trim().is_empty()
+            && ws.discovery.has_file(&format!("{dir}AGENTS.md"))
+        {
+            out = "@AGENTS.md\n".to_string();
+        }
+        files.insert(path.clone(), out);
     }
     actions
         .sort_by(|a, b| (a.path.as_str(), a.line, a.kind).cmp(&(b.path.as_str(), b.line, b.kind)));
@@ -653,7 +670,7 @@ mod tests {
         assert!(!agents.contains("├──"));
         assert!(!agents.contains("2 spaces"));
         assert!(!agents.contains("PRs under 100"));
-        assert!(agents.contains("- When the task involves adding a new endpoint, read `docs/agents/adding-a-new-endpoint.md`."));
+        assert!(agents.contains("## Adding a new endpoint\n\n- Before starting, read `docs/agents/adding-a-new-endpoint.md`."));
         assert!(agents.contains("- Read [API](docs/api.md) when working on api reference."));
         assert!(
             p.files["docs/agents/adding-a-new-endpoint.md"]
@@ -749,7 +766,7 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         std::fs::write(
             dir.path().join("AGENTS.md"),
-            "## Releasing\n\n1. Bump.\n2. Tag.\n3. Push.\n",
+            "## Releasing\n\n1. Bump the version in Cargo.toml and update the changelog with every user-facing change.\n2. Tag the release commit with the new version and push the tag to origin.\n3. Wait for the release workflow, then check the published artifacts and the docs site.\n",
         )
         .unwrap();
         let w = Workspace::load(dir.path(), &Default::default()).unwrap();
@@ -759,7 +776,7 @@ mod tests {
         let a = std::fs::read_to_string(dir.path().join("AGENTS.md")).unwrap();
         assert_eq!(
             a,
-            "- When the task involves releasing, read `docs/agents/releasing.md`.\n"
+            "## Releasing\n\n- Before starting, read `docs/agents/releasing.md`.\n"
         );
     }
 }

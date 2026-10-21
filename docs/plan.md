@@ -40,9 +40,10 @@ and `cargo test --workspace`.
 - [x] 31. feat(bench): mnemoa-bench with 12 suites, --filter and --json
 - [x] 32. fix(core): MNA008 ignores bare source paths, MNA011 skips procedure steps, clearer nested AGENTS.md reason
 - [x] 33. fix(core): no hooks for stale commands, drop emptied headings, remove every copy of a promoted rule
-- [ ] 34. test: fixture corpus, insta snapshots, proptest parser fuzzing and coverage target
-- [ ] 35. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
-- [ ] 36. docs: architecture, api and rules docs; CONTRIBUTING; action.yml
-- [ ] 37. docs: README in mnemo format with real numbers and TBDs
+- [x] 34. fix(core): keep a moved section's heading; import AGENTS.md into an emptied CLAUDE.md
+- [ ] 35. test: fixture corpus, insta snapshots, proptest parser fuzzing and coverage target
+- [ ] 36. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
+- [ ] 37. docs: architecture, api and rules docs; CONTRIBUTING; action.yml
+- [ ] 38. docs: README in mnemo format with real numbers and TBDs
 
 If an item splits, renumber this list and keep going.
