@@ -2,12 +2,14 @@
 
 use serde::Serialize;
 
+pub mod commands;
 pub mod references;
 
 use crate::config::Config;
 use crate::diag::{self, Finding, Severity};
 use crate::discover::Target;
 use crate::doc::Doc;
+use crate::repo::RepoFacts;
 use crate::workspace::Workspace;
 
 /// Static description of a rule.
@@ -190,6 +192,7 @@ pub struct Context<'a> {
     pub ws: &'a Workspace,
     pub config: &'a Config,
     pub targets: &'a [Target],
+    facts: std::sync::OnceLock<RepoFacts>,
 }
 
 impl<'a> Context<'a> {
@@ -198,7 +201,13 @@ impl<'a> Context<'a> {
             ws,
             config,
             targets,
+            facts: std::sync::OnceLock::new(),
         }
+    }
+
+    /// Repository facts (task runners, enforcers, dependencies), computed on first use.
+    pub fn facts(&self) -> &RepoFacts {
+        self.facts.get_or_init(|| RepoFacts::collect(self.ws))
     }
 
     /// Instruction documents: every non-plan surface plus imported files.
@@ -262,6 +271,7 @@ pub fn registry() -> Vec<Box<dyn Check>> {
     vec![
         Box::new(references::BlindReference),
         Box::new(references::BrokenReference),
+        Box::new(commands::StaleCommand),
     ]
 }
 
