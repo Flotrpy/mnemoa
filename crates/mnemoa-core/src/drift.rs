@@ -110,11 +110,15 @@ pub struct DriftReport {
     pub summary: Summary,
     /// Whether git history was available.
     pub history: bool,
+    /// The repository's `scan.strict` setting.
+    #[serde(default)]
+    pub strict: bool,
 }
 
 impl DriftReport {
+    /// 1 when any error, or any warning when `strict` or the repository config is strict.
     pub fn exit_code(&self, strict: bool) -> i32 {
-        if self.summary.errors > 0 || (strict && self.summary.warnings > 0) {
+        if self.summary.errors > 0 || ((strict || self.strict) && self.summary.warnings > 0) {
             1
         } else {
             0
@@ -396,6 +400,7 @@ pub fn drift(
         freshness,
         summary,
         history: history.is_some(),
+        strict: config.scan.strict,
     })
 }
 

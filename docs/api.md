@@ -20,7 +20,7 @@ Errors are `{"error": "<message>"}` with status `400` (bad input), `403` (outsid
 | Method | Path | Body | Response |
 |---|---|---|---|
 | GET | `/health` | none | `HealthResponse` |
-| POST | `/scan` | `{path, targets?, rules?, strict?}` | `ScanReport` |
+| POST | `/scan` | `{path, targets?, rules?, strict?, history?}` | `ScanReport` |
 | POST | `/budget` | `{path, targets?}` | `BudgetReport` |
 | POST | `/drift` | `{path, base?}` | `DriftReport` |
 | POST | `/promote` | `{path, llm?, apply?}` | `PromotionPlan` + `written` |
@@ -70,6 +70,8 @@ Errors are `{"error": "<message>"}` with status `400` (bad input), `403` (outsid
 }
 ```
 
+Send `"history": false` to skip git history (and with it MNA005), as `scan --no-history` does locally.
+
 ### POST /budget
 
 ```json
@@ -84,11 +86,12 @@ Errors are `{"error": "<message>"}` with status `400` (bad input), `403` (outsid
     "total_lines": 120, "total_bytes": 6400, "total_tokens": 1500,
     "on_demand": [{ "path": "pkg/AGENTS.md", "trigger": "when Codex is started in `pkg/` or below", "tokens": 300 }],
     "notes": ["Codex is assumed not to strip HTML comments (unverified)"]
-  }]
+  }],
+  "token_budget": 2000
 }
 ```
 
-`dropped_bytes` appears for Codex when the always-loaded set passes the 32 KiB cap.
+`dropped_bytes` appears for Codex when the always-loaded set passes the 32 KiB cap. `token_budget` is the repository's `rules.token_budget`; `mnemoa --server … budget --check` fails when a target exceeds it or drops bytes.
 
 ### POST /drift
 
@@ -103,9 +106,12 @@ Errors are `{"error": "<message>"}` with status `400` (bad input), `403` (outsid
     "reference": "src/old.rs", "message": "`src/old.rs` was renamed to `src/new.rs` since origin/main."
   }],
   "freshness": [{ "path": "AGENTS.md", "last_commit": "…", "commits_since": 3, "references": ["src/new.rs"] }],
-  "summary": { "errors": 1, "warnings": 0, "infos": 0 }
+  "summary": { "errors": 1, "warnings": 0, "infos": 0 },
+  "strict": false
 }
 ```
+
+`strict` is the repository's `scan.strict`; when true, warnings fail `mnemoa --server … drift` too.
 
 Drift kinds: `missing-path`, `missing-symbol`, `stale-command`, `removed-in-diff`, `renamed-in-diff`, `symbol-removed-in-diff`, `done-task-missing-file`, `open-task-file-changed`, `malformed-task`, `stale-memory-bank`.
 

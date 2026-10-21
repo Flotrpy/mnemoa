@@ -277,7 +277,7 @@ fn cmd_drift(a: &DriftArgs, g: &Global) -> Result<i32> {
         },
     )?;
     print(&report::render_drift(&report, format, use_color(g.color)))?;
-    Ok(report.exit_code(a.strict || config.scan.strict))
+    Ok(report.exit_code(a.strict))
 }
 
 fn cmd_budget(a: &BudgetArgs, g: &Global) -> Result<i32> {
@@ -287,13 +287,14 @@ fn cmd_budget(a: &BudgetArgs, g: &Global) -> Result<i32> {
     let config = load_config(&a.path, g)?;
     let format: Format = a.format.parse().map_err(anyhow::Error::msg)?;
     let ws = scan::load_workspace(&a.path, &config)?;
-    let report = mnemoa_core::budget::budget(&ws, &config.targets, mnemoa_core::Tokenizer::best());
+    let report = mnemoa_core::budget::budget(&ws, &config.targets, mnemoa_core::Tokenizer::best())
+        .with_token_budget(config.rules.token_budget);
     print(&report::render_budget(&report, format, use_color(g.color)))?;
-    let over = report
-        .targets
-        .iter()
-        .any(|t| t.total_tokens > config.rules.token_budget || t.dropped_bytes.is_some());
-    Ok(if a.check && over { 1 } else { 0 })
+    Ok(if a.check && report.over_budget() {
+        1
+    } else {
+        0
+    })
 }
 
 #[cfg(feature = "llm")]

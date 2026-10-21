@@ -177,6 +177,8 @@ pub struct ScanRequest {
     pub targets: Option<Vec<String>>,
     pub rules: Option<Vec<String>>,
     pub strict: Option<bool>,
+    /// Use git history (MNA005). Defaults to true.
+    pub history: Option<bool>,
 }
 
 fn dot() -> String {
@@ -200,7 +202,7 @@ async fn scan_handler(
             rules: req.rules,
             strict: req.strict,
             baseline: None,
-            history: true,
+            history: req.history.unwrap_or(true),
         };
         scan::scan(&path, &config, &opts).map_err(|e| ApiError::bad(e.to_string()))
     })
@@ -233,11 +235,10 @@ async fn budget_handler(
     }
     let report = blocking(move || {
         let ws = scan::load_workspace(&path, &config).map_err(|e| ApiError::bad(e.to_string()))?;
-        Ok(mnemoa_core::budget::budget(
-            &ws,
-            &config.targets,
-            Tokenizer::best(),
-        ))
+        Ok(
+            mnemoa_core::budget::budget(&ws, &config.targets, Tokenizer::best())
+                .with_token_budget(config.rules.token_budget),
+        )
     })
     .await?;
     Ok(Json(report))

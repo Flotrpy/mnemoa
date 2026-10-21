@@ -2227,12 +2227,15 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
+ "axum",
  "clap",
+ "mnemoa-api",
  "mnemoa-core",
  "predicates",
  "reqwest",
  "serde_json",
  "tempfile",
+ "tokio",
 ]
 
 [[package]]

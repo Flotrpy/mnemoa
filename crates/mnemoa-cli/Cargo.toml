@@ -27,5 +27,8 @@ serde_json = "1.0.154"
 
 [dev-dependencies]
 assert_cmd = "2.2.2"
+axum = "0.8.9"
+mnemoa-api = { path = "../mnemoa-api" }
 predicates = "3.1.4"
 tempfile = "3.27.0"
+tokio = { version = "1.54.0", features = ["rt-multi-thread", "net"] }
