@@ -382,6 +382,23 @@ mod tests {
     }
 
     #[test]
+    fn every_rule_is_documented() {
+        let doc = include_str!("../../../../docs/rules.md");
+        for r in &RULES {
+            assert!(
+                doc.contains(&format!("## {} {}", r.id, r.name)),
+                "{} missing from docs/rules.md",
+                r.id
+            );
+            assert!(
+                doc.contains(r.summary),
+                "{} summary out of date in docs/rules.md",
+                r.id
+            );
+        }
+    }
+
+    #[test]
     fn only_mna011_is_opt_in() {
         let opt: Vec<&str> = RULES.iter().filter(|r| r.opt_in).map(|r| r.id).collect();
         assert_eq!(opt, vec!["MNA011"]);

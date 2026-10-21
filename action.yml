@@ -1,0 +1,55 @@
+name: mnemoa
+description: Keep repo memory for coding agents small, true and enforced. Scans agent instruction files and checks docs and plans for drift.
+branding:
+  icon: check-square
+  color: purple
+
+inputs:
+  path:
+    description: Repository root to check.
+    default: "."
+  strict:
+    description: Fail on warnings as well as errors.
+    default: "false"
+  drift:
+    description: Also run `mnemoa drift`.
+    default: "true"
+  drift-base:
+    description: Base revision for diff-aware drift (defaults to the pull request base branch).
+    default: ""
+  sarif:
+    description: Write SARIF to this file (for github/codeql-action/upload-sarif).
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Install mnemoa
+      shell: bash
+      run: |
+        if ! command -v mnemoa >/dev/null 2>&1; then
+          cargo install --locked --path "${{ github.action_path }}/crates/mnemoa-cli"
+        fi
+    - name: Scan
+      shell: bash
+      run: |
+        args=(scan "${{ inputs.path }}" --format github)
+        if [ "${{ inputs.strict }}" = "true" ]; then args+=(--strict); fi
+        mnemoa "${args[@]}"
+    - name: SARIF
+      if: inputs.sarif != ''
+      shell: bash
+      run: mnemoa scan "${{ inputs.path }}" --format sarif > "${{ inputs.sarif }}" || true
+    - name: Drift
+      if: inputs.drift == 'true'
+      shell: bash
+      run: |
+        base="${{ inputs.drift-base }}"
+        if [ -z "$base" ] && [ -n "${{ github.base_ref }}" ]; then
+          git fetch --no-tags --depth=200 origin "${{ github.base_ref }}" || true
+          base="origin/${{ github.base_ref }}"
+        fi
+        args=(drift "${{ inputs.path }}" --format github)
+        if [ -n "$base" ]; then args+=(--base "$base"); fi
+        if [ "${{ inputs.strict }}" = "true" ]; then args+=(--strict); fi
+        mnemoa "${args[@]}"
