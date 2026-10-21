@@ -16,6 +16,7 @@ default = ["tiktoken"]
 tiktoken = ["dep:tiktoken-rs"]
 
 [dependencies]
+gix = { version = "0.87.1", default-features = false, features = ["sha1", "revision", "blob-diff"] }
 globset = "0.4.19"
 ignore = "0.4.30"
 pulldown-cmark = { version = "0.13.4", default-features = false }

@@ -20,7 +20,7 @@ and `cargo test --workspace`.
 - [x] 11. feat(core): MNA001 context-bloat and MNA009 discoverable-content
 - [x] 12. feat(core): MNA002 lint-leakage with enforcer detection catalog
 - [x] 13. feat(core): MNA003 skill-leakage and MNA004 conflicting-instructions
-- [ ] 14. feat(core): git history trait with gix backend; MNA005 init-fossilization
+- [x] 14. feat(core): git history trait with gix backend; MNA005 init-fossilization
 - [ ] 15. feat(core): MNA010 cross-file-divergence, MNA013 unloaded-file and rationale parser (MNA011)
 - [ ] 16. feat(cli): mnemoa scan with pretty, json, sarif and github formats plus baseline
 - [ ] 17. ci: dogfood mnemoa scan on this repo
