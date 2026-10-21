@@ -1,0 +1,748 @@
+repo,rule,severity,path,line,message,snippet
+openai/openai-agents-python,MNA001,warn,AGENTS.md,1,"codex loads about 7128 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7128.",budget:codex
+openai/openai-agents-python,MNA001,warn,AGENTS.md,1,Codex stops adding guidance after 32768 bytes; about 5473 bytes from `AGENTS.md` onward never reach it.,codex-byte-cap
+openai/openai-agents-python,MNA001,warn,AGENTS.md,1,"cursor loads about 7128 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7128.",budget:cursor
+openai/openai-agents-python,MNA001,warn,AGENTS.md,1,"copilot loads about 7128 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7128.",budget:copilot
+openai/openai-agents-python,MNA001,warn,AGENTS.md,1,"kiro loads about 7128 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7128.",budget:kiro
+openai/openai-agents-python,MNA006,info,AGENTS.md,7,Reference to `#project-structure-guide` says nothing about when or why to read it.,3. [Project Structure Guide](#project-structure-guide)
+openai/openai-agents-python,MNA006,info,AGENTS.md,8,Reference to `#operation-guide` says nothing about when or why to read it.,4. [Operation Guide](#operation-guide)
+openai/openai-agents-python,MNA001,warn,AGENTS.md,200,AGENTS.md has 214 lines; always-loaded files should stay under 200.,
+openai/openai-agents-python,MNA001,warn,CLAUDE.md,1,"claude-code loads about 7128 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 7128.",budget:claude-code
+openai/openai-agents-python,MNA006,info,CLAUDE.md,7,Reference to `#project-structure-guide` says nothing about when or why to read it.,3. [Project Structure Guide](#project-structure-guide)
+openai/openai-agents-python,MNA006,info,CLAUDE.md,8,Reference to `#operation-guide` says nothing about when or why to read it.,4. [Operation Guide](#operation-guide)
+openai/openai-agents-python,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 214 lines; always-loaded files should stay under 200.,
+openai/openai-agents-js,MNA001,warn,AGENTS.md,1,"codex loads about 7599 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7599.",budget:codex
+openai/openai-agents-js,MNA001,warn,AGENTS.md,1,Codex stops adding guidance after 32768 bytes; about 6710 bytes from `AGENTS.md` onward never reach it.,codex-byte-cap
+openai/openai-agents-js,MNA001,warn,AGENTS.md,1,"cursor loads about 7599 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7599.",budget:cursor
+openai/openai-agents-js,MNA001,warn,AGENTS.md,1,"copilot loads about 7599 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7599.",budget:copilot
+openai/openai-agents-js,MNA001,warn,AGENTS.md,1,"kiro loads about 7599 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7599.",budget:kiro
+openai/openai-agents-js,MNA006,info,AGENTS.md,11,Reference to `#project-structure-guide` says nothing about when or why to read it.,3.  [Project Structure Guide](#project-structure-guide)
+openai/openai-agents-js,MNA006,info,AGENTS.md,12,Reference to `#operation-guide` says nothing about when or why to read it.,4.  [Operation Guide](#operation-guide)
+openai/openai-agents-js,MNA001,warn,AGENTS.md,200,AGENTS.md has 248 lines; always-loaded files should stay under 200.,
+openai/openai-agents-js,MNA002,warn,AGENTS.md,244,"Restates what Prettier already enforces (maximum line length; configured in .prettierrc, package.json).",- Keep summary under 80 characters.
+openai/openai-agents-js,MNA001,warn,CLAUDE.md,1,"claude-code loads about 7599 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 7599.",budget:claude-code
+openai/openai-agents-js,MNA006,info,CLAUDE.md,11,Reference to `#project-structure-guide` says nothing about when or why to read it.,3.  [Project Structure Guide](#project-structure-guide)
+openai/openai-agents-js,MNA006,info,CLAUDE.md,12,Reference to `#operation-guide` says nothing about when or why to read it.,4.  [Operation Guide](#operation-guide)
+openai/openai-agents-js,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 248 lines; always-loaded files should stay under 200.,
+openai/openai-agents-js,MNA002,warn,CLAUDE.md,244,"Restates what Prettier already enforces (maximum line length; configured in .prettierrc, package.json).",- Keep summary under 80 characters.
+anthropics/claude-code,MNA003,info,CLAUDE.md,5,"A 3-step procedure (""Security hardening for GitHub Actions"") is loaded on every task, but only some tasks need it.",## Security hardening for GitHub Actions
+anthropics/anthropic-sdk-python,MNA001,warn,CLAUDE.md,1,"claude-code loads about 7474 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 7474.",budget:claude-code
+anthropics/anthropic-sdk-python,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 368 lines; always-loaded files should stay under 200.,
+anthropics/anthropic-sdk-typescript,MNA001,warn,CLAUDE.md,1,"claude-code loads about 7034 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 7034.",budget:claude-code
+anthropics/anthropic-sdk-typescript,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 298 lines; always-loaded files should stay under 200.,
+vercel/next.js,MNA001,warn,AGENTS.md,1,"claude-code loads about 7322 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7322.",budget:claude-code
+vercel/next.js,MNA001,warn,AGENTS.md,1,"codex loads about 7384 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7384.",budget:codex
+vercel/next.js,MNA001,warn,AGENTS.md,1,"cursor loads about 7384 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7384.",budget:cursor
+vercel/next.js,MNA001,warn,AGENTS.md,1,"copilot loads about 7384 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7384.",budget:copilot
+vercel/next.js,MNA001,warn,AGENTS.md,1,"kiro loads about 7384 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7384.",budget:kiro
+vercel/next.js,MNA009,info,AGENTS.md,9,Directory tree repeats the repo layout (7 of 8 entries exist); the agent can list the tree itself.,```
+vercel/next.js,MNA007,error,AGENTS.md,48,"Path `turbopack/README.md` does not exist, though `turbopack/` does.",`turbopack/README.md`
+vercel/next.js,MNA007,error,AGENTS.md,49,"Path `turbopack/crates/README.md` does not exist, though `turbopack/` does.",`turbopack/crates/README.md`
+vercel/next.js,MNA001,warn,AGENTS.md,200,AGENTS.md has 545 lines; always-loaded files should stay under 200.,
+vercel/next.js,MNA008,warn,AGENTS.md,272,`packages/next/dist`: `packages/next/dist` does not exist.,`packages/next/dist`
+vercel/next.js,MNA008,warn,AGENTS.md,314,`.husky/post-checkout`: `.husky/post-checkout` does not exist.,`.husky/post-checkout`
+vercel/next.js,MNA004,info,AGENTS.md,329,"Puts refer to guideline in `.github/ISSUE_TEMPLATE/1.bug_report.yml`, but AGENTS.md:292 puts them in `.github/pull_request_template.md`.",You must inform the user that you are not allowed to create issues/discussions/comments on their behalf. Refer to the guidelines in `.github/ISSUE_TEMPLATE/1.bug_report.yml`.
+vercel/next.js,MNA007,error,AGENTS.md,541,"Path `docs/README.md` does not exist, though `docs/` does.",`docs/README.md`
+vercel/next.js,MNA007,error,AGENTS.md,543,"Path `crates/turborepo-cli/src/cli/agent_guidance.rs` does not exist, though `crates/` does.",`crates/turborepo-cli/src/cli/agent_guidance.rs`
+vercel/ai,MNA004,info,AGENTS.md,45,"Uses npm, but the repo's lockfile is `pnpm-lock.yaml` (pnpm).",`npm install -g pnpm@12`
+vercel/ai,MNA004,info,AGENTS.md,50,"Uses pnpm as the JavaScript package manager, but AGENTS.md:45 uses npm.",pnpm install        # Install all dependencies
+vercel/ai,MNA004,info,AGENTS.md,51,"Uses pnpm as the JavaScript package manager, but AGENTS.md:45 uses npm.",pnpm build          # Build all packages
+vercel/ai,MNA004,info,AGENTS.md,60,"Uses pnpm as the JavaScript package manager, but AGENTS.md:45 uses npm.",`pnpm install`
+vercel/ai,MNA004,info,AGENTS.md,61,"Uses pnpm as the JavaScript package manager, but AGENTS.md:45 uses npm.",`pnpm build`
+vercel/ai,MNA004,info,AGENTS.md,62,"Uses pnpm as the JavaScript package manager, but AGENTS.md:45 uses npm.",`pnpm test`
+vercel/ai,MNA004,info,AGENTS.md,75,"Uses pnpm as the JavaScript package manager, but AGENTS.md:45 uses npm.",`pnpm build`
+vercel/ai,MNA004,info,AGENTS.md,77,"Uses pnpm as the JavaScript package manager, but AGENTS.md:45 uses npm.",`pnpm test`
+vercel/ai,MNA004,info,AGENTS.md,127,"Uses pnpm as the JavaScript package manager, but AGENTS.md:45 uses npm.",`pnpm install`
+vercel/ai,MNA001,warn,AGENTS.md,200,AGENTS.md has 324 lines; always-loaded files should stay under 200.,
+vercel/ai,MNA003,info,AGENTS.md,250,"A 3-step procedure (""Adding New Packages"") is loaded on every task, but only some tasks need it.",### Adding New Packages
+vercel/ai,MNA003,info,AGENTS.md,292,"A 5-step procedure (""New Features"") is loaded on every task, but only some tasks need it.",### New Features
+microsoft/vscode,MNA008,warn,.github/copilot-instructions.md,61,"`npm run typecheck`: no script `typecheck` in package.json (has: 7z, agent-host:check-copilot-meta, agent-host:generate-copilot-meta, build-fast, build-fast-extensions, bundle-dev-tunnels-web, check-cyclic-dependencies, codex:check-protocol).",`npm run typecheck`
+microsoft/vscode,MNA002,warn,.github/copilot-instructions.md,81,Restates what ESLint already enforces (identifier naming case; configured in eslint.config.js).,- Use PascalCase for `type` names
+microsoft/vscode,MNA002,warn,.github/copilot-instructions.md,83,Restates what ESLint already enforces (identifier naming case; configured in eslint.config.js).,- Use camelCase for `function` and `method` names
+microsoft/vscode,MNA002,warn,.github/copilot-instructions.md,84,Restates what ESLint already enforces (identifier naming case; configured in eslint.config.js).,- Use camelCase for `property` names and `local variables`
+microsoft/vscode,MNA013,warn,.github/instructions/accessibility.instructions.md,1,"copilot never loads .github/instructions/accessibility.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA007,error,.github/instructions/buildNext.instructions.md,34,Link target `index.ts` does not exist.,[index.ts](index.ts)
+microsoft/vscode,MNA007,error,.github/instructions/buildNext.instructions.md,42,Link target `nls-plugin.ts` does not exist.,[nls-plugin.ts](nls-plugin.ts)
+microsoft/vscode,MNA007,error,.github/instructions/buildNext.instructions.md,344,"Path `test/nls-sourcemap.test.ts` does not exist, though `test/` does.",`test/nls-sourcemap.test.ts`
+microsoft/vscode,MNA013,warn,.github/instructions/chat.instructions.md,1,"copilot never loads .github/instructions/chat.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA013,warn,.github/instructions/disposable.instructions.md,1,"copilot never loads .github/instructions/disposable.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA013,warn,.github/instructions/interactive.instructions.md,1,"copilot never loads .github/instructions/interactive.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA013,warn,.github/instructions/kusto.instructions.md,1,"copilot never loads .github/instructions/kusto.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA006,info,.github/instructions/kusto.instructions.md,9,Reference to `../../../vscode-tools/.github/skills/kusto-telemetry/kusto-vscode.instructions.md` says nothing about when or why to read it.,**[kusto-vscode-instructions.md](../../../vscode-tools/.github/skills/kusto-telemetry/kusto-vscode.instructions.md)**
+microsoft/vscode,MNA013,warn,.github/instructions/learnings.instructions.md,1,"copilot never loads .github/instructions/learnings.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA013,warn,.github/instructions/notebook.instructions.md,1,"copilot never loads .github/instructions/notebook.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA013,warn,.github/instructions/observables.instructions.md,1,"copilot never loads .github/instructions/observables.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA008,warn,.github/instructions/oss-third-party-notices.instructions.md,360,`extensions/copilot: 329 packages`: `extensions/copilot:` does not exist.,`extensions/copilot: 329 packages`
+microsoft/vscode,MNA013,warn,.github/instructions/telemetry.instructions.md,1,"copilot never loads .github/instructions/telemetry.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA013,warn,.github/instructions/tree-widgets.instructions.md,1,"copilot never loads .github/instructions/tree-widgets.instructions.md: no `applyTo` glob, so Copilot never applies it automatically.",unloaded:copilot
+microsoft/vscode,MNA007,error,.github/instructions/tree-widgets.instructions.md,49,"Path `src/vs/platform/list/browser/test/listService.test.ts` does not exist, though `src/` does.",`src/vs/platform/list/browser/test/listService.test.ts`
+microsoft/vscode,MNA007,error,extensions/copilot/src/extension/chatSessions/copilotcli/AGENTS.md,98,"Path `src/util/common/` does not exist, though `src/` does.",`src/util/common/`
+microsoft/vscode,MNA007,error,extensions/copilot/src/extension/chatSessions/copilotcli/AGENTS.md,98,"Path `src/platform/` does not exist, though `src/` does.",`src/platform/`
+microsoft/vscode,MNA007,error,extensions/copilot/src/extension/chatSessions/copilotcli/AGENTS.md,99,"Path `src/util/` does not exist, though `src/` does.",`src/util/`
+microsoft/vscode,MNA007,error,extensions/copilot/src/extension/chatSessions/copilotcli/AGENTS.md,99,"Path `src/platform/` does not exist, though `src/` does.",`src/platform/`
+microsoft/vscode,MNA007,error,extensions/copilot/src/extension/chatSessions/copilotcli/AGENTS.md,100,"Path `src/util/` does not exist, though `src/` does.",`src/util/`
+microsoft/vscode,MNA007,error,extensions/copilot/src/extension/chatSessions/copilotcli/AGENTS.md,100,"Path `src/platform/` does not exist, though `src/` does.",`src/platform/`
+microsoft/vscode,MNA007,error,extensions/copilot/src/extension/chatSessions/copilotcli/AGENTS.md,336,"Path `vscode-node/copilotCLIChatSessions.ts` does not exist, though `vscode-node/` does.",`vscode-node/copilotCLIChatSessions.ts`
+microsoft/vscode,MNA007,error,src/vs/platform/agentHost/node/copilot/prompts/AGENTS.md,3,"Path `extensions/copilot/.../prompts/node/agent/` does not exist, though `extensions/` does.",`extensions/copilot/.../prompts/node/agent/`
+microsoft/vscode,MNA007,error,src/vs/platform/agentHost/node/copilot/prompts/AGENTS.md,60,"Path `test/node/serverToolGroups.test.ts` does not exist, though `test/` does.",`test/node/serverToolGroups.test.ts`
+microsoft/vscode,MNA007,error,src/vs/platform/agentHost/node/copilot/prompts/AGENTS.md,60,"Path `test/node/toolSearchDeferral.test.ts` does not exist, though `test/` does.",`test/node/toolSearchDeferral.test.ts`
+microsoft/TypeScript,MNA008,warn,.github/copilot-instructions.md,84,`tsc/testdata/baselines/local`: `tsc/testdata/baselines/local` does not exist.,`tsc/testdata/baselines/local`
+microsoft/autogen,MNA008,warn,.github/copilot-instructions.md,13,`./dotnet-install.sh --channel 9.0`: `./dotnet-install.sh` does not exist.,`wget https://dot.net/v1/dotnet-install.sh && chmod +x dotnet-install.sh && ./dotnet-install.sh --channel 9.0`
+microsoft/autogen,MNA008,warn,.github/copilot-instructions.md,14,`./dotnet-install.sh --channel 8.0 --runtime dotnet`: `./dotnet-install.sh` does not exist.,`./dotnet-install.sh --channel 8.0 --runtime dotnet && ./dotnet-install.sh --channel 8.0 --runtime aspnetcore`
+microsoft/autogen,MNA001,warn,.github/copilot-instructions.md,200,.github/copilot-instructions.md has 226 lines; always-loaded files should stay under 200.,
+microsoft/autogen,MNA009,info,.github/copilot-instructions.md,210,Directory tree repeats the repo layout (11 of 13 entries exist); the agent can list the tree itself.,```
+langchain-ai/langchain,MNA001,warn,AGENTS.md,1,"claude-code loads about 4666 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4666.",budget:claude-code
+langchain-ai/langchain,MNA001,warn,AGENTS.md,1,"codex loads about 4680 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4680.",budget:codex
+langchain-ai/langchain,MNA001,warn,AGENTS.md,1,"cursor loads about 4680 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4680.",budget:cursor
+langchain-ai/langchain,MNA001,warn,AGENTS.md,1,"copilot loads about 4680 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4680.",budget:copilot
+langchain-ai/langchain,MNA001,warn,AGENTS.md,1,"kiro loads about 4680 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4680.",budget:kiro
+langchain-ai/langchain,MNA009,info,AGENTS.md,19,Directory tree repeats the repo layout (16 of 16 entries exist); the agent can list the tree itself.,```txt
+langchain-ai/langchain,MNA001,warn,AGENTS.md,200,AGENTS.md has 390 lines; always-loaded files should stay under 200.,
+langchain-ai/langchain,MNA003,info,AGENTS.md,296,"A 4-step procedure (""Release process"") is loaded on every task, but only some tasks need it.",### Release process
+langchain-ai/langgraph,MNA009,info,AGENTS.md,46,Directory tree repeats the repo layout (11 of 11 entries exist); the agent can list the tree itself.,```text
+huggingface/transformers,MNA013,warn,.ai/AGENTS.md,1,claude-code never loads .ai/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `.ai/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+huggingface/transformers,MNA008,warn,.github/copilot-instructions.md,17,"`make fixup`: no target `fixup` in Makefile (has: benchmark, build-release, check-code-quality, check-repo, check-repository-consistency, claude, clean-ai, codex).",`make fixup`
+huggingface/transformers,MNA008,warn,.github/copilot-instructions.md,26,"`make fixup`: no target `fixup` in Makefile (has: benchmark, build-release, check-code-quality, check-repo, check-repository-consistency, claude, clean-ai, codex).",`make fixup`
+huggingface/transformers,MNA008,warn,.github/copilot-instructions.md,29,"`make fixup`: no target `fixup` in Makefile (has: benchmark, build-release, check-code-quality, check-repo, check-repository-consistency, claude, clean-ai, codex).",`make fixup`
+huggingface/transformers,MNA008,warn,.github/copilot-instructions.md,35,"`make fixup`: no target `fixup` in Makefile (has: benchmark, build-release, check-code-quality, check-repo, check-repository-consistency, claude, clean-ai, codex).",`make fixup`
+huggingface/transformers,MNA008,warn,.github/copilot-instructions.md,36,"`make fixup`: no target `fixup` in Makefile (has: benchmark, build-release, check-code-quality, check-repo, check-repository-consistency, claude, clean-ai, codex).",`make fixup`
+pydantic/pydantic-ai,MNA001,warn,AGENTS.md,1,"codex loads about 4394 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4394.",budget:codex
+pydantic/pydantic-ai,MNA001,warn,AGENTS.md,1,"cursor loads about 4394 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4394.",budget:cursor
+pydantic/pydantic-ai,MNA001,warn,AGENTS.md,1,"copilot loads about 4394 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4394.",budget:copilot
+pydantic/pydantic-ai,MNA001,warn,AGENTS.md,1,"kiro loads about 4394 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4394.",budget:kiro
+pydantic/pydantic-ai,MNA006,info,AGENTS.md,154,Reference to `docs/AGENTS.md` says nothing about when or why to read it.,- [docs/AGENTS.md](docs/AGENTS.md)
+pydantic/pydantic-ai,MNA001,warn,CLAUDE.md,1,"claude-code loads about 4394 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 4394.",budget:claude-code
+pydantic/pydantic-ai,MNA006,info,CLAUDE.md,154,Reference to `docs/AGENTS.md` says nothing about when or why to read it.,- [docs/AGENTS.md](docs/AGENTS.md)
+pydantic/pydantic-ai,MNA013,warn,pydantic_ai_slim/pydantic_ai/capabilities/AGENTS.md,1,claude-code never loads pydantic_ai_slim/pydantic_ai/capabilities/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `pydantic_ai_slim/pydantic_ai/capabilities/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+pydantic/pydantic-ai,MNA013,warn,pydantic_ai_slim/pydantic_ai/durable_exec/AGENTS.md,1,claude-code never loads pydantic_ai_slim/pydantic_ai/durable_exec/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `pydantic_ai_slim/pydantic_ai/durable_exec/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+pydantic/pydantic-ai,MNA013,warn,pydantic_ai_slim/pydantic_ai/profiles/AGENTS.md,1,claude-code never loads pydantic_ai_slim/pydantic_ai/profiles/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `pydantic_ai_slim/pydantic_ai/profiles/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+pydantic/pydantic-ai,MNA013,warn,pydantic_ai_slim/pydantic_ai/providers/AGENTS.md,1,claude-code never loads pydantic_ai_slim/pydantic_ai/providers/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `pydantic_ai_slim/pydantic_ai/providers/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+pydantic/pydantic-ai,MNA013,warn,pydantic_ai_slim/pydantic_ai/toolsets/AGENTS.md,1,claude-code never loads pydantic_ai_slim/pydantic_ai/toolsets/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `pydantic_ai_slim/pydantic_ai/toolsets/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+pydantic/pydantic-ai,MNA006,info,src/pydantic_ai_harness/AGENTS.md,36,Reference to `src/pydantic_ai_harness/agent_docs/index.md` says nothing about when or why to read it.,1. Read `src/pydantic_ai_harness/agent_docs/index.md`.
+pydantic/pydantic-ai,MNA006,info,src/pydantic_ai_harness/CLAUDE.md,36,Reference to `src/pydantic_ai_harness/agent_docs/index.md` says nothing about when or why to read it.,1. Read `src/pydantic_ai_harness/agent_docs/index.md`.
+pydantic/pydantic-ai,MNA007,error,src/pydantic_clai2/AGENTS.md,315,"Path `tests/menu_script.py` does not exist, though `tests/` does.",`tests/menu_script.py`
+pydantic/pydantic-ai,MNA008,warn,src/pydantic_clai2/AGENTS.md,315,`tests/menu_script.py`: `tests/menu_script.py` does not exist.,`tests/menu_script.py`
+pydantic/pydantic-ai,MNA007,error,src/pydantic_clai2/AGENTS.md,403,"Path `tests/test_settings_compatibility.py` does not exist, though `tests/` does.",`tests/test_settings_compatibility.py`
+pydantic/pydantic-ai,MNA008,warn,src/pydantic_clai2/AGENTS.md,403,`tests/test_settings_compatibility.py`: `tests/test_settings_compatibility.py` does not exist.,`tests/test_settings_compatibility.py`
+pydantic/pydantic-ai,MNA007,error,src/pydantic_clai2/CLAUDE.md,315,"Path `tests/menu_script.py` does not exist, though `tests/` does.",`tests/menu_script.py`
+pydantic/pydantic-ai,MNA008,warn,src/pydantic_clai2/CLAUDE.md,315,`tests/menu_script.py`: `tests/menu_script.py` does not exist.,`tests/menu_script.py`
+pydantic/pydantic-ai,MNA007,error,src/pydantic_clai2/CLAUDE.md,403,"Path `tests/test_settings_compatibility.py` does not exist, though `tests/` does.",`tests/test_settings_compatibility.py`
+pydantic/pydantic-ai,MNA008,warn,src/pydantic_clai2/CLAUDE.md,403,`tests/test_settings_compatibility.py`: `tests/test_settings_compatibility.py` does not exist.,`tests/test_settings_compatibility.py`
+astral-sh/uv,MNA008,warn,AGENTS.md,20,`cargo xwin clippy`: `xwin` is not a cargo command or an alias in .cargo/config.toml.,`cargo xwin clippy`
+astral-sh/ruff,MNA001,warn,AGENTS.md,1,"claude-code loads about 4312 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 5, AGENTS.md 4307.",budget:claude-code
+astral-sh/ruff,MNA001,warn,AGENTS.md,1,"codex loads about 4307 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4307.",budget:codex
+astral-sh/ruff,MNA001,warn,AGENTS.md,1,"cursor loads about 4307 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4307.",budget:cursor
+astral-sh/ruff,MNA001,warn,AGENTS.md,1,"copilot loads about 4307 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4307.",budget:copilot
+astral-sh/ruff,MNA001,warn,AGENTS.md,1,"kiro loads about 4307 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4307.",budget:kiro
+astral-sh/ruff,MNA001,warn,AGENTS.md,200,AGENTS.md has 230 lines; always-loaded files should stay under 200.,
+astral-sh/ruff,MNA002,warn,AGENTS.md,223,Restates what EditorConfig and Prettier and rustfmt and Black and Ruff already enforces (indentation width or tabs versus spaces; configured in .editorconfig).,"- Prefer let chains (`if let` combined with `&&`) and let guards (`PAT if let ... =>`) over nested `if let` statements to reduce indentation and improve readability. At the end of a task, always check your work to see if you missed opportunities to use `let` chains or `let` guards."
+denoland/deno,MNA003,info,.github/copilot-instructions.md,194,"A 4-step procedure (""Adding a New CLI Subcommand"") is loaded on every task, but only some tasks need it.",### Adding a New CLI Subcommand
+denoland/deno,MNA001,warn,.github/copilot-instructions.md,200,.github/copilot-instructions.md has 352 lines; always-loaded files should stay under 200.,
+denoland/deno,MNA003,info,.github/copilot-instructions.md,202,"A 5-step procedure (""Modifying or Adding an Extension"") is loaded on every task, but only some tasks need it.",### Modifying or Adding an Extension
+denoland/deno,MNA006,info,CLAUDE.md,5,Reference to `#git-workflow` says nothing about when or why to read it.,- [Git workflow](#git-workflow)
+denoland/deno,MNA006,info,CLAUDE.md,7,Reference to `#quick-start` says nothing about when or why to read it.,- [Quick Start](#quick-start)
+denoland/deno,MNA006,info,CLAUDE.md,8,Reference to `#commands` says nothing about when or why to read it.,- [Commands](#commands)
+denoland/deno,MNA006,info,CLAUDE.md,9,Reference to `#testing` says nothing about when or why to read it.,- [Testing](#testing)
+denoland/deno,MNA006,info,CLAUDE.md,10,Reference to `#development-workflows` says nothing about when or why to read it.,- [Development Workflows](#development-workflows)
+denoland/deno,MNA006,info,CLAUDE.md,11,Reference to `#debugging` says nothing about when or why to read it.,- [Debugging](#debugging)
+denoland/deno,MNA006,info,CLAUDE.md,12,Reference to `#codebase-navigation` says nothing about when or why to read it.,- [Codebase Navigation](#codebase-navigation)
+denoland/deno,MNA006,info,CLAUDE.md,13,Reference to `#troubleshooting` says nothing about when or why to read it.,- [Troubleshooting](#troubleshooting)
+denoland/deno,MNA003,info,CLAUDE.md,196,"A 4-step procedure (""Creating a New Spec Test"") is loaded on every task, but only some tasks need it.",### Creating a New Spec Test
+denoland/deno,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 433 lines; always-loaded files should stay under 200.,
+denoland/deno,MNA003,info,CLAUDE.md,266,"A 4-step procedure (""Adding a New CLI Subcommand"") is loaded on every task, but only some tasks need it.",### Adding a New CLI Subcommand
+denoland/deno,MNA003,info,CLAUDE.md,279,"A 5-step procedure (""Modifying or Adding an Extension"") is loaded on every task, but only some tasks need it.",### Modifying or Adding an Extension
+oven-sh/bun,MNA007,error,.github/workflows/CLAUDE.md,28,"Path `src/deps/` does not exist, though `src/` does.",`src/deps/`
+oven-sh/bun,MNA001,warn,AGENTS.md,1,"codex loads about 4551 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4551.",budget:codex
+oven-sh/bun,MNA001,warn,AGENTS.md,1,"cursor loads about 4551 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4551.",budget:cursor
+oven-sh/bun,MNA001,warn,AGENTS.md,1,"copilot loads about 4551 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4551.",budget:copilot
+oven-sh/bun,MNA001,warn,AGENTS.md,1,"kiro loads about 4551 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4551.",budget:kiro
+oven-sh/bun,MNA008,warn,AGENTS.md,18,"`bun run build*`: no script `build*` in package.json (has: bd, bd:v, build, build:asan, build:assert, build:ci, build:debug, build:debug:fuzzilli).",`bun run build*`
+oven-sh/bun,MNA007,error,AGENTS.md,142,"Path `src/shell/` does not exist, though `src/` does.",`src/shell/`
+oven-sh/bun,MNA007,error,AGENTS.md,146,"Path `src/bake/` does not exist, though `src/` does.",`src/bake/`
+oven-sh/bun,MNA003,info,AGENTS.md,194,"A 15-step procedure (this procedure) is loaded on every task, but only some tasks need it.",1. **Never use `bun test` or `bun <file>` directly** - always use `bun bd test` or `bun bd <command>`. `bun bd` compiles & runs the debug build.
+oven-sh/bun,MNA001,warn,AGENTS.md,200,AGENTS.md has 241 lines; always-loaded files should stay under 200.,
+oven-sh/bun,MNA001,warn,CLAUDE.md,1,"claude-code loads about 4551 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 4551.",budget:claude-code
+oven-sh/bun,MNA008,warn,CLAUDE.md,18,"`bun run build*`: no script `build*` in package.json (has: bd, bd:v, build, build:asan, build:assert, build:ci, build:debug, build:debug:fuzzilli).",`bun run build*`
+oven-sh/bun,MNA007,error,CLAUDE.md,142,"Path `src/shell/` does not exist, though `src/` does.",`src/shell/`
+oven-sh/bun,MNA007,error,CLAUDE.md,146,"Path `src/bake/` does not exist, though `src/` does.",`src/bake/`
+oven-sh/bun,MNA003,info,CLAUDE.md,194,"A 15-step procedure (this procedure) is loaded on every task, but only some tasks need it.",1. **Never use `bun test` or `bun <file>` directly** - always use `bun bd test` or `bun bd <command>`. `bun bd` compiles & runs the debug build.
+oven-sh/bun,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 241 lines; always-loaded files should stay under 200.,
+oven-sh/bun,MNA007,error,src/format/CLAUDE.md,54,"Path `src/main/core.js` does not exist, though `src/` does.",`src/main/core.js`
+oven-sh/bun,MNA007,error,src/lint/CLAUDE.md,50,"Path `eslint/eqeqeq.mdx` does not exist, though `eslint/` does.",`eslint/eqeqeq.mdx`
+oven-sh/bun,MNA007,error,src/lint/CLAUDE.md,50,"Path `eslint/no-var.mdx` does not exist, though `eslint/` does.",`eslint/no-var.mdx`
+oven-sh/bun,MNA007,error,src/lint/CLAUDE.md,50,"Path `typescript/no-floating-promises.mdx` does not exist, though `typescript/` does.",`typescript/no-floating-promises.mdx`
+zed-industries/zed,MNA008,warn,AGENTS.md,166,`script/crash-to-prompt <issue-id>`: `script/crash-to-prompt` does not exist.,`script/crash-to-prompt <issue-id>`
+zed-industries/zed,MNA003,info,AGENTS.md,175,"A 3-step procedure (""High bar for new rules"") is loaded on every task, but only some tasks need it.",## High bar for new rules
+zed-industries/zed,MNA008,warn,CLAUDE.md,166,`script/crash-to-prompt <issue-id>`: `script/crash-to-prompt` does not exist.,`script/crash-to-prompt <issue-id>`
+zed-industries/zed,MNA003,info,CLAUDE.md,175,"A 3-step procedure (""High bar for new rules"") is loaded on every task, but only some tasks need it.",## High bar for new rules
+zed-industries/zed,MNA008,warn,GEMINI.md,166,`script/crash-to-prompt <issue-id>`: `script/crash-to-prompt` does not exist.,`script/crash-to-prompt <issue-id>`
+zed-industries/zed,MNA003,info,GEMINI.md,175,"A 3-step procedure (""High bar for new rules"") is loaded on every task, but only some tasks need it.",## High bar for new rules
+zed-industries/zed,MNA013,warn,docs/AGENTS.md,1,claude-code never loads docs/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `docs/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+zed-industries/zed,MNA006,info,docs/AGENTS.md,279,Reference to `.github/copilot-instructions.md` says nothing about when or why to read it.,- `.github/copilot-instructions.md`
+zed-industries/zed,MNA007,error,docs/AGENTS.md,279,"Path `.github/copilot-instructions.md` does not exist, though `.github/` does.",`.github/copilot-instructions.md`
+vitest-dev/vitest,MNA001,warn,AGENTS.md,1,"claude-code loads about 4560 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4560.",budget:claude-code
+vitest-dev/vitest,MNA001,warn,AGENTS.md,1,"codex loads about 4560 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4560.",budget:codex
+vitest-dev/vitest,MNA001,warn,AGENTS.md,1,"cursor loads about 4560 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4560.",budget:cursor
+vitest-dev/vitest,MNA001,warn,AGENTS.md,1,"copilot loads about 4633 tokens at start (o200k_base estimate), over the budget of 4000: .github/copilot-instructions.md 73, AGENTS.md 4560.",budget:copilot
+vitest-dev/vitest,MNA001,warn,AGENTS.md,1,"kiro loads about 4560 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4560.",budget:kiro
+vitest-dev/vitest,MNA003,info,AGENTS.md,176,"A 5-step procedure (""Adding New Features"") is loaded on every task, but only some tasks need it.",### Adding New Features
+vitest-dev/vitest,MNA001,warn,AGENTS.md,200,AGENTS.md has 266 lines; always-loaded files should stay under 200.,
+vitest-dev/vitest,MNA009,info,AGENTS.md,212,Stack list repeats what the manifests declare (6 of 8 items).,- **Vite** - Build tool and dev server
+remix-run/react-router,MNA010,warn,CLAUDE.md,1,"Claude Code reads CLAUDE.md and skips AGENTS.md when both exist; 45 rule(s) only in AGENTS.md never reach Claude Code, and 11 rule(s) only in CLAUDE.md never reach other agents.",pair:AGENTS.md
+supabase/supabase,MNA006,info,.github/copilot-instructions.md,45,Reference to `apps/docs/` says nothing about when or why to read it.,- `apps/docs/` — Documentation
+supabase/supabase,MNA007,error,apps/kb/AGENTS.md,58,"Path `public/markdown/` does not exist, though `public/` does.",`public/markdown/`
+supabase/supabase,MNA008,warn,apps/kb/AGENTS.md,79,`supabase/troubleshooting`: `supabase/troubleshooting` does not exist.,`supabase/troubleshooting`
+prisma/prisma,MNA007,error,AGENTS.md,38,"Path `docs/drive/` does not exist, though `docs/` does.",`docs/drive/`
+prisma/prisma,MNA007,error,AGENTS.md,38,"Path `skills/.pilot/` does not exist, though `skills/` does.",`skills/.pilot/`
+prisma/prisma,MNA007,error,AGENTS.md,39,"Path `.cursor/rules/` does not exist, though `.cursor/` does.",`.cursor/rules/`
+prisma/prisma,MNA008,warn,AGENTS.md,40,`.cursor/rules`: `.cursor/rules` does not exist.,`.cursor/rules`
+prisma/prisma,MNA008,warn,AGENTS.md,95,`docs/architecture docs/patterns/interface-plus-factory.md`: `docs/architecture` does not exist.,`docs/architecture docs/patterns/interface-plus-factory.md`
+prisma/prisma,MNA007,error,AGENTS.md,115,"Path `.agents/skills/publish-npm-version/SKILL.md` does not exist, though `.agents/` does.",`.agents/skills/publish-npm-version/SKILL.md`
+prisma/prisma,MNA008,warn,AGENTS.md,119,`docs/architecture docs/subsystems/`: `docs/architecture` does not exist.,`docs/architecture docs/subsystems/`
+prisma/prisma,MNA007,error,CLAUDE.md,38,"Path `docs/drive/` does not exist, though `docs/` does.",`docs/drive/`
+prisma/prisma,MNA007,error,CLAUDE.md,38,"Path `skills/.pilot/` does not exist, though `skills/` does.",`skills/.pilot/`
+prisma/prisma,MNA007,error,CLAUDE.md,39,"Path `.cursor/rules/` does not exist, though `.cursor/` does.",`.cursor/rules/`
+prisma/prisma,MNA008,warn,CLAUDE.md,40,`.cursor/rules`: `.cursor/rules` does not exist.,`.cursor/rules`
+prisma/prisma,MNA008,warn,CLAUDE.md,95,`docs/architecture docs/patterns/interface-plus-factory.md`: `docs/architecture` does not exist.,`docs/architecture docs/patterns/interface-plus-factory.md`
+prisma/prisma,MNA007,error,CLAUDE.md,115,"Path `.agents/skills/publish-npm-version/SKILL.md` does not exist, though `.agents/` does.",`.agents/skills/publish-npm-version/SKILL.md`
+prisma/prisma,MNA008,warn,CLAUDE.md,119,`docs/architecture docs/subsystems/`: `docs/architecture` does not exist.,`docs/architecture docs/subsystems/`
+trpc/trpc,MNA008,warn,.cursor/rules/react-query-tests.mdc,14,`./__testHelpers`: `./__testHelpers` does not exist.,`./__testHelpers`
+trpc/trpc,MNA008,warn,.cursor/rules/react-query-tests.mdc,94,`./__testHelpers`: `./__testHelpers` does not exist.,`./__testHelpers`
+trpc/trpc,MNA008,warn,.cursor/rules/tanstack-react-query-tests.mdc,14,`./__helpers`: `./__helpers` does not exist.,`./__helpers`
+trpc/trpc,MNA008,warn,.cursor/rules/tanstack-react-query-tests.mdc,96,`./__helpers`: `./__helpers` does not exist.,`./__helpers`
+withastro/astro,MNA002,warn,AGENTS.md,33,"Restates what ESLint already enforces (unused imports, variables or code; configured in eslint.config.js).","- If you notice unrelated dead code, mention it - don't delete it."
+withastro/astro,MNA002,warn,AGENTS.md,38,"Restates what ESLint already enforces (unused imports, variables or code; configured in eslint.config.js).",- Don't remove pre-existing dead code unless asked.
+withastro/astro,MNA006,info,AGENTS.md,95,Reference to `node_modules/astro/dist/...` says nothing about when or why to read it.,- `node_modules/astro/dist/...` → `packages/astro/src/...`
+withastro/astro,MNA006,info,AGENTS.md,96,Reference to `node_modules/@astrojs/react/...` says nothing about when or why to read it.,- `node_modules/@astrojs/react/...` → `packages/integrations/react/src/...`
+withastro/astro,MNA004,info,AGENTS.md,153,"Uses npm as the JavaScript package manager, but AGENTS.md:98 uses pnpm.",`npm install -g agent-browser && agent-browser install`
+nuxt/nuxt,MNA006,info,CONTRIBUTING.md,7,Reference to `https://nuxt.com/docs/community/contribution` says nothing about when or why to read it.,- [General Contribution Guide](https://nuxt.com/docs/community/contribution)
+nuxt/nuxt,MNA006,info,CONTRIBUTING.md,8,Reference to `https://nuxt.com/docs/community/framework-contribution` says nothing about when or why to read it.,- [Framework Contribution Guide](https://nuxt.com/docs/community/framework-contribution)
+nuxt/nuxt,MNA006,info,CONTRIBUTING.md,54,Reference to `https://nuxt.com/docs/community/contribution#ai-assisted-contributions` says nothing about when or why to read it.,See the [full policy](https://nuxt.com/docs/community/contribution#ai-assisted-contributions).
+electron/electron,MNA004,info,.github/copilot-instructions.md,5,"Uses npm, but the repo's lockfile is `yarn.lock` (yarn).",Electron uses `@electron/build-tools` (`e` CLI). Install with `npm i -g @electron/build-tools`.
+electron/electron,MNA004,info,.github/copilot-instructions.md,5,"Uses npm, but the repo's lockfile is `yarn.lock` (yarn).",`npm i -g @electron/build-tools`
+electron/electron,MNA004,info,.github/copilot-instructions.md,20,"Uses npm, but the repo's lockfile is `yarn.lock` (yarn).","npm run lint              # Run all linters (JS, C++, Python, GN, docs)"
+electron/electron,MNA004,info,.github/copilot-instructions.md,21,"Uses npm, but the repo's lockfile is `yarn.lock` (yarn).",npm run lint:js           # JavaScript/TypeScript only
+electron/electron,MNA004,info,.github/copilot-instructions.md,22,"Uses npm, but the repo's lockfile is `yarn.lock` (yarn).",npm run lint:clang-format # C++ formatting only
+electron/electron,MNA004,info,.github/copilot-instructions.md,23,"Uses npm, but the repo's lockfile is `yarn.lock` (yarn).",npm run lint:cpp          # C++ linting only
+electron/electron,MNA004,info,.github/copilot-instructions.md,24,"Uses npm, but the repo's lockfile is `yarn.lock` (yarn).",npm run lint:docs         # Documentation only
+electron/electron,MNA004,info,.github/copilot-instructions.md,30,"Uses npm, but the repo's lockfile is `yarn.lock` (yarn).","npm run test -- -g ""pattern""   # Run tests matching a regex pattern"
+electron/electron,MNA004,info,.github/copilot-instructions.md,114,"Uses npm, but the repo's lockfile is `yarn.lock` (yarn).",`npm run lint:docs`
+electron/electron,MNA008,warn,CLAUDE.md,8,"`yarn run <tool>`: no script `<tool>` in package.json (has: asar, bundle, create-api-json, create-typescript-definitions, format, generate-version-json, gn-check, gn-format).",`yarn run <tool>`
+electron/electron,MNA009,info,CLAUDE.md,18,Directory tree repeats the repo layout (19 of 20 entries exist); the agent can list the tree itself.,```text
+electron/electron,MNA004,info,CLAUDE.md,49,"Uses npm as the JavaScript package manager, but CLAUDE.md:8 uses yarn.",npm i -g @electron/build-tools
+electron/electron,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 342 lines; always-loaded files should stay under 200.,
+electron/electron,MNA004,info,CLAUDE.md,271,"Uses npm as the JavaScript package manager, but CLAUDE.md:8 uses yarn.",npm run lint              # Run all linters
+electron/electron,MNA004,info,CLAUDE.md,272,"Uses npm as the JavaScript package manager, but CLAUDE.md:8 uses yarn.",npm run lint:js           # Run oxlint over all JS/TS/MJS sources
+electron/electron,MNA004,info,CLAUDE.md,273,"Uses npm as the JavaScript package manager, but CLAUDE.md:8 uses yarn.",npm run lint:clang-format # C++ formatting
+electron/electron,MNA004,info,CLAUDE.md,274,"Uses npm as the JavaScript package manager, but CLAUDE.md:8 uses yarn.",npm run lint:api-history  # Validate API history YAML blocks in docs
+n8n-io/n8n,MNA013,warn,.agents/skills/AGENTS.md,1,claude-code never loads .agents/skills/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `.agents/skills/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA001,warn,AGENTS.md,1,"claude-code loads about 5541 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 5, AGENTS.md 5536.",budget:claude-code
+n8n-io/n8n,MNA001,warn,AGENTS.md,1,"codex loads about 5536 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5536.",budget:codex
+n8n-io/n8n,MNA001,warn,AGENTS.md,1,"cursor loads about 5536 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5536.",budget:cursor
+n8n-io/n8n,MNA001,warn,AGENTS.md,1,"copilot loads about 5536 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5536.",budget:copilot
+n8n-io/n8n,MNA001,warn,AGENTS.md,1,"kiro loads about 5536 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5536.",budget:kiro
+n8n-io/n8n,MNA001,warn,AGENTS.md,200,AGENTS.md has 438 lines; always-loaded files should stay under 200.,
+n8n-io/n8n,MNA006,info,AGENTS.md,319,Reference to `packages/frontend/AGENTS.md` says nothing about when or why to read it.,- Refer to `packages/frontend/AGENTS.md`
+n8n-io/n8n,MNA013,warn,packages/@n8n/agents/AGENTS.md,1,claude-code never loads packages/@n8n/agents/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/@n8n/agents/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,22,`types/                # Public TypeScript types`: `types/` does not exist.,types/                # Public TypeScript types
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,25,"`sdk/                # Types aligned with builders (agent, eval, guardrail, mcp, memory, message, provider, tool)`: `sdk/` does not exist.","sdk/                # Types aligned with builders (agent, eval, guardrail, mcp, memory, message, provider, tool)"
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,26,"`runtime/            # Serializable runtime shapes (events, message lists)`: `runtime/` does not exist.","runtime/            # Serializable runtime shapes (events, message lists)"
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,27,`utils/              # JSON typing helpers re-exported with public types`: `utils/` does not exist.,utils/              # JSON typing helpers re-exported with public types
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,28,`sdk/                  # Fluent builders and SDK entry points`: `sdk/` does not exist.,sdk/                  # Fluent builders and SDK entry points
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,41,`runtime/              # Runtime internals`: `runtime/` does not exist.,runtime/              # Runtime internals; selected MCP and memory helpers are exported
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,61,`storage/              # Shared memory backend base class (exported)`: `storage/` does not exist.,storage/              # Shared memory backend base class (exported)
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,63,"`workspace/            # Workspace, sandbox, filesystem, built-in tools (exported)`: `workspace/` does not exist.","workspace/            # Workspace, sandbox, filesystem, built-in tools (exported)"
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,64,`integrations/         # Optional integrations (exported where applicable)`: `integrations/` does not exist.,integrations/         # Optional integrations (exported where applicable)
+n8n-io/n8n,MNA008,warn,packages/@n8n/agents/AGENTS.md,66,`utils/                # Shared helpers`: `utils/` does not exist.,"utils/                # Shared helpers; selected JSON, model, and Zod utilities are exported"
+n8n-io/n8n,MNA007,error,packages/@n8n/agents/AGENTS.md,145,"Path `.agents/specs/` does not exist, though `.agents/` does.",`.agents/specs/`
+n8n-io/n8n,MNA013,warn,packages/@n8n/ai-utilities/AGENTS.md,1,claude-code never loads packages/@n8n/ai-utilities/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/@n8n/ai-utilities/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/@n8n/db/AGENTS.md,1,claude-code never loads packages/@n8n/db/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/@n8n/db/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/@n8n/engine/AGENTS.md,1,claude-code never loads packages/@n8n/engine/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/@n8n/engine/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA007,error,packages/@n8n/engine/AGENTS.md,15,"Path `src/__tests__/dependency-purity.test.ts` does not exist, though `src/` does.",`src/__tests__/dependency-purity.test.ts`
+n8n-io/n8n,MNA006,info,packages/@n8n/node-cli/src/template/templates/shared/default/AGENTS.md,82,Reference to `.agents/workflow.md` says nothing about when or why to read it.,- Read `.agents/workflow.md` for more info
+n8n-io/n8n,MNA013,warn,packages/@n8n/nodes-langchain/AGENTS.md,1,claude-code never loads packages/@n8n/nodes-langchain/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/@n8n/nodes-langchain/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/cli/AGENTS.md,1,claude-code never loads packages/cli/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/cli/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/cli/src/modules/agents/AGENTS.md,1,claude-code never loads packages/cli/src/modules/agents/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/cli/src/modules/agents/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/cli/src/modules/instance-ai/AGENTS.md,1,claude-code never loads packages/cli/src/modules/instance-ai/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/cli/src/modules/instance-ai/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/cli/src/modules/knowledge/AGENTS.md,1,claude-code never loads packages/cli/src/modules/knowledge/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/cli/src/modules/knowledge/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA008,warn,packages/cli/src/modules/knowledge/AGENTS.md,24,`entities/        entity classes`: `entities/` does not exist.,entities/        entity classes
+n8n-io/n8n,MNA008,warn,packages/cli/src/modules/knowledge/AGENTS.md,25,`repositories/    repositories`: `repositories/` does not exist.,repositories/    repositories
+n8n-io/n8n,MNA008,warn,packages/cli/src/modules/knowledge/AGENTS.md,26,"`files/           upload, storage and file service code`: `files/` does not exist.","files/           upload, storage and file service code"
+n8n-io/n8n,MNA008,warn,packages/cli/src/modules/knowledge/AGENTS.md,27,"`retrieval/       sandbox mirror, search commands, retrieval schemas`: `retrieval/` does not exist.","retrieval/       sandbox mirror, search commands, retrieval schemas"
+n8n-io/n8n,MNA008,warn,packages/cli/src/modules/knowledge/AGENTS.md,28,`vector-stores/   external vector-store connections`: `vector-stores/` does not exist.,vector-stores/   external vector-store connections
+n8n-io/n8n,MNA007,error,packages/cli/src/modules/n8n-packages/CLAUDE.md,58,"Path `__tests__/import-package-request.dto.test.ts` does not exist, though `__tests__/` does.",`__tests__/import-package-request.dto.test.ts`
+n8n-io/n8n,MNA007,error,packages/cli/src/modules/n8n-packages/CLAUDE.md,67,"Path `docs/commands/package.md` does not exist, though `docs/` does.",`docs/commands/package.md`
+n8n-io/n8n,MNA013,warn,packages/cli/src/modules/skills/AGENTS.md,1,claude-code never loads packages/cli/src/modules/skills/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/cli/src/modules/skills/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/frontend/@n8n/design-system/AGENTS.md,1,claude-code never loads packages/frontend/@n8n/design-system/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/frontend/@n8n/design-system/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA006,info,packages/frontend/@n8n/design-system/README.md,10,Reference to `#consume-the-package` says nothing about when or why to read it.,- [Consume the package](#consume-the-package)
+n8n-io/n8n,MNA006,info,packages/frontend/@n8n/design-system/README.md,11,Reference to `#exports` says nothing about when or why to read it.,- [Exports](#exports)
+n8n-io/n8n,MNA006,info,packages/frontend/@n8n/design-system/README.md,12,Reference to `#develop-the-package` says nothing about when or why to read it.,- [Develop the package](#develop-the-package)
+n8n-io/n8n,MNA006,info,packages/frontend/@n8n/design-system/README.md,13,Reference to `#pack-and-publish` says nothing about when or why to read it.,- [Pack and publish](#pack-and-publish)
+n8n-io/n8n,MNA006,info,packages/frontend/@n8n/design-system/README.md,14,Reference to `#contributing` says nothing about when or why to read it.,- [Contributing](#contributing)
+n8n-io/n8n,MNA006,info,packages/frontend/@n8n/design-system/README.md,15,Reference to `#owners` says nothing about when or why to read it.,- [Owners](#owners)
+n8n-io/n8n,MNA006,info,packages/frontend/@n8n/design-system/README.md,16,Reference to `#license` says nothing about when or why to read it.,- [License](#license)
+n8n-io/n8n,MNA008,warn,packages/frontend/@n8n/design-system/README.md,182,`assets/fonts`: `assets/fonts` does not exist.,`assets/fonts`
+n8n-io/n8n,MNA008,warn,packages/frontend/editor-ui/src/app/stores/workflowDocument/CLAUDE.md,25,`./types.ts`: `./types.ts` does not exist.,`./types.ts`
+n8n-io/n8n,MNA013,warn,packages/frontend/editor-ui/src/features/agents/AGENTS.md,1,claude-code never loads packages/frontend/editor-ui/src/features/agents/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/frontend/editor-ui/src/features/agents/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/quality/AGENTS.md,1,claude-code never loads packages/quality/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/quality/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/quality/efficiency/AGENTS.md,1,claude-code never loads packages/quality/efficiency/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/quality/efficiency/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/quality/environments/AGENTS.md,1,claude-code never loads packages/quality/environments/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/quality/environments/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/quality/policy/AGENTS.md,1,claude-code never loads packages/quality/policy/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/quality/policy/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/quality/testing/AGENTS.md,1,claude-code never loads packages/quality/testing/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/quality/testing/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,packages/quality/testing/playwright/tests/infrastructure/benchmarks/AGENTS.md,1,claude-code never loads packages/quality/testing/playwright/tests/infrastructure/benchmarks/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/quality/testing/playwright/tests/infrastructure/benchmarks/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+n8n-io/n8n,MNA013,warn,scripts/instance-seeding/AGENTS.md,1,claude-code never loads scripts/instance-seeding/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `scripts/instance-seeding/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+excalidraw/excalidraw,MNA010,warn,CLAUDE.md,1,"Claude Code reads CLAUDE.md and skips AGENTS.md when both exist; 2 rule(s) only in AGENTS.md never reach Claude Code, and 12 rule(s) only in CLAUDE.md never reach other agents.",pair:AGENTS.md
+calcom/cal.com,MNA013,warn,.opencode/skill/vercel-react-best-practices/AGENTS.md,1,claude-code never loads .opencode/skill/vercel-react-best-practices/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `.opencode/skill/vercel-react-best-practices/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+calcom/cal.com,MNA006,info,.opencode/skill/vercel-react-best-practices/AGENTS.md,25,Reference to `#12-dependency-based-parallelization` says nothing about when or why to read it.,- 1.2 [Dependency-Based Parallelization](#12-dependency-based-parallelization)
+calcom/cal.com,MNA002,warn,AGENTS.md,19,Restates what Biome already enforces (formatting with a named formatter; configured in biome.json).,- Use Biome for formatting and linting
+calcom/cal.com,MNA003,info,AGENTS.md,47,"A 4-step procedure (""How to Split Large Changes"") is loaded on every task, but only some tasks need it.",### How to Split Large Changes
+calcom/cal.com,MNA002,warn,AGENTS.md,109,Restates what Biome already enforces (the TypeScript any type; configured in biome.json).,- Use `as any` type casting
+calcom/cal.com,MNA007,error,AGENTS.md,130,"Path `packages/features/ee/workflows/lib/constants.ts` does not exist, though `packages/` does.",`packages/features/ee/workflows/lib/constants.ts`
+calcom/cal.com,MNA001,warn,AGENTS.md,200,AGENTS.md has 244 lines; always-loaded files should stay under 200.,
+calcom/cal.com,MNA002,warn,CLAUDE.md,19,Restates what Biome already enforces (formatting with a named formatter; configured in biome.json).,- Use Biome for formatting and linting
+calcom/cal.com,MNA003,info,CLAUDE.md,47,"A 4-step procedure (""How to Split Large Changes"") is loaded on every task, but only some tasks need it.",### How to Split Large Changes
+calcom/cal.com,MNA002,warn,CLAUDE.md,109,Restates what Biome already enforces (the TypeScript any type; configured in biome.json).,- Use `as any` type casting
+calcom/cal.com,MNA007,error,CLAUDE.md,130,"Path `packages/features/ee/workflows/lib/constants.ts` does not exist, though `packages/` does.",`packages/features/ee/workflows/lib/constants.ts`
+calcom/cal.com,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 244 lines; always-loaded files should stay under 200.,
+calcom/cal.com,MNA013,warn,agents/skills/vercel-react-best-practices/AGENTS.md,1,claude-code never loads agents/skills/vercel-react-best-practices/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `agents/skills/vercel-react-best-practices/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+calcom/cal.com,MNA006,info,agents/skills/vercel-react-best-practices/AGENTS.md,25,Reference to `#12-dependency-based-parallelization` says nothing about when or why to read it.,- 1.2 [Dependency-Based Parallelization](#12-dependency-based-parallelization)
+mastra-ai/mastra,MNA013,warn,agent-sdks/acp/AGENTS.md,1,claude-code never loads agent-sdks/acp/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `agent-sdks/acp/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,agent-sdks/claude/AGENTS.md,1,claude-code never loads agent-sdks/claude/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `agent-sdks/claude/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,agent-sdks/cursor/AGENTS.md,1,claude-code never loads agent-sdks/cursor/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `agent-sdks/cursor/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,agent-sdks/openai/AGENTS.md,1,claude-code never loads agent-sdks/openai/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `agent-sdks/openai/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA008,warn,docs/CONTRIBUTING.md,22,"`pnpm run dev`: no script `dev` in package.json (has: affected-tests, build, build:auth, build:cli, build:clients, build:combined-stores, build:core, build:deployer).",pnpm run dev
+mastra-ai/mastra,MNA008,warn,docs/CONTRIBUTING.md,40,"`pnpm run serve`: no script `serve` in package.json (has: affected-tests, build, build:auth, build:cli, build:clients, build:combined-stores, build:core, build:deployer).",pnpm run serve
+mastra-ai/mastra,MNA008,warn,docs/CONTRIBUTING.md,52,"`pnpm run vale:download`: no script `vale:download` in package.json (has: affected-tests, build, build:auth, build:cli, build:clients, build:combined-stores, build:core, build:deployer).",pnpm run vale:download
+mastra-ai/mastra,MNA008,warn,docs/CONTRIBUTING.md,58,"`pnpm run lint:prose`: no script `lint:prose` in package.json (has: affected-tests, build, build:auth, build:cli, build:clients, build:combined-stores, build:core, build:deployer).",pnpm run lint:prose && pnpm run validate
+mastra-ai/mastra,MNA008,warn,docs/CONTRIBUTING.md,61,"`pnpm run generate-vercel-redirects`: no script `generate-vercel-redirects` in package.json (has: affected-tests, build, build:auth, build:cli, build:clients, build:combined-stores, build:core, build:deployer).",`pnpm run generate-vercel-redirects`
+mastra-ai/mastra,MNA007,error,docs/CONTRIBUTING.md,68,"Path `src/content/en/guides/` does not exist, though `src/` does.",`src/content/en/guides/`
+mastra-ai/mastra,MNA008,warn,docs/styleguides/STYLEGUIDE.md,62,"`make sure` runs make, but the repo has no Makefile.",`make sure`
+mastra-ai/mastra,MNA013,warn,examples/AGENTS.md,1,claude-code never loads examples/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `examples/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,examples/agent-builder/AGENTS.md,1,claude-code never loads examples/agent-builder/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `examples/agent-builder/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,mastracode/AGENTS.md,1,claude-code never loads mastracode/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `mastracode/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,mastracode/factory-ui/AGENTS.md,1,claude-code never loads mastracode/factory-ui/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `mastracode/factory-ui/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,packages/_types-builder/AGENTS.md,1,claude-code never loads packages/_types-builder/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/_types-builder/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,packages/auth/AGENTS.md,1,claude-code never loads packages/auth/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/auth/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,packages/cli/AGENTS.md,1,claude-code never loads packages/cli/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/cli/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,packages/codemod/AGENTS.md,1,claude-code never loads packages/codemod/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/codemod/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,packages/connect/AGENTS.md,1,claude-code never loads packages/connect/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/connect/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,packages/core/AGENTS.md,1,claude-code never loads packages/core/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/core/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,packages/deployer/AGENTS.md,1,claude-code never loads packages/deployer/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/deployer/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,packages/mcp/AGENTS.md,1,claude-code never loads packages/mcp/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/mcp/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA013,warn,packages/memory/AGENTS.md,1,claude-code never loads packages/memory/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/memory/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA010,warn,packages/playground-ui/CLAUDE.md,1,"Claude Code reads packages/playground-ui/CLAUDE.md and skips packages/playground-ui/AGENTS.md when both exist; 7 rule(s) only in packages/playground-ui/AGENTS.md never reach Claude Code, and 27 rule(s) only in packages/playground-ui/CLAUDE.md never reach other agents.",pair:packages/playground-ui/AGENTS.md
+mastra-ai/mastra,MNA010,warn,packages/playground/CLAUDE.md,1,"Claude Code reads packages/playground/CLAUDE.md and skips packages/playground/AGENTS.md when both exist; 5 rule(s) only in packages/playground/AGENTS.md never reach Claude Code, and 26 rule(s) only in packages/playground/CLAUDE.md never reach other agents.",pair:packages/playground/AGENTS.md
+mastra-ai/mastra,MNA013,warn,packages/rag/AGENTS.md,1,claude-code never loads packages/rag/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/rag/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA010,warn,packages/server/CLAUDE.md,1,"Claude Code reads packages/server/CLAUDE.md and skips packages/server/AGENTS.md when both exist; 2 rule(s) only in packages/server/AGENTS.md never reach Claude Code, and 5 rule(s) only in packages/server/CLAUDE.md never reach other agents.",pair:packages/server/AGENTS.md
+mastra-ai/mastra,MNA013,warn,templates/template-agent-harness/AGENTS.md,1,claude-code never loads templates/template-agent-harness/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `templates/template-agent-harness/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA006,info,templates/template-agent-harness/AGENTS.md,14,Reference to `https://mastra.ai/llms.txt` says nothing about when or why to read it.,- [Mastra Documentation](https://mastra.ai/llms.txt)
+mastra-ai/mastra,MNA013,warn,templates/template-starter-agent/AGENTS.md,1,claude-code never loads templates/template-starter-agent/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `templates/template-starter-agent/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mastra-ai/mastra,MNA006,info,templates/template-starter-agent/AGENTS.md,15,Reference to `https://mastra.ai/llms.txt` says nothing about when or why to read it.,- [Mastra Documentation](https://mastra.ai/llms.txt)
+modelcontextprotocol/servers,MNA001,warn,AGENTS.md,1,"claude-code loads about 11044 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 11044.",budget:claude-code
+modelcontextprotocol/servers,MNA001,warn,AGENTS.md,1,"codex loads about 11044 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 11044.",budget:codex
+modelcontextprotocol/servers,MNA001,warn,AGENTS.md,1,Codex stops adding guidance after 32768 bytes; about 14079 bytes from `AGENTS.md` onward never reach it.,codex-byte-cap
+modelcontextprotocol/servers,MNA001,warn,AGENTS.md,1,"cursor loads about 11044 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 11044.",budget:cursor
+modelcontextprotocol/servers,MNA001,warn,AGENTS.md,1,"copilot loads about 11044 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 11044.",budget:copilot
+modelcontextprotocol/servers,MNA001,warn,AGENTS.md,1,"kiro loads about 11044 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 11044.",budget:kiro
+modelcontextprotocol/servers,MNA009,info,AGENTS.md,43,Directory tree repeats the repo layout (17 of 27 entries exist); the agent can list the tree itself.,```
+modelcontextprotocol/servers,MNA001,warn,AGENTS.md,200,AGENTS.md has 685 lines; always-loaded files should stay under 200.,
+modelcontextprotocol/servers,MNA007,error,AGENTS.md,214,"Path `.github/dependabot.yml` does not exist, though `.github/` does.",`.github/dependabot.yml`
+modelcontextprotocol/servers,MNA007,error,AGENTS.md,218,"Path `.github/dependabot.yml` does not exist, though `.github/` does.",`.github/dependabot.yml`
+modelcontextprotocol/servers,MNA008,warn,src/everything/AGENTS.md,7,"`npm run start:stdio`: no script `start:stdio` in package.json (has: build, changeset, coverage, coverage:py, format, format:check, format:check:root, format:root).",`npm run start:stdio`
+modelcontextprotocol/servers,MNA008,warn,src/everything/AGENTS.md,8,"`npm run start:sse`: no script `start:sse` in package.json (has: build, changeset, coverage, coverage:py, format, format:check, format:check:root, format:root).",`npm run start:sse`
+modelcontextprotocol/servers,MNA008,warn,src/everything/AGENTS.md,9,"`npm run start:streamableHttp`: no script `start:streamableHttp` in package.json (has: build, changeset, coverage, coverage:py, format, format:check, format:check:root, format:root).",`npm run start:streamableHttp`
+modelcontextprotocol/servers,MNA008,warn,src/everything/AGENTS.md,10,"`npm run prepare`: no script `prepare` in package.json (has: build, changeset, coverage, coverage:py, format, format:check, format:check:root, format:root).",`npm run prepare`
+modelcontextprotocol/typescript-sdk,MNA003,info,CLAUDE.md,5,"A 8-step procedure (this procedure) is loaded on every task, but only some tasks need it.","1. **Minimalism** — The SDK should do less, not more: prefer changes that add no API or option unless justified."
+google-gemini/gemini-cli,MNA008,warn,packages/devtools/GEMINI.md,67,"`npm run build:client`: no script `build:client` in package.json (has: auth, auth:docker, auth:npm, build, build-and-start, build:all, build:binary, build:packages).",npm run build:client
+google-gemini/gemini-cli,MNA009,info,packages/devtools/GEMINI.md,72,Directory tree repeats the repo layout (10 of 13 entries exist); the agent can list the tree itself.,```
+cline/cline,MNA004,info,.clinerules/bun-and-node.md,10,"Uses npm as the JavaScript package manager, but .clinerules/bun-and-node.md:10 uses bun.",`npm install`
+cline/cline,MNA004,info,.clinerules/bun-and-node.md,10,"Uses npm as the JavaScript package manager, but .clinerules/bun-and-node.md:10 uses bun.",`npm ci`
+cline/cline,MNA008,warn,.clinerules/bun-and-node.md,11,"`bun run <script>`: no script `<script>` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run <script>`
+cline/cline,MNA004,info,.clinerules/bun-and-node.md,11,"Uses npm as the JavaScript package manager, but .clinerules/bun-and-node.md:10 uses bun.",`npm run <script>`
+cline/cline,MNA008,warn,.clinerules/bun-and-node.md,11,"`npm run <script>`: no script `<script>` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`npm run <script>`
+cline/cline,MNA001,warn,.clinerules/cline-overview.md,1,"cline loads about 28474 tokens at start (o200k_base estimate), over the budget of 4000: .clinerules/bun-and-node.md 745, .clinerules/cline-overview.md 5755, .clinerules/debug-harness.md 1790, .clinerules/general.md 3000, .clinerules/hooks/README.md 3645, .clinerules/network.md 639, .clinerules/protobuf-development.md 831, .clinerules/sdk-migration.md 319, .clinerules/storage.md 698, .clinerules/workflows/address-pr-comments.md 238, .clinerules/workflows/find-pr-reviewers.md 634, .clinerules/workflows/git-branch-analysis.md 947, .clinerules/workflows/hotfix-release.md 1430, .clinerules/workflows/pr-review.md 2958, .clinerules/workflows/release.md 375, .clinerules/workflows/writing-documentation.md 4470.",budget:cline
+cline/cline,MNA001,warn,.clinerules/cline-overview.md,200,.clinerules/cline-overview.md has 764 lines; always-loaded files should stay under 200.,
+cline/cline,MNA008,warn,.clinerules/debug-harness.md,9,"`bun run protos`: no script `protos` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",bun run protos && IS_DEV=true bun esbuild.mjs
+cline/cline,MNA008,warn,.clinerules/debug-harness.md,55,"`bun run dev:mcp-oauth-test-server`: no script `dev:mcp-oauth-test-server` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run dev:mcp-oauth-test-server`
+cline/cline,MNA008,warn,.clinerules/general.md,16,"`bun run X`: no script `X` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run X`
+cline/cline,MNA007,error,.clinerules/general.md,16,Import `@.clinerules/bun-and-node.md` does not resolve.,@.clinerules/bun-and-node.md
+cline/cline,MNA002,warn,.clinerules/general.md,17,Restates what Biome already enforces (=== instead of ==; configured in biome.json).,"- Avoid provider-specific string matching / hardcoded provider branches when fixing provider/config plumbing. Prefer provider metadata, shared catalog/defaults, explicit protocol/client capabilities, or centralized normalization utilities that apply by data shape rather than `providerId === ""...""`. If a provider exception seems necessary, stop and explain why instead of adding ad-hoc string matching."
+cline/cline,MNA008,warn,.clinerules/general.md,18,"`bun run compile`: no script `compile` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run compile`
+cline/cline,MNA007,error,.clinerules/general.md,22,Import `@.clinerules/network.md` does not resolve.,@.clinerules/network.md
+cline/cline,MNA008,warn,.clinerules/general.md,77,"`bun run protos`: no script `protos` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run protos`
+cline/cline,MNA003,info,.clinerules/general.md,97,"A 3-step procedure (""Adding New Global State Keys"") is loaded on every task, but only some tasks need it.",## Adding New Global State Keys
+cline/cline,MNA008,warn,.clinerules/general.md,113,"`bun run protos`: no script `protos` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run protos`
+cline/cline,MNA001,warn,.clinerules/general.md,200,.clinerules/general.md has 205 lines; always-loaded files should stay under 200.,
+cline/cline,MNA008,warn,.clinerules/hooks/README.md,24,`.clinerules/hooks/TaskStart`: `.clinerules/hooks/TaskStart` does not exist.,`.clinerules/hooks/TaskStart`
+cline/cline,MNA008,warn,.clinerules/hooks/README.md,30,`.clinerules/hooks/TaskResume`: `.clinerules/hooks/TaskResume` does not exist.,`.clinerules/hooks/TaskResume`
+cline/cline,MNA008,warn,.clinerules/hooks/README.md,36,`.clinerules/hooks/TaskCancel`: `.clinerules/hooks/TaskCancel` does not exist.,`.clinerules/hooks/TaskCancel`
+cline/cline,MNA008,warn,.clinerules/hooks/README.md,43,`.clinerules/hooks/TaskComplete`: `.clinerules/hooks/TaskComplete` does not exist.,`.clinerules/hooks/TaskComplete`
+cline/cline,MNA008,warn,.clinerules/hooks/README.md,49,`.clinerules/hooks/UserPromptSubmit`: `.clinerules/hooks/UserPromptSubmit` does not exist.,`.clinerules/hooks/UserPromptSubmit`
+cline/cline,MNA008,warn,.clinerules/hooks/README.md,55,`.clinerules/hooks/PreToolUse`: `.clinerules/hooks/PreToolUse` does not exist.,`.clinerules/hooks/PreToolUse`
+cline/cline,MNA008,warn,.clinerules/hooks/README.md,61,`.clinerules/hooks/PostToolUse`: `.clinerules/hooks/PostToolUse` does not exist.,`.clinerules/hooks/PostToolUse`
+cline/cline,MNA008,warn,.clinerules/hooks/README.md,67,`.clinerules/hooks/PreCompact`: `.clinerules/hooks/PreCompact` does not exist.,`.clinerules/hooks/PreCompact`
+cline/cline,MNA001,warn,.clinerules/hooks/README.md,200,.clinerules/hooks/README.md has 424 lines; always-loaded files should stay under 200.,
+cline/cline,MNA006,info,.clinerules/protobuf-development.md,31,Reference to `proto/ui.proto` says nothing about when or why to read it.,**File: `proto/ui.proto`**
+cline/cline,MNA008,warn,.clinerules/protobuf-development.md,45,"`bun run protos`: no script `protos` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",bun run protos
+cline/cline,MNA006,info,.clinerules/protobuf-development.md,53,Reference to `src/core/controller/ui/scrollToSettings.ts` says nothing about when or why to read it.,**File: `src/core/controller/ui/scrollToSettings.ts`**
+cline/cline,MNA003,info,.clinerules/storage.md,46,"A 3-step procedure (""Adding New Storage Keys"") is loaded on every task, but only some tasks need it.",## Adding New Storage Keys
+cline/cline,MNA003,info,.clinerules/workflows/find-pr-reviewers.md,7,"A 8-step procedure (this procedure) is loaded on every task, but only some tasks need it.",1. Get the current branch name and verify it's not `main`
+cline/cline,MNA003,info,.clinerules/workflows/hotfix-release.md,76,"A 3-step procedure (""Step 5: Create Release Notes Commit on Main"") is loaded on every task, but only some tasks need it.",## Step 5: Create Release Notes Commit on Main
+cline/cline,MNA001,warn,.clinerules/workflows/pr-review.md,200,.clinerules/workflows/pr-review.md has 352 lines; always-loaded files should stay under 200.,
+cline/cline,MNA001,warn,.clinerules/workflows/writing-documentation.md,200,.clinerules/workflows/writing-documentation.md has 392 lines; always-loaded files should stay under 200.,
+cline/cline,MNA008,warn,.github/copilot-instructions.md,12,"`bun run compile`: no script `compile` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run compile`
+cline/cline,MNA008,warn,.github/copilot-instructions.md,13,"`bun run watch`: no script `watch` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run watch`
+cline/cline,MNA008,warn,.github/copilot-instructions.md,14,"`bun run protos`: no script `protos` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run protos`
+cline/cline,MNA008,warn,.github/copilot-instructions.md,19,"`bun run protos`: no script `protos` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run protos`
+cline/cline,MNA003,info,.github/copilot-instructions.md,24,"A 3-step procedure (""Adding API Providers (silent failure risk)"") is loaded on every task, but only some tasks need it.",## Adding API Providers (silent failure risk)
+cline/cline,MNA003,info,.github/copilot-instructions.md,34,"A 7-step procedure (""Adding Tools to System Prompt (5+ file chain)"") is loaded on every task, but only some tasks need it.",## Adding Tools to System Prompt (5+ file chain)
+cline/cline,MNA008,warn,AGENTS.md,22,"`bun run protos`: no script `protos` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run protos`
+cline/cline,MNA008,warn,AGENTS.md,23,"`bun run build:webview`: no script `build:webview` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run build:webview`
+cline/cline,MNA008,warn,AGENTS.md,23,"`bun run package`: no script `package` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run package`
+cline/cline,MNA008,warn,AGENTS.md,25,"`bun run test:integration`: no script `test:integration` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run test:integration`
+cline/cline,MNA008,warn,AGENTS.md,26,"`bun run download-ripgrep`: no script `download-ripgrep` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run download-ripgrep`
+cline/cline,MNA008,warn,AGENTS.md,30,"`bun run dev:sidecar`: no script `dev:sidecar` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run dev:sidecar`
+cline/cline,MNA008,warn,AGENTS.md,30,"`bun run dev:web`: no script `dev:web` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run dev:web`
+cline/cline,MNA008,warn,AGENTS.md,34,"`bun run typecheck`: no script `typecheck` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run typecheck`
+cline/cline,MNA008,warn,AGENTS.md,34,"`bun run test:chat-ui`: no script `test:chat-ui` in package.json (has: biome, build, build:apps, build:models, build:sdk, check, clean, cli).",`bun run test:chat-ui`
+block/goose,MNA008,warn,AGENTS.md,106,`ui/desktop/src/api`: `ui/desktop/src/api` does not exist.,`ui/desktop/src/api`
+block/goose,MNA008,warn,AGENTS.md,121,`ui/desktop/src/api`: `ui/desktop/src/api` does not exist.,`ui/desktop/src/api`
+sst/opencode,MNA008,warn,AGENTS.md,1,"`bun run generate`: no script `generate` in package.json (has: bench:devex, check, dev, dev:console, dev:desktop, dev:live, dev:stats, dev:storybook).",`bun run generate`
+sst/opencode,MNA008,warn,services/www/AGENTS.md,14,"`bun run build`: no script `build` in package.json (has: bench:devex, check, dev, dev:console, dev:desktop, dev:live, dev:stats, dev:storybook).",`bun run build`
+sst/opencode,MNA008,warn,services/www/AGENTS.md,18,"`bun run check:generated`: no script `check:generated` in package.json (has: bench:devex, check, dev, dev:console, dev:desktop, dev:live, dev:stats, dev:storybook).",`bun run check:generated`
+sst/opencode,MNA008,warn,services/www/AGENTS.md,18,"`bun run build`: no script `build` in package.json (has: bench:devex, check, dev, dev:console, dev:desktop, dev:live, dev:stats, dev:storybook).",`bun run build`
+sst/opencode,MNA008,warn,services/www/src/docs/AGENTS.md,26,"`bun run build`: no script `build` in package.json (has: bench:devex, check, dev, dev:console, dev:desktop, dev:live, dev:stats, dev:storybook).",`bun run build`
+browser-use/browser-use,MNA001,warn,AGENTS.md,1,"codex loads about 9117 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 9117.",budget:codex
+browser-use/browser-use,MNA001,warn,AGENTS.md,1,Codex stops adding guidance after 32768 bytes; about 5695 bytes from `AGENTS.md` onward never reach it.,codex-byte-cap
+browser-use/browser-use,MNA001,warn,AGENTS.md,1,"cursor loads about 9117 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 9117.",budget:cursor
+browser-use/browser-use,MNA001,warn,AGENTS.md,1,"copilot loads about 9117 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 9117.",budget:copilot
+browser-use/browser-use,MNA001,warn,AGENTS.md,1,"kiro loads about 9117 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 9117.",budget:kiro
+browser-use/browser-use,MNA006,info,AGENTS.md,99,Reference to `https://docs.browser-use.com/supported-models#supported-models` says nothing about when or why to read it.,See [Supported Models](https://docs.browser-use.com/supported-models#supported-models) for more.
+browser-use/browser-use,MNA001,warn,AGENTS.md,200,AGENTS.md has 1017 lines; always-loaded files should stay under 200.,
+browser-use/browser-use,MNA006,info,AGENTS.md,940,Reference to `https://github.com/browser-use/browser-use/issues` says nothing about when or why to read it.,1. Check our [GitHub Issues](https://github.com/browser-use/browser-use/issues)
+browser-use/browser-use,MNA010,warn,CLAUDE.md,1,"Claude Code reads CLAUDE.md and skips AGENTS.md when both exist; 158 rule(s) only in AGENTS.md never reach Claude Code, and 68 rule(s) only in CLAUDE.md never reach other agents.",pair:AGENTS.md
+browser-use/browser-use,MNA002,warn,CLAUDE.md,62,"Restates what Ruff already enforces (indentation width or tabs versus spaces; configured in pyproject.toml, .github/workflows/lint.yml, .github/workflows/publish.yml, .pre-commit-config.yaml).","- Use tabs for indentation in all python code, not spaces"
+browser-use/browser-use,MNA007,error,CLAUDE.md,87,"Path `tests/ci/test_action_EventNameHere.py` does not exist, though `tests/` does.",`tests/ci/test_action_EventNameHere.py`
+browser-use/browser-use,MNA008,warn,CLAUDE.md,87,`tests/ci/test_action_EventNameHere.py`: `tests/ci/test_action_EventNameHere.py` does not exist.,`tests/ci/test_action_EventNameHere.py`
+openai/openai-python,MNA006,info,AGENTS.md,78,Reference to `.github/workflows/ci.yml` says nothing about when or why to read it.,- `.github/workflows/ci.yml`
+openai/openai-python,MNA006,info,AGENTS.md,83,Reference to `.github/workflows/python-version-review.yml` says nothing about when or why to read it.,- `.github/workflows/python-version-review.yml`
+ollama/ollama,MNA008,warn,AGENTS.md,10,`./ollama serve`: `./ollama` does not exist.,./ollama serve
+ollama/ollama,MNA010,warn,CLAUDE.md,1,"Claude Code reads CLAUDE.md and skips AGENTS.md when both exist; 1 rule(s) only in AGENTS.md never reach Claude Code, and 1 rule(s) only in CLAUDE.md never reach other agents.",pair:AGENTS.md
+ggml-org/llama.cpp,MNA001,warn,AGENTS.md,200,AGENTS.md has 251 lines; always-loaded files should stay under 200.,
+ggml-org/llama.cpp,MNA006,info,AGENTS.md,235,Reference to `CONTRIBUTING.md` says nothing about when or why to read it.,- [Contributing guidelines](CONTRIBUTING.md)
+ggml-org/llama.cpp,MNA006,info,AGENTS.md,238,Reference to `.github/pull_request_template.md` says nothing about when or why to read it.,- [PR template](.github/pull_request_template.md)
+ggml-org/llama.cpp,MNA006,info,AGENTS.md,241,Reference to `docs/build.md` says nothing about when or why to read it.,- [Build documentation](docs/build.md)
+ggml-org/llama.cpp,MNA006,info,AGENTS.md,242,Reference to `tools/server/README.md` says nothing about when or why to read it.,- [Server usage documentation](tools/server/README.md)
+ggml-org/llama.cpp,MNA006,info,AGENTS.md,248,Reference to `common/jinja/README.md` says nothing about when or why to read it.,- [Jinja engine](common/jinja/README.md)
+ggml-org/llama.cpp,MNA010,warn,CLAUDE.md,1,Claude Code reads CLAUDE.md and skips AGENTS.md when both exist; 57 rule(s) only in AGENTS.md never reach Claude Code.,pair:AGENTS.md
+pytorch/pytorch,MNA001,warn,AGENTS.md,1,"copilot loads about 5135 tokens at start (o200k_base estimate), over the budget of 4000: .github/copilot-instructions.md 1181, AGENTS.md 3954.",budget:copilot
+pytorch/pytorch,MNA001,warn,AGENTS.md,200,AGENTS.md has 365 lines; always-loaded files should stay under 200.,
+pytorch/pytorch,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 365 lines; always-loaded files should stay under 200.,
+apache/airflow,MNA001,warn,AGENTS.md,1,"codex loads about 5266 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5266.",budget:codex
+apache/airflow,MNA001,warn,AGENTS.md,1,"cursor loads about 5266 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5266.",budget:cursor
+apache/airflow,MNA001,warn,AGENTS.md,1,"copilot loads about 6810 tokens at start (o200k_base estimate), over the budget of 4000: .github/instructions/code-review.instructions.md 1544, AGENTS.md 5266.",budget:copilot
+apache/airflow,MNA001,warn,AGENTS.md,1,"kiro loads about 5266 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5266.",budget:kiro
+apache/airflow,MNA003,info,AGENTS.md,92,"A 9-step procedure (this procedure) is loaded on every task, but only some tasks need it.",1. Users author Dags with the Task SDK (`airflow.sdk`).
+apache/airflow,MNA002,warn,AGENTS.md,136,"Restates what Ruff already enforces (formatting with a named formatter; configured in pyproject.toml, .pre-commit-config.yaml).","- **Always format and check Python files with ruff immediately after writing or editing them:** `uv run ruff format <file_path>` and `uv run ruff check --fix <file_path>`. Do this for every Python file you create or modify, before moving on to the next step."
+apache/airflow,MNA001,warn,AGENTS.md,200,AGENTS.md has 251 lines; always-loaded files should stay under 200.,
+apache/airflow,MNA001,warn,CLAUDE.md,1,"claude-code loads about 5214 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 5214.",budget:claude-code
+apache/airflow,MNA003,info,CLAUDE.md,92,"A 9-step procedure (this procedure) is loaded on every task, but only some tasks need it.",1. Users author Dags with the Task SDK (`airflow.sdk`).
+apache/airflow,MNA002,warn,CLAUDE.md,136,"Restates what Ruff already enforces (formatting with a named formatter; configured in pyproject.toml, .pre-commit-config.yaml).","- **Always format and check Python files with ruff immediately after writing or editing them:** `uv run ruff format <file_path>` and `uv run ruff check --fix <file_path>`. Do this for every Python file you create or modify, before moving on to the next step."
+apache/airflow,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 251 lines; always-loaded files should stay under 200.,
+apache/airflow,MNA013,warn,airflow-core/src/airflow/_shared/AGENTS.md,1,claude-code never loads airflow-core/src/airflow/_shared/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `airflow-core/src/airflow/_shared/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA013,warn,airflow-core/src/airflow/api_fastapi/execution_api/AGENTS.md,1,claude-code never loads airflow-core/src/airflow/api_fastapi/execution_api/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `airflow-core/src/airflow/api_fastapi/execution_api/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA013,warn,airflow-core/src/airflow/ui/AGENTS.md,1,claude-code never loads airflow-core/src/airflow/ui/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `airflow-core/src/airflow/ui/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA013,warn,dev/AGENTS.md,1,claude-code never loads dev/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `dev/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA006,info,dev/AGENTS.md,9,Reference to `#scripts` says nothing about when or why to read it.,- [Scripts](#scripts)
+apache/airflow,MNA013,warn,dev/ide_setup/AGENTS.md,1,claude-code never loads dev/ide_setup/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `dev/ide_setup/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA006,info,dev/ide_setup/AGENTS.md,8,Reference to `#ide-setup` says nothing about when or why to read it.,- [IDE Setup](#ide-setup)
+apache/airflow,MNA013,warn,providers/AGENTS.md,1,claude-code never loads providers/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `providers/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA007,error,providers/AGENTS.md,37,"Path `docs/changelog.rst` does not exist, though `docs/` does.",`docs/changelog.rst`
+apache/airflow,MNA013,warn,providers/common/ai/AGENTS.md,1,claude-code never loads providers/common/ai/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `providers/common/ai/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA013,warn,providers/elasticsearch/AGENTS.md,1,claude-code never loads providers/elasticsearch/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `providers/elasticsearch/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA013,warn,providers/opensearch/AGENTS.md,1,claude-code never loads providers/opensearch/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `providers/opensearch/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA007,error,registry/AGENTS.md,570,"Path `dev/registry/.inventory_cache/` does not exist, though `dev/` does.",`dev/registry/.inventory_cache/`
+apache/airflow,MNA007,error,registry/CLAUDE.md,570,"Path `dev/registry/.inventory_cache/` does not exist, though `dev/` does.",`dev/registry/.inventory_cache/`
+apache/airflow,MNA013,warn,scripts/ci/prek/AGENTS.md,1,claude-code never loads scripts/ci/prek/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `scripts/ci/prek/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA013,warn,task-sdk/src/airflow/sdk/_shared/AGENTS.md,1,claude-code never loads task-sdk/src/airflow/sdk/_shared/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `task-sdk/src/airflow/sdk/_shared/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA007,error,task-sdk/src/airflow/sdk/_shared/AGENTS.md,8,Link target `../../../../shared` does not exist.,[shared folder](../../../../shared)
+apache/airflow,MNA013,warn,task-sdk/src/airflow/sdk/execution_time/schema/AGENTS.md,1,claude-code never loads task-sdk/src/airflow/sdk/execution_time/schema/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `task-sdk/src/airflow/sdk/execution_time/schema/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+apache/airflow,MNA007,error,task-sdk/src/airflow/sdk/execution_time/schema/AGENTS.md,46,"Path `versions/vYYYY_MM_DD.py` does not exist, though `versions/` does.",`versions/vYYYY_MM_DD.py`
+apache/airflow,MNA007,error,task-sdk/src/airflow/sdk/execution_time/schema/AGENTS.md,72,"Path `versions/vYYYY_MM_DD.py` does not exist, though `versions/` does.",`versions/vYYYY_MM_DD.py`
+grafana/grafana,MNA007,error,AGENTS.md,154,"Path `conf/custom.ini` does not exist, though `conf/` does.",`conf/custom.ini`
+grafana/grafana,MNA013,warn,docs/AGENTS.md,1,claude-code never loads docs/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `docs/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA013,warn,e2e-playwright/alerting-suite/AGENTS.md,1,claude-code never loads e2e-playwright/alerting-suite/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `e2e-playwright/alerting-suite/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA013,warn,e2e-playwright/dashboard-new-layouts/AGENTS.md,1,claude-code never loads e2e-playwright/dashboard-new-layouts/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `e2e-playwright/dashboard-new-layouts/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA013,warn,e2e-playwright/plugin-e2e/plugin-e2e-api-tests/AGENTS.md,1,claude-code never loads e2e-playwright/plugin-e2e/plugin-e2e-api-tests/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `e2e-playwright/plugin-e2e/plugin-e2e-api-tests/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA013,warn,packages/grafana-ui/AGENTS.md,1,claude-code never loads packages/grafana-ui/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `packages/grafana-ui/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA013,warn,pkg/router/AGENTS.md,1,claude-code never loads pkg/router/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `pkg/router/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA013,warn,pkg/storage/unified/AGENTS.md,1,claude-code never loads pkg/storage/unified/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `pkg/storage/unified/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA013,warn,public/app/core/journeys/AGENTS.md,1,claude-code never loads public/app/core/journeys/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `public/app/core/journeys/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA008,warn,public/app/core/journeys/AGENTS.md,16,`./journey-tracking.md`: `./journey-tracking.md` does not exist.,`./journey-tracking.md`
+grafana/grafana,MNA008,warn,public/app/core/journeys/AGENTS.md,17,`./searchToResource.ts`: `./searchToResource.ts` does not exist.,`./searchToResource.ts`
+grafana/grafana,MNA008,warn,public/app/core/journeys/AGENTS.md,18,`./searchToResource.test.ts`: `./searchToResource.test.ts` does not exist.,`./searchToResource.test.ts`
+grafana/grafana,MNA008,warn,public/app/core/journeys/AGENTS.md,136,`./searchToResource.smoke.ts`: `./searchToResource.smoke.ts` does not exist.,`./searchToResource.smoke.ts`
+grafana/grafana,MNA013,warn,public/app/features/AGENTS.md,1,claude-code never loads public/app/features/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `public/app/features/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA013,warn,public/app/features/alerting/unified/AGENTS.md,1,claude-code never loads public/app/features/alerting/unified/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `public/app/features/alerting/unified/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA007,error,public/app/features/alerting/unified/AGENTS.md,187,"Path `state/reducers/` does not exist, though `state/` does.",`state/reducers/`
+grafana/grafana,MNA007,error,public/app/features/alerting/unified/AGENTS.md,200,"Path `rule-editor/alert-rule-form/` does not exist, though `rule-editor/` does.",`rule-editor/alert-rule-form/`
+grafana/grafana,MNA007,error,public/app/features/alerting/unified/AGENTS.md,256,"Path `packages/grafana-alerting/src/grafana/contactPoints/components/ContactPointSelector/ContactPointSelector.test.scenario.ts` does not exist, though `packages/` does.",`packages/grafana-alerting/src/grafana/contactPoints/components/ContactPointSelector/ContactPointSelector.test.scenario.ts`
+grafana/grafana,MNA007,error,public/app/features/alerting/unified/AGENTS.md,507,"Path `rule-editor/alert-rule-form/` does not exist, though `rule-editor/` does.",`rule-editor/alert-rule-form/`
+grafana/grafana,MNA013,warn,public/app/features/expressions/components/SqlExpressions/SqlEditor/AGENTS.md,1,claude-code never loads public/app/features/expressions/components/SqlExpressions/SqlEditor/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `public/app/features/expressions/components/SqlExpressions/SqlEditor/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+grafana/grafana,MNA013,warn,public/app/plugins/panel/AGENTS.md,1,claude-code never loads public/app/plugins/panel/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `public/app/plugins/panel/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+kubernetes/kubernetes,MNA007,error,vendor/go.opentelemetry.io/otel/AGENTS.md,5,"Path `.github/copilot-instructions.md` does not exist, though `.github/` does.",`.github/copilot-instructions.md`
+kubernetes/kubernetes,MNA007,error,vendor/go.opentelemetry.io/otel/AGENTS.md,6,"Path `.github/copilot-instructions.md` does not exist, though `.github/` does.",`.github/copilot-instructions.md`
+rust-lang/rust,MNA001,warn,AGENTS.md,200,AGENTS.md has 258 lines; always-loaded files should stay under 200.,
+rust-lang/rust,MNA003,info,AGENTS.md,200,"A 4-step procedure (""Mechanical rewrites"") is loaded on every task, but only some tasks need it.",### Mechanical rewrites
+rust-lang/rust,MNA002,warn,AGENTS.md,210,"Restates what rustfmt already enforces (formatting with a named formatter; configured in rustfmt.toml, src/tools/rust-analyzer/editors/code/package.json).","For Rust formatting, use `./x fmt`; do not invoke `rustfmt` directly."
+mui/material-ui,MNA009,info,AGENTS.md,154,Directory tree repeats the repo layout (5 of 6 entries exist); the agent can list the tree itself.,```text
+mui/material-ui,MNA001,warn,AGENTS.md,200,AGENTS.md has 268 lines; always-loaded files should stay under 200.,
+mui/material-ui,MNA003,info,AGENTS.md,252,"A 6-step procedure (""Pre-PR Checklist"") is loaded on every task, but only some tasks need it.",## Pre-PR Checklist
+mui/material-ui,MNA010,warn,CLAUDE.md,1,"Claude Code reads CLAUDE.md and skips AGENTS.md when both exist; 47 rule(s) only in AGENTS.md never reach Claude Code, and 1 rule(s) only in CLAUDE.md never reach other agents.",pair:AGENTS.md
+mui/material-ui,MNA013,warn,skills/material-ui-nextjs/AGENTS.md,1,claude-code never loads skills/material-ui-nextjs/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `skills/material-ui-nextjs/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mui/material-ui,MNA006,info,skills/material-ui-nextjs/AGENTS.md,20,Reference to `#pages-router` says nothing about when or why to read it.,2. [Pages Router](#pages-router)
+mui/material-ui,MNA006,info,skills/material-ui-nextjs/AGENTS.md,25,Reference to `#further-reading` says nothing about when or why to read it.,7. [Further reading](#further-reading)
+mui/material-ui,MNA006,info,skills/material-ui-nextjs/AGENTS.md,35,Reference to `@mui/material-nextjs` says nothing about when or why to read it.,- `@mui/material-nextjs`
+mui/material-ui,MNA006,info,skills/material-ui-nextjs/AGENTS.md,36,Reference to `@emotion/cache` says nothing about when or why to read it.,- `@emotion/cache`
+mui/material-ui,MNA013,warn,skills/material-ui-styling/AGENTS.md,1,claude-code never loads skills/material-ui-styling/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `skills/material-ui-styling/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mui/material-ui,MNA006,info,skills/material-ui-styling/AGENTS.md,21,Reference to `#2-reusable-styled` says nothing about when or why to read it.,3. [Reusable: `styled()`](#2-reusable-styled)
+mui/material-ui,MNA006,info,skills/material-ui-styling/AGENTS.md,25,Reference to `#imports-and-consistency` says nothing about when or why to read it.,7. [Imports and consistency](#imports-and-consistency)
+mui/material-ui,MNA006,info,skills/material-ui-styling/AGENTS.md,26,Reference to `#further-reading-repo--site` says nothing about when or why to read it.,8. [Further reading](#further-reading-repo--site)
+mui/material-ui,MNA013,warn,skills/material-ui-tailwind/AGENTS.md,1,claude-code never loads skills/material-ui-tailwind/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `skills/material-ui-tailwind/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mui/material-ui,MNA006,info,skills/material-ui-tailwind/AGENTS.md,21,Reference to `#vite-and-other-spas` says nothing about when or why to read it.,3. [Vite and other SPAs](#vite-and-other-spas)
+mui/material-ui,MNA006,info,skills/material-ui-tailwind/AGENTS.md,26,Reference to `#troubleshooting` says nothing about when or why to read it.,8. [Troubleshooting](#troubleshooting)
+mui/material-ui,MNA006,info,skills/material-ui-tailwind/AGENTS.md,27,Reference to `#further-reading` says nothing about when or why to read it.,9. [Further reading](#further-reading)
+mui/material-ui,MNA013,warn,skills/material-ui-theming/AGENTS.md,1,claude-code never loads skills/material-ui-theming/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `skills/material-ui-theming/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+mui/material-ui,MNA006,info,skills/material-ui-theming/AGENTS.md,19,Reference to `#core-setup` says nothing about when or why to read it.,1. [Core setup](#core-setup)
+mui/material-ui,MNA006,info,skills/material-ui-theming/AGENTS.md,24,Reference to `#typography-and-spacing` says nothing about when or why to read it.,6. [Typography and spacing](#typography-and-spacing)
+mui/material-ui,MNA006,info,skills/material-ui-theming/AGENTS.md,26,Reference to `#nesting-themeprovider` says nothing about when or why to read it.,8. [Nesting `ThemeProvider`](#nesting-themeprovider)
+mui/material-ui,MNA006,info,skills/material-ui-theming/AGENTS.md,29,Reference to `#further-reading` says nothing about when or why to read it.,11. [Further reading](#further-reading)
+storybookjs/storybook,MNA007,error,.cursor/rules/cursor-cloud.mdc,20,"Path `code/core/dist/bin/dispatcher.js` does not exist, though `code/` does.",`code/core/dist/bin/dispatcher.js`
+storybookjs/storybook,MNA007,error,.cursorrules,15,"Path `code/vitest.workspace.ts` does not exist, though `code/` does.",`code/vitest.workspace.ts`
+storybookjs/storybook,MNA007,error,.cursorrules,29,"Path `./code/vitest.workspace.ts` does not exist, though `code/` does.",`./code/vitest.workspace.ts`
+storybookjs/storybook,MNA008,warn,.cursorrules,29,`./code/vitest.workspace.ts`: `./code/vitest.workspace.ts` does not exist.,`./code/vitest.workspace.ts`
+storybookjs/storybook,MNA008,warn,AGENTS.md,12,`./foo.ts`: `./foo.ts` does not exist.,`./foo.ts`
+jestjs/jest,MNA001,warn,.github/copilot-instructions.md,1,"claude-code loads about 4370 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 15, .github/copilot-instructions.md 4355.",budget:claude-code
+jestjs/jest,MNA001,warn,.github/copilot-instructions.md,1,"copilot loads about 4355 tokens at start (o200k_base estimate), over the budget of 4000: .github/copilot-instructions.md 4355.",budget:copilot
+jestjs/jest,MNA001,warn,.github/copilot-instructions.md,200,.github/copilot-instructions.md has 240 lines; always-loaded files should stay under 200.,
+jestjs/jest,MNA007,error,packages/jest-config/CLAUDE.md,78,"Path `e2e/__tests__/configFile.test.ts` does not exist, though `e2e/` does.",`e2e/__tests__/configFile.test.ts`
+PostHog/posthog,MNA007,error,.cursor/rules/django-python.mdc,113,"Path `.flox/cache/venv/` does not exist, though `.flox/` does.",`.flox/cache/venv/`
+PostHog/posthog,MNA001,warn,AGENTS.md,1,"codex loads about 10534 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 10534.",budget:codex
+PostHog/posthog,MNA001,warn,AGENTS.md,1,Codex stops adding guidance after 32768 bytes; about 12426 bytes from `AGENTS.md` onward never reach it.,codex-byte-cap
+PostHog/posthog,MNA001,warn,AGENTS.md,1,"cursor loads about 10911 tokens at start (o200k_base estimate), over the budget of 4000: .cursorrules 377, AGENTS.md 10534.",budget:cursor
+PostHog/posthog,MNA001,warn,AGENTS.md,1,"copilot loads about 10534 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 10534.",budget:copilot
+PostHog/posthog,MNA001,warn,AGENTS.md,1,"kiro loads about 10534 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 10534.",budget:kiro
+PostHog/posthog,MNA002,warn,AGENTS.md,76,Restates what EditorConfig and Prettier and rustfmt and Ruff already enforces (maximum line length; configured in .editorconfig).,- Keep the first line under 72 characters
+PostHog/posthog,MNA002,warn,AGENTS.md,120,Restates what EditorConfig and Prettier and rustfmt and Ruff already enforces (maximum line length; configured in .editorconfig).,"- **Do not claim a provenance you have not checked.** ""Written fresh"" in a commit message is a factual claim a reviewer will rely on. If you are unsure, compare your text against the source: any shared run of ~40 characters or more means derived, not fresh."
+PostHog/posthog,MNA001,warn,AGENTS.md,200,AGENTS.md has 337 lines; always-loaded files should stay under 200.,
+PostHog/posthog,MNA002,warn,AGENTS.md,225,Restates what the TypeScript compiler already enforces (the TypeScript any type; configured in tsconfig.json).,"- **Write as if mypy `--strict` were on.** `[review]` Annotate every signature, avoid `Any`, put type-only references under `TYPE_CHECKING`. The config is not fully strict yet; new code should be. When a change is type-risky run mypy the way CI does — `uv run mypy --cache-fine-grained .`, repo-wide, never a file subset. It follows imports, so a subset misses reverse-dependency breakage."
+PostHog/posthog,MNA007,error,AGENTS.md,288,"Path `.claude/settings.local.json` does not exist, though `.claude/` does.",`.claude/settings.local.json`
+PostHog/posthog,MNA007,error,AGENTS.md,319,Link target `products/conversations/skills/organizing-conversations-code/SKILL.md` does not exist.,[`products/conversations/skills/organizing-conversations-code/SKILL.md`](products/conversations/skills/organizing-conversations-code/SKILL.md)
+PostHog/posthog,MNA007,error,AGENTS.md,319,"Path `products/conversations/skills/organizing-conversations-code/SKILL.md` does not exist, though `products/` does.",`products/conversations/skills/organizing-conversations-code/SKILL.md`
+PostHog/posthog,MNA001,warn,CLAUDE.md,1,"claude-code loads about 10534 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 10534.",budget:claude-code
+PostHog/posthog,MNA002,warn,CLAUDE.md,76,Restates what EditorConfig and Prettier and rustfmt and Ruff already enforces (maximum line length; configured in .editorconfig).,- Keep the first line under 72 characters
+PostHog/posthog,MNA002,warn,CLAUDE.md,120,Restates what EditorConfig and Prettier and rustfmt and Ruff already enforces (maximum line length; configured in .editorconfig).,"- **Do not claim a provenance you have not checked.** ""Written fresh"" in a commit message is a factual claim a reviewer will rely on. If you are unsure, compare your text against the source: any shared run of ~40 characters or more means derived, not fresh."
+PostHog/posthog,MNA001,warn,CLAUDE.md,200,CLAUDE.md has 337 lines; always-loaded files should stay under 200.,
+PostHog/posthog,MNA002,warn,CLAUDE.md,225,Restates what the TypeScript compiler already enforces (the TypeScript any type; configured in tsconfig.json).,"- **Write as if mypy `--strict` were on.** `[review]` Annotate every signature, avoid `Any`, put type-only references under `TYPE_CHECKING`. The config is not fully strict yet; new code should be. When a change is type-risky run mypy the way CI does — `uv run mypy --cache-fine-grained .`, repo-wide, never a file subset. It follows imports, so a subset misses reverse-dependency breakage."
+PostHog/posthog,MNA007,error,CLAUDE.md,288,"Path `.claude/settings.local.json` does not exist, though `.claude/` does.",`.claude/settings.local.json`
+PostHog/posthog,MNA007,error,CLAUDE.md,319,Link target `products/conversations/skills/organizing-conversations-code/SKILL.md` does not exist.,[`products/conversations/skills/organizing-conversations-code/SKILL.md`](products/conversations/skills/organizing-conversations-code/SKILL.md)
+PostHog/posthog,MNA007,error,CLAUDE.md,319,"Path `products/conversations/skills/organizing-conversations-code/SKILL.md` does not exist, though `products/` does.",`products/conversations/skills/organizing-conversations-code/SKILL.md`
+PostHog/posthog,MNA007,error,posthog/clickhouse/client/AGENTS.md,76,"Path `docs/claude/clickhouse-connections.md` does not exist, though `docs/` does.",`docs/claude/clickhouse-connections.md`
+PostHog/posthog,MNA007,error,posthog/clickhouse/client/CLAUDE.md,76,"Path `docs/claude/clickhouse-connections.md` does not exist, though `docs/` does.",`docs/claude/clickhouse-connections.md`
+PostHog/posthog,MNA007,error,posthog/ingress/README.md,80,"Path `products/messaging/backend/api/customerio_webhook.py` does not exist, though `products/` does.",`products/messaging/backend/api/customerio_webhook.py`
+PostHog/posthog,MNA007,error,products/ai_observability/AGENTS.md,35,"Path `products/ai_observability/docs/` does not exist, though `products/` does.",`products/ai_observability/docs/`
+PostHog/posthog,MNA007,error,products/ai_observability/CLAUDE.md,35,"Path `products/ai_observability/docs/` does not exist, though `products/` does.",`products/ai_observability/docs/`
+PostHog/posthog,MNA007,error,products/customer_analytics/frontend/components/Accounts/AGENTS.md,361,"Path `products/customer_analytics/backend/max_tools/` does not exist, though `products/` does.",`products/customer_analytics/backend/max_tools/`
+PostHog/posthog,MNA007,error,products/customer_analytics/frontend/components/Accounts/CLAUDE.md,361,"Path `products/customer_analytics/backend/max_tools/` does not exist, though `products/` does.",`products/customer_analytics/backend/max_tools/`
+PostHog/posthog,MNA008,warn,products/desktop/AGENTS.md,15,`packages/core`: `packages/core` does not exist.,`packages/core`
+PostHog/posthog,MNA008,warn,products/desktop/AGENTS.md,16,`packages/workspace-server`: `packages/workspace-server` does not exist.,`packages/workspace-server`
+PostHog/posthog,MNA008,warn,products/desktop/AGENTS.md,17,`packages/ui`: `packages/ui` does not exist.,`packages/ui`
+PostHog/posthog,MNA008,warn,products/desktop/AGENTS.md,151,`./web-storage`: `./web-storage` does not exist.,`./web-storage`
+PostHog/posthog,MNA008,warn,products/desktop/AGENTS.md,196,`packages/workspace-server`: `packages/workspace-server` does not exist.,`packages/workspace-server`
+PostHog/posthog,MNA007,error,products/desktop/AGENTS.md,263,"Path `frontend/tmp/openapi.json` does not exist, though `frontend/` does.",`frontend/tmp/openapi.json`
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,355,Reference to `./docs/CONVENTIONS.md` says nothing about when or why to read it.,See [docs/CONVENTIONS.md](./docs/CONVENTIONS.md).
+PostHog/posthog,MNA008,warn,products/desktop/AGENTS.md,384,`packages/core`: `packages/core` does not exist.,`packages/core`
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,386,Reference to `./docs/TESTING.md` says nothing about when or why to read it.,See [docs/TESTING.md](./docs/TESTING.md).
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,390,Reference to `./docs/ARCHITECTURE.md` says nothing about when or why to read it.,- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,391,Reference to `./docs/CONVENTIONS.md` says nothing about when or why to read it.,- [docs/CONVENTIONS.md](./docs/CONVENTIONS.md)
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,392,Reference to `./docs/TESTING.md` says nothing about when or why to read it.,- [docs/TESTING.md](./docs/TESTING.md)
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,393,Reference to `./docs/ANNOUNCEMENTS.md` says nothing about when or why to read it.,- [docs/ANNOUNCEMENTS.md](./docs/ANNOUNCEMENTS.md)
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,394,Reference to `./docs/DEEP-LINKS.md` says nothing about when or why to read it.,- [docs/DEEP-LINKS.md](./docs/DEEP-LINKS.md)
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,395,Reference to `./docs/LOCAL-DEVELOPMENT.md` says nothing about when or why to read it.,- [docs/LOCAL-DEVELOPMENT.md](./docs/LOCAL-DEVELOPMENT.md)
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,396,Reference to `./docs/UPDATES.md` says nothing about when or why to read it.,- [docs/UPDATES.md](./docs/UPDATES.md)
+PostHog/posthog,MNA006,info,products/desktop/AGENTS.md,397,Reference to `./docs/TROUBLESHOOTING.md` says nothing about when or why to read it.,- [docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)
+PostHog/posthog,MNA008,warn,products/desktop/CLAUDE.md,15,`packages/core`: `packages/core` does not exist.,`packages/core`
+PostHog/posthog,MNA008,warn,products/desktop/CLAUDE.md,16,`packages/workspace-server`: `packages/workspace-server` does not exist.,`packages/workspace-server`
+PostHog/posthog,MNA008,warn,products/desktop/CLAUDE.md,17,`packages/ui`: `packages/ui` does not exist.,`packages/ui`
+PostHog/posthog,MNA008,warn,products/desktop/CLAUDE.md,151,`./web-storage`: `./web-storage` does not exist.,`./web-storage`
+PostHog/posthog,MNA008,warn,products/desktop/CLAUDE.md,196,`packages/workspace-server`: `packages/workspace-server` does not exist.,`packages/workspace-server`
+PostHog/posthog,MNA007,error,products/desktop/CLAUDE.md,263,"Path `frontend/tmp/openapi.json` does not exist, though `frontend/` does.",`frontend/tmp/openapi.json`
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,355,Reference to `./docs/CONVENTIONS.md` says nothing about when or why to read it.,See [docs/CONVENTIONS.md](./docs/CONVENTIONS.md).
+PostHog/posthog,MNA008,warn,products/desktop/CLAUDE.md,384,`packages/core`: `packages/core` does not exist.,`packages/core`
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,386,Reference to `./docs/TESTING.md` says nothing about when or why to read it.,See [docs/TESTING.md](./docs/TESTING.md).
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,390,Reference to `./docs/ARCHITECTURE.md` says nothing about when or why to read it.,- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,391,Reference to `./docs/CONVENTIONS.md` says nothing about when or why to read it.,- [docs/CONVENTIONS.md](./docs/CONVENTIONS.md)
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,392,Reference to `./docs/TESTING.md` says nothing about when or why to read it.,- [docs/TESTING.md](./docs/TESTING.md)
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,393,Reference to `./docs/ANNOUNCEMENTS.md` says nothing about when or why to read it.,- [docs/ANNOUNCEMENTS.md](./docs/ANNOUNCEMENTS.md)
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,394,Reference to `./docs/DEEP-LINKS.md` says nothing about when or why to read it.,- [docs/DEEP-LINKS.md](./docs/DEEP-LINKS.md)
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,395,Reference to `./docs/LOCAL-DEVELOPMENT.md` says nothing about when or why to read it.,- [docs/LOCAL-DEVELOPMENT.md](./docs/LOCAL-DEVELOPMENT.md)
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,396,Reference to `./docs/UPDATES.md` says nothing about when or why to read it.,- [docs/UPDATES.md](./docs/UPDATES.md)
+PostHog/posthog,MNA006,info,products/desktop/CLAUDE.md,397,Reference to `./docs/TROUBLESHOOTING.md` says nothing about when or why to read it.,- [docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/browser-tabs/AGENTS.md,52,"Path `services/browser-tabs/` does not exist, though `services/` does.",`services/browser-tabs/`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/browser-tabs/CLAUDE.md,52,"Path `services/browser-tabs/` does not exist, though `services/` does.",`services/browser-tabs/`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/canvas/AGENTS.md,349,"Path `docs/CANVAS-FREEFORM-REACT-PLAN.md` does not exist, though `docs/` does.",`docs/CANVAS-FREEFORM-REACT-PLAN.md`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/canvas/CLAUDE.md,349,"Path `docs/CANVAS-FREEFORM-REACT-PLAN.md` does not exist, though `docs/` does.",`docs/CANVAS-FREEFORM-REACT-PLAN.md`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/AGENTS.md,167,"Path `utils/reportMembership.ts` does not exist, though `utils/` does.",`utils/reportMembership.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/AGENTS.md,194,"Path `packages/api-client/src/posthog-client.ts` does not exist, though `packages/` does.",`packages/api-client/src/posthog-client.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/AGENTS.md,196,"Path `packages/core/src/inbox/reportCharts.ts` does not exist, though `packages/` does.",`packages/core/src/inbox/reportCharts.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/AGENTS.md,200,"Path `utils/reportPresentation.ts` does not exist, though `utils/` does.",`utils/reportPresentation.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/AGENTS.md,253,"Path `utils/reportMembership.test.ts` does not exist, though `utils/` does.",`utils/reportMembership.test.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/AGENTS.md,254,"Path `utils/reportPresentation.test.ts` does not exist, though `utils/` does.",`utils/reportPresentation.test.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/CLAUDE.md,167,"Path `utils/reportMembership.ts` does not exist, though `utils/` does.",`utils/reportMembership.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/CLAUDE.md,194,"Path `packages/api-client/src/posthog-client.ts` does not exist, though `packages/` does.",`packages/api-client/src/posthog-client.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/CLAUDE.md,196,"Path `packages/core/src/inbox/reportCharts.ts` does not exist, though `packages/` does.",`packages/core/src/inbox/reportCharts.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/CLAUDE.md,200,"Path `utils/reportPresentation.ts` does not exist, though `utils/` does.",`utils/reportPresentation.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/CLAUDE.md,253,"Path `utils/reportMembership.test.ts` does not exist, though `utils/` does.",`utils/reportMembership.test.ts`
+PostHog/posthog,MNA007,error,products/desktop/packages/ui/src/features/inbox/CLAUDE.md,254,"Path `utils/reportPresentation.test.ts` does not exist, though `utils/` does.",`utils/reportPresentation.test.ts`
+PostHog/posthog,MNA007,error,products/engineering_analytics/README.md,92,Link target `../../docs/internal/backend-test-retries.md` does not exist.,[Backend test retries](../../docs/internal/backend-test-retries.md)
+PostHog/posthog,MNA008,warn,products/posthog_ai/frontend/AGENTS.md,91,`products/tasks/frontend/generated/api`: `products/tasks/frontend/generated/api` does not exist.,`products/tasks/frontend/generated/api`
+PostHog/posthog,MNA008,warn,products/posthog_ai/frontend/CLAUDE.md,91,`products/tasks/frontend/generated/api`: `products/tasks/frontend/generated/api` does not exist.,`products/tasks/frontend/generated/api`
+PostHog/posthog,MNA006,info,products/signals/backend/report_generation/AGENTS.md,169,Reference to `../management/commands/analyze_report.py` says nothing about when or why to read it.,File: `../management/commands/analyze_report.py`
+PostHog/posthog,MNA006,info,products/signals/backend/report_generation/AGENTS.md,183,Reference to `../management/commands/select_repo.py` says nothing about when or why to read it.,File: `../management/commands/select_repo.py`
+PostHog/posthog,MNA006,info,products/signals/backend/report_generation/AGENTS.md,197,Reference to `../management/commands/parse_sandbox_log.py` says nothing about when or why to read it.,File: `../management/commands/parse_sandbox_log.py`
+PostHog/posthog,MNA006,info,products/signals/backend/report_generation/CLAUDE.md,169,Reference to `../management/commands/analyze_report.py` says nothing about when or why to read it.,File: `../management/commands/analyze_report.py`
+PostHog/posthog,MNA006,info,products/signals/backend/report_generation/CLAUDE.md,183,Reference to `../management/commands/select_repo.py` says nothing about when or why to read it.,File: `../management/commands/select_repo.py`
+PostHog/posthog,MNA006,info,products/signals/backend/report_generation/CLAUDE.md,197,Reference to `../management/commands/parse_sandbox_log.py` says nothing about when or why to read it.,File: `../management/commands/parse_sandbox_log.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/AGENTS.md,72,`tools/__init__.py`: `tools/__init__.py` does not exist.,`tools/__init__.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/AGENTS.md,176,`tools/report.py`: `tools/report.py` does not exist.,`tools/report.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/AGENTS.md,179,`tools/emit.py`: `tools/emit.py` does not exist.,`tools/emit.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/AGENTS.md,181,`tools/emit.py`: `tools/emit.py` does not exist.,`tools/emit.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/AGENTS.md,219,`tools/__init__.py`: `tools/__init__.py` does not exist.,`tools/__init__.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/CLAUDE.md,72,`tools/__init__.py`: `tools/__init__.py` does not exist.,`tools/__init__.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/CLAUDE.md,176,`tools/report.py`: `tools/report.py` does not exist.,`tools/report.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/CLAUDE.md,179,`tools/emit.py`: `tools/emit.py` does not exist.,`tools/emit.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/CLAUDE.md,181,`tools/emit.py`: `tools/emit.py` does not exist.,`tools/emit.py`
+PostHog/posthog,MNA008,warn,products/signals/backend/scout_harness/CLAUDE.md,219,`tools/__init__.py`: `tools/__init__.py` does not exist.,`tools/__init__.py`
+PostHog/posthog,MNA007,error,products/signals/skills/AGENTS.md,7,"Path `products/posthog_ai/dist/skills/` does not exist, though `products/` does.",`products/posthog_ai/dist/skills/`
+PostHog/posthog,MNA007,error,products/signals/skills/AGENTS.md,144,"Path `products/posthog_ai/dist/skills/` does not exist, though `products/` does.",`products/posthog_ai/dist/skills/`
+PostHog/posthog,MNA007,error,products/signals/skills/CLAUDE.md,7,"Path `products/posthog_ai/dist/skills/` does not exist, though `products/` does.",`products/posthog_ai/dist/skills/`
+PostHog/posthog,MNA007,error,products/signals/skills/CLAUDE.md,144,"Path `products/posthog_ai/dist/skills/` does not exist, though `products/` does.",`products/posthog_ai/dist/skills/`
+PostHog/posthog,MNA008,warn,products/warehouse_sources/backend/temporal/data_imports/sources/AGENTS.md,13,`common/testing`: `common/testing` does not exist.,`common/testing`
+PostHog/posthog,MNA008,warn,products/warehouse_sources/backend/temporal/data_imports/sources/CLAUDE.md,13,`common/testing`: `common/testing` does not exist.,`common/testing`
+PostHog/posthog,MNA007,error,rust/personhog-router/AGENTS.md,6,"Path `src/service/tests/mocks.rs` does not exist, though `src/` does.",`src/service/tests/mocks.rs`
+PostHog/posthog,MNA007,error,rust/personhog-router/CLAUDE.md,6,"Path `src/service/tests/mocks.rs` does not exist, though `src/` does.",`src/service/tests/mocks.rs`
+getsentry/sentry,MNA013,warn,src/sentry/issues/action_log/AGENTS.md,1,claude-code never loads src/sentry/issues/action_log/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `src/sentry/issues/action_log/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+getsentry/sentry,MNA013,warn,src/sentry/issues/derived/AGENTS.md,1,claude-code never loads src/sentry/issues/derived/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `src/sentry/issues/derived/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+getsentry/sentry,MNA008,warn,static/AGENTS.md,118,`static/app/images`: `static/app/images` does not exist.,`static/app/images`
+getsentry/sentry,MNA007,error,tests/AGENTS.md,11,"Path `src/sentry/foo/bar.py` does not exist, though `src/` does.",`src/sentry/foo/bar.py`
+getsentry/sentry,MNA007,error,tests/AGENTS.md,12,"Path `tests/sentry/foo/test_bar.py` does not exist, though `tests/` does.",`tests/sentry/foo/test_bar.py`
+mattermost/mattermost,MNA007,error,AGENTS.md,17,"Path `.cursor/AGENTS.md` does not exist, though `.cursor/` does.",`.cursor/AGENTS.md`
+appwrite/appwrite,MNA001,warn,AGENTS.md,1,"claude-code loads about 7254 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 5, AGENTS.md 7249.",budget:claude-code
+appwrite/appwrite,MNA001,warn,AGENTS.md,1,"codex loads about 7249 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7249.",budget:codex
+appwrite/appwrite,MNA001,warn,AGENTS.md,1,"cursor loads about 7249 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7249.",budget:cursor
+appwrite/appwrite,MNA001,warn,AGENTS.md,1,"copilot loads about 7249 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7249.",budget:copilot
+appwrite/appwrite,MNA001,warn,AGENTS.md,1,"kiro loads about 7249 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 7249.",budget:kiro
+appwrite/appwrite,MNA009,info,AGENTS.md,96,Directory tree repeats the repo layout (19 of 20 entries exist); the agent can list the tree itself.,```
+appwrite/appwrite,MNA001,warn,AGENTS.md,200,AGENTS.md has 334 lines; always-loaded files should stay under 200.,
+appwrite/appwrite,MNA013,warn,apps/console/AGENTS.md,1,claude-code never loads apps/console/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `apps/console/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,33,"`bun run sdk:preview`: no script `sdk:preview` in package.json (has: format:compose, lint:compose).",`bun run sdk:preview`
+appwrite/appwrite,MNA006,info,apps/console/AGENTS.md,603,Reference to `node_modules/@appwrite.io/console/src/models.ts` says nothing about when or why to read it.,**Reference**: `node_modules/@appwrite.io/console/src/models.ts`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1116,"`bun run generate:cover-manifest`: no script `generate:cover-manifest` in package.json (has: format:compose, lint:compose).",`bun run generate:cover-manifest`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1116,"`bun run generate:content-covers`: no script `generate:content-covers` in package.json (has: format:compose, lint:compose).",`bun run generate:content-covers`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1117,"`bun run i18n:audit:<lang>`: no script `i18n:audit:<lang>` in package.json (has: format:compose, lint:compose).",`bun run i18n:audit:<lang>`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1519,`src/components`: `src/components` does not exist.,`src/components`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1525,"`bun run i18n:audit:<lang>`: no script `i18n:audit:<lang>` in package.json (has: format:compose, lint:compose).",`bun run i18n:audit:<lang>`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1533,`src/components`: `src/components` does not exist.,`src/components`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1536,"`bun run i18n:audit:<lang>`: no script `i18n:audit:<lang>` in package.json (has: format:compose, lint:compose).",`bun run i18n:audit:<lang>`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1583,"`bun run i18n:audit:he`: no script `i18n:audit:he` in package.json (has: format:compose, lint:compose).",`bun run i18n:audit:he`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1628,"`bun run i18n:audit:ja`: no script `i18n:audit:ja` in package.json (has: format:compose, lint:compose).",`bun run i18n:audit:ja`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1662,"`bun run i18n:audit:<lang>`: no script `i18n:audit:<lang>` in package.json (has: format:compose, lint:compose).",`bun run i18n:audit:<lang>`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1675,"`bun run generate:cover-manifest`: no script `generate:cover-manifest` in package.json (has: format:compose, lint:compose).",`bun run generate:cover-manifest`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1675,"`bun run generate:content-covers`: no script `generate:content-covers` in package.json (has: format:compose, lint:compose).",`bun run generate:content-covers`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1675,"`bun run build`: no script `build` in package.json (has: format:compose, lint:compose).",`bun run build`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1696,"`bun run prune:removed-blog-assets`: no script `prune:removed-blog-assets` in package.json (has: format:compose, lint:compose).",`bun run prune:removed-blog-assets`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1700,"`bun run generate:blog-manifest`: no script `generate:blog-manifest` in package.json (has: format:compose, lint:compose).",`bun run generate:blog-manifest`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1700,"`bun run generate:cover-manifest`: no script `generate:cover-manifest` in package.json (has: format:compose, lint:compose).",`bun run generate:cover-manifest`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1701,"`bun run lint:removed-blog-links`: no script `lint:removed-blog-links` in package.json (has: format:compose, lint:compose).",`bun run lint:removed-blog-links`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1719,"`bun run <script>`: no script `<script>` in package.json (has: format:compose, lint:compose).",`bun run <script>`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run dev`: no script `dev` in package.json (has: format:compose, lint:compose).",`bun run dev`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run lint`: no script `lint` in package.json (has: format:compose, lint:compose).",`bun run lint`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run check`: no script `check` in package.json (has: format:compose, lint:compose).",`bun run check`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run test`: no script `test` in package.json (has: format:compose, lint:compose).",`bun run test`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run e2e`: no script `e2e` in package.json (has: format:compose, lint:compose).",`bun run e2e`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run install-browsers`: no script `install-browsers` in package.json (has: format:compose, lint:compose).",`bun run install-browsers`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run e2e:mysql`: no script `e2e:mysql` in package.json (has: format:compose, lint:compose).",`bun run e2e:mysql`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run e2e:postgres`: no script `e2e:postgres` in package.json (has: format:compose, lint:compose).",`bun run e2e:postgres`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run e2e:tablesdb`: no script `e2e:tablesdb` in package.json (has: format:compose, lint:compose).",`bun run e2e:tablesdb`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run e2e:documentsdb`: no script `e2e:documentsdb` in package.json (has: format:compose, lint:compose).",`bun run e2e:documentsdb`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run e2e:vectorsdb`: no script `e2e:vectorsdb` in package.json (has: format:compose, lint:compose).",`bun run e2e:vectorsdb`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1721,"`bun run e2e:databases`: no script `e2e:databases` in package.json (has: format:compose, lint:compose).",`bun run e2e:databases`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1722,"`bun run lint`: no script `lint` in package.json (has: format:compose, lint:compose).",`bun run lint`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1722,"`bun run check`: no script `check` in package.json (has: format:compose, lint:compose).",`bun run check`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1722,"`bun run lint:types`: no script `lint:types` in package.json (has: format:compose, lint:compose).",`bun run lint:types`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1722,"`bun run lint:types --update`: no script `lint:types` in package.json (has: format:compose, lint:compose).",`bun run lint:types --update`
+appwrite/appwrite,MNA008,warn,apps/console/AGENTS.md,1732,"`bun run e2e:cleanup-projects -- --all`: no script `e2e:cleanup-projects` in package.json (has: format:compose, lint:compose).",`bun run e2e:cleanup-projects -- --all`
+directus/directus,MNA010,warn,.claude/CLAUDE.md,1,"Claude Code reads .claude/CLAUDE.md and skips AGENTS.md when both exist; 78 rule(s) only in AGENTS.md never reach Claude Code, and 1 rule(s) only in .claude/CLAUDE.md never reach other agents.",pair:AGENTS.md
+directus/directus,MNA007,error,.claude/CLAUDE.md,3,Link target `../agents.md` does not exist.,[agents.md](../agents.md)
+directus/directus,MNA009,info,.github/copilot-instructions.md,88,Directory tree repeats the repo layout (16 of 16 entries exist); the agent can list the tree itself.,```
+directus/directus,MNA001,warn,.github/copilot-instructions.md,200,.github/copilot-instructions.md has 265 lines; always-loaded files should stay under 200.,
+directus/directus,MNA003,info,.github/copilot-instructions.md,200,"A 3-step procedure (""Adding Dependencies"") is loaded on every task, but only some tasks need it.",### Adding Dependencies
+directus/directus,MNA009,info,AGENTS.md,82,Stack list repeats what the manifests declare (5 of 6 items).,- **`@directus/types`** - Shared TypeScript types
+directus/directus,MNA003,info,AGENTS.md,127,"A 3-step procedure (""Creating a Changeset"") is loaded on every task, but only some tasks need it.",### Creating a Changeset
+directus/directus,MNA001,warn,AGENTS.md,200,AGENTS.md has 239 lines; always-loaded files should stay under 200.,
+strapi/strapi,MNA001,warn,AGENTS.md,200,AGENTS.md has 263 lines; always-loaded files should stay under 200.,
+medusajs/medusa,MNA001,warn,AGENTS.md,1,"claude-code loads about 4515 tokens at start (o200k_base estimate), over the budget of 4000: CLAUDE.md 5, AGENTS.md 4510.",budget:claude-code
+medusajs/medusa,MNA001,warn,AGENTS.md,1,"codex loads about 4510 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4510.",budget:codex
+medusajs/medusa,MNA001,warn,AGENTS.md,1,"cursor loads about 4510 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4510.",budget:cursor
+medusajs/medusa,MNA001,warn,AGENTS.md,1,"copilot loads about 4510 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4510.",budget:copilot
+medusajs/medusa,MNA001,warn,AGENTS.md,1,"kiro loads about 4510 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 4510.",budget:kiro
+medusajs/medusa,MNA009,info,AGENTS.md,45,Directory tree repeats the repo layout (15 of 19 entries exist); the agent can list the tree itself.,```
+medusajs/medusa,MNA001,warn,AGENTS.md,200,AGENTS.md has 514 lines; always-loaded files should stay under 200.,
+medusajs/medusa,MNA006,info,AGENTS.md,257,Reference to `packages/modules/order/src/services/order-module-service.ts` says nothing about when or why to read it.,- `packages/modules/order/src/services/order-module-service.ts`
+medusajs/medusa,MNA006,info,AGENTS.md,258,Reference to `packages/modules/api-key/src/services/api-key-module-service.ts` says nothing about when or why to read it.,- `packages/modules/api-key/src/services/api-key-module-service.ts`
+medusajs/medusa,MNA006,info,AGENTS.md,327,Reference to `packages/medusa/src/api/admin/orders/route.ts` says nothing about when or why to read it.,- `packages/medusa/src/api/admin/orders/route.ts`
+medusajs/medusa,MNA006,info,AGENTS.md,389,Reference to `packages/core/core-flows/src/promotion/steps/delete-promotions.ts` says nothing about when or why to read it.,- `packages/core/core-flows/src/promotion/steps/delete-promotions.ts`
+medusajs/medusa,MNA006,info,AGENTS.md,390,Reference to `packages/core/core-flows/src/promotion/workflows/delete-promotions.ts` says nothing about when or why to read it.,- `packages/core/core-flows/src/promotion/workflows/delete-promotions.ts`
+medusajs/medusa,MNA006,info,AGENTS.md,391,Reference to `packages/core/core-flows/src/order/workflows/update-order.ts` says nothing about when or why to read it.,- `packages/core/core-flows/src/order/workflows/update-order.ts`
+medusajs/medusa,MNA006,info,AGENTS.md,435,Reference to `packages/core/utils/src/modules-sdk/medusa-internal-service.ts` says nothing about when or why to read it.,- `packages/core/utils/src/modules-sdk/medusa-internal-service.ts`
+medusajs/medusa,MNA006,info,AGENTS.md,436,Reference to `packages/core/core-flows/src/order/workflows/update-order.ts` says nothing about when or why to read it.,- `packages/core/core-flows/src/order/workflows/update-order.ts`
+medusajs/medusa,MNA006,info,AGENTS.md,513,Reference to `.github/workflows/fix-bug-action.yml` says nothing about when or why to read it.,- `.github/workflows/fix-bug-action.yml`
+medusajs/medusa,MNA006,info,AGENTS.md,514,Reference to `.github/workflows/triage-issue-action.yml` says nothing about when or why to read it.,- `.github/workflows/triage-issue-action.yml`
+medusajs/medusa,MNA006,info,packages/admin/admin-bundler/AGENTS.md,43,Reference to `src/commands/plugin.ts` says nothing about when or why to read it.,- `src/commands/plugin.ts`:
+medusajs/medusa,MNA007,error,packages/admin/admin-sdk/AGENTS.md,11,"Path `src/admin/layouts/` does not exist, though `src/` does.",`src/admin/layouts/`
+medusajs/medusa,MNA007,error,packages/admin/admin-sdk/AGENTS.md,61,"Path `src/admin/routes/settings/` does not exist, though `src/` does.",`src/admin/routes/settings/`
+medusajs/medusa,MNA006,info,packages/admin/admin-shared/AGENTS.md,31,Reference to `src/extensions/widgets/` says nothing about when or why to read it.,- `src/extensions/widgets/`:
+medusajs/medusa,MNA006,info,packages/admin/admin-vite-plugin/AGENTS.md,29,Reference to `src/plugin.ts` says nothing about when or why to read it.,- `src/plugin.ts`:
+medusajs/medusa,MNA006,info,packages/admin/admin-vite-plugin/AGENTS.md,34,Reference to `src/utils.ts` says nothing about when or why to read it.,- `src/utils.ts`:
+medusajs/medusa,MNA007,error,packages/core/framework/AGENTS.md,41,"Path `src/api/middlewares.ts` does not exist, though `src/` does.",`src/api/middlewares.ts`
+medusajs/medusa,MNA007,error,packages/deps/AGENTS.md,20,"Path `src/index.ts` does not exist, though `src/` does.",`src/index.ts`
+medusajs/medusa,MNA006,info,packages/deps/AGENTS.md,24,Reference to `./awilix` says nothing about when or why to read it.,"- `./awilix`, `./pg`, `./zod`"
+medusajs/medusa,MNA008,warn,packages/deps/AGENTS.md,24,`./awilix`: `./awilix` does not exist.,`./awilix`
+medusajs/medusa,MNA008,warn,packages/deps/AGENTS.md,24,`./pg`: `./pg` does not exist.,`./pg`
+medusajs/medusa,MNA008,warn,packages/deps/AGENTS.md,24,`./zod`: `./zod` does not exist.,`./zod`
+medusajs/medusa,MNA006,info,packages/design-system/toolbox/AGENTS.md,34,Reference to `tokens/colors.ts` says nothing about when or why to read it.,"- `tokens/colors.ts`, `tokens/effects.ts`, `tokens/typography.ts`, `tokens/components.ts`"
+medusajs/medusa,MNA006,info,packages/design-system/toolbox/AGENTS.md,35,Reference to `extension/theme.ts` says nothing about when or why to read it.,- `extension/theme.ts`
+medusajs/medusa,MNA006,info,packages/design-system/ui-preset/AGENTS.md,40,Reference to `tokens/colors.ts` says nothing about when or why to read it.,"- `tokens/colors.ts`, `tokens/effects.ts`, `tokens/typography.ts`, `tokens/components.ts`, `extension/theme.ts`"
+medusajs/medusa,MNA006,info,packages/modules/event-bus-redis/AGENTS.md,34,Reference to `src/services/event-bus-redis.ts` says nothing about when or why to read it.,- `src/services/event-bus-redis.ts`:
+medusajs/medusa,MNA006,info,packages/modules/workflow-engine-redis/AGENTS.md,42,Reference to `src/utils/workflow-orchestrator-storage.ts` says nothing about when or why to read it.,- `src/utils/workflow-orchestrator-storage.ts`:
+medusajs/medusa,MNA008,warn,packages/plugins/draft-order/AGENTS.md,45,`./workflows`: `./workflows` does not exist.,`./workflows`
+medusajs/medusa,MNA008,warn,packages/plugins/draft-order/AGENTS.md,45,`./admin`: `./admin` does not exist.,`./admin`
+medusajs/medusa,MNA007,error,www/apps/api-reference/CLAUDE.md,90,"Path `www/utils/scripts/migrate-api-ref-links.mjs` does not exist, though `www/` does.",`www/utils/scripts/migrate-api-ref-links.mjs`
+payloadcms/payload,MNA001,warn,AGENTS.md,1,"claude-code loads about 5631 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5631.",budget:claude-code
+payloadcms/payload,MNA001,warn,AGENTS.md,1,"codex loads about 5631 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5631.",budget:codex
+payloadcms/payload,MNA001,warn,AGENTS.md,1,"cursor loads about 5631 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5631.",budget:cursor
+payloadcms/payload,MNA001,warn,AGENTS.md,1,"copilot loads about 5631 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5631.",budget:copilot
+payloadcms/payload,MNA001,warn,AGENTS.md,1,"kiro loads about 5631 tokens at start (o200k_base estimate), over the budget of 4000: AGENTS.md 5631.",budget:kiro
+payloadcms/payload,MNA008,warn,AGENTS.md,49,"`pnpm run build:<directory_name>`: no script `build:<directory_name>` in package.json (has: bf, build, build:admin-bar, build:all, build:all:force, build:app, build:app:analyze, build:bundle-for-analysis).",`pnpm run build:<directory_name>`
+payloadcms/payload,MNA001,warn,AGENTS.md,200,AGENTS.md has 486 lines; always-loaded files should stay under 200.,
+payloadcms/payload,MNA009,info,AGENTS.md,226,Directory tree repeats the repo layout (5 of 5 entries exist); the agent can list the tree itself.,```
+payloadcms/payload,MNA008,warn,AGENTS.md,289,"`pnpm run translateNewKeys`: no script `translateNewKeys` in packages/richtext-lexical/package.json (has: build, build:babel, build:bundle-for-analysis, build:clean, build:debug, build:esbuild, build:esbuild:postprocess, build:reactcompiler).",`cd packages/richtext-lexical && pnpm run translateNewKeys`
+dotnet/aspnetcore,MNA008,warn,src/Components/AGENTS.md,241,"`npm run build:production`: no script `build:production` in package.json (has: build, coverage, get-version, integration-test, lint, test).",`npm run build:production`
+JetBrains/kotlin,MNA010,warn,CLAUDE.md,1,Claude Code reads CLAUDE.md and skips AGENTS.md when both exist; 1 rule(s) only in CLAUDE.md never reach other agents.,pair:AGENTS.md
+JetBrains/kotlin,MNA007,error,CLAUDE.md,16,Import `@./.claude/local.md` does not resolve.,@./.claude/local.md
+JetBrains/kotlin,MNA007,error,CLAUDE.md,18,"Path `./.claude/CLAUDE.md` does not exist, though `.claude/` does.",`./.claude/CLAUDE.md`
+JetBrains/kotlin,MNA008,warn,CLAUDE.md,18,`./.claude/CLAUDE.md`: `./.claude/CLAUDE.md` does not exist.,`./.claude/CLAUDE.md`
+JetBrains/kotlin,MNA013,warn,compiler/fir/analysis-tests/AGENTS.md,1,claude-code never loads compiler/fir/analysis-tests/AGENTS.md: Claude Code skips nested AGENTS.md files when CLAUDE.md exists; add `compiler/fir/analysis-tests/CLAUDE.md` containing `@AGENTS.md`.,unloaded:claude-code
+JetBrains/kotlin,MNA007,error,libraries/tools/kotlin-gradle-plugin-integration-tests/AGENTS.md,89,"Path `src/test/kotlin/.../gradle/` does not exist, though `src/` does.",`src/test/kotlin/.../gradle/`
+JetBrains/kotlin,MNA007,error,libraries/tools/kotlin-gradle-plugin-integration-tests/AGENTS.md,90,"Path `src/test/kotlin/.../gradle/testbase/` does not exist, though `src/` does.",`src/test/kotlin/.../gradle/testbase/`
+home-assistant/core,MNA007,error,.github/copilot-instructions.md,192,Link target `AI_POLICY.md` does not exist.,[Open Home Foundation AI Policy](AI_POLICY.md)
