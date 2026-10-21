@@ -377,6 +377,34 @@ pub fn plan(ws: &Workspace, config: &Config, today: &str, ast_grep: Option<&Path
             );
         }
     }
+    // The same rule may be copied into several files (AGENTS.md and CLAUDE.md); remove every copy.
+    let promoted: BTreeMap<String, &promote::Promotion> = promo
+        .promotions
+        .iter()
+        .filter(|p| p.removes_prose && p.artifacts.iter().all(|a| a.action != Action::Manual))
+        .map(|p| (p.hash.clone(), p))
+        .collect();
+    for doc in cx.instruction_docs() {
+        for rule in &doc.rules {
+            let Some(p) = promoted.get(&crate::rationale::rule_hash(&rule.text)) else {
+                continue;
+            };
+            let line = doc.line_of(rule.span.start);
+            if doc.path == p.source && line == p.line {
+                continue;
+            }
+            if let Some(r) = promote::removal_range(doc, rule) {
+                add(
+                    &doc.path,
+                    r,
+                    String::new(),
+                    Kind::Promote,
+                    line,
+                    format!("remove copy of rule promoted to `{}`", p.id),
+                );
+            }
+        }
+    }
     let doc_paths: BTreeSet<&String> = ws.docs.keys().collect();
     for (path, content) in &promo.files {
         if !doc_paths.contains(path) {
@@ -439,7 +467,7 @@ pub fn plan(ws: &Workspace, config: &Config, today: &str, ast_grep: Option<&Path
             actions.push(e.action);
         }
         out.push_str(&doc.text[pos..]);
-        files.insert(path, out);
+        files.insert(path.clone(), drop_emptied_headings(doc, &out));
     }
     actions
         .sort_by(|a, b| (a.path.as_str(), a.line, a.kind).cmp(&(b.path.as_str(), b.line, b.kind)));
@@ -509,6 +537,57 @@ pub fn plan(ws: &Workspace, config: &Config, today: &str, ast_grep: Option<&Path
         files_changed: files.keys().cloned().collect(),
         files,
     }
+}
+
+/// Remove level-2+ headings whose section had content before the edits and has none after.
+fn drop_emptied_headings(before: &Doc, after: &str) -> String {
+    let had_content: BTreeSet<String> = sections(before)
+        .into_iter()
+        .filter(|(_, body)| !body.trim().is_empty())
+        .map(|(title, _)| title)
+        .collect();
+    let new_doc = Doc::parse(&before.path, after);
+    let mut remove = Vec::new();
+    for (i, h) in new_doc.headings.iter().enumerate() {
+        if h.level < 2 {
+            continue;
+        }
+        let end = new_doc.headings[i + 1..]
+            .iter()
+            .find(|n| n.level <= h.level)
+            .map_or(after.len(), |n| n.span.start);
+        let body = &after[h.span.end..end];
+        let sub = new_doc.headings[i + 1..].iter().any(|n| n.span.start < end);
+        if !sub && body.trim().is_empty() && had_content.contains(&h.text) {
+            remove.push(h.span.start..end);
+        }
+    }
+    if remove.is_empty() {
+        return after.to_string();
+    }
+    let mut out = String::new();
+    let mut pos = 0;
+    for r in remove {
+        out.push_str(&after[pos..r.start]);
+        pos = r.end;
+    }
+    out.push_str(&after[pos..]);
+    out
+}
+
+/// (heading text, section body) for every heading.
+fn sections(doc: &Doc) -> Vec<(String, String)> {
+    doc.headings
+        .iter()
+        .enumerate()
+        .map(|(i, h)| {
+            let end = doc.headings[i + 1..]
+                .iter()
+                .find(|n| n.level <= h.level)
+                .map_or(doc.text.len(), |n| n.span.start);
+            (h.text.clone(), doc.text[h.span.end..end].to_string())
+        })
+        .collect()
 }
 
 /// Path of `to` relative to the directory of `from` (both repo-relative).
@@ -627,6 +706,29 @@ mod tests {
             ("docs/x.md", "# X\n"),
         ]);
         assert!(p.actions.is_empty() && p.files.is_empty() && p.diff.is_empty());
+    }
+
+    #[test]
+    fn emptied_sections_lose_their_heading_and_copies_are_removed() {
+        let p = run(&[
+            (
+                "AGENTS.md",
+                "# P\n\n- Use 2 spaces for indentation.\n\n## Stack\n\n- TypeScript\n- React\n- Vitest\n\n## Rules\n\n- Keep PRs small.\n",
+            ),
+            (
+                "CLAUDE.md",
+                "@AGENTS.md\n\n- Use 2 spaces for indentation.\n- Prefer plan mode.\n",
+            ),
+            (
+                "package.json",
+                r#"{"devDependencies":{"typescript":"5","react":"18","vitest":"1"}}"#,
+            ),
+            ("tsconfig.json", "{}"),
+        ]);
+        let a = &p.files["AGENTS.md"];
+        assert!(!a.contains("## Stack"), "{a}");
+        assert!(a.contains("## Rules") && a.contains("Keep PRs small"));
+        assert_eq!(p.files["CLAUDE.md"], "@AGENTS.md\n\n- Prefer plan mode.\n");
     }
 
     #[test]
