@@ -210,10 +210,7 @@ pub fn plan(ws: &Workspace, opts: &InitOptions) -> InitPlan {
 pub fn apply(ws: &Workspace, plan: &InitPlan) -> std::io::Result<Vec<String>> {
     let mut written = Vec::new();
     for (path, content) in &plan.create {
-        let full = ws.root.join(path);
-        if let Some(parent) = full.parent() {
-            std::fs::create_dir_all(parent)?;
-        }
+        let full = ws.writable_path(path)?;
         let mut f = std::fs::OpenOptions::new()
             .write(true)
             .create_new(true)

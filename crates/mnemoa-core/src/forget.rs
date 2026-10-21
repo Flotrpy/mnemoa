@@ -627,11 +627,7 @@ pub fn relative_path(from: &str, to: &str) -> String {
 /// Write the plan.
 pub fn apply(ws: &Workspace, plan: &ForgetPlan) -> std::io::Result<Vec<String>> {
     for (path, content) in &plan.files {
-        let full = ws.root.join(path);
-        if let Some(parent) = full.parent() {
-            std::fs::create_dir_all(parent)?;
-        }
-        std::fs::write(full, content)?;
+        std::fs::write(ws.writable_path(path)?, content)?;
     }
     Ok(plan.files.keys().cloned().collect())
 }

@@ -62,6 +62,14 @@ impl ApiError {
     fn internal(msg: impl std::fmt::Display) -> Self {
         ApiError(StatusCode::INTERNAL_SERVER_ERROR, msg.to_string())
     }
+    /// A failed write: 403 when the core refused a path outside the repository.
+    fn write(e: std::io::Error) -> Self {
+        if e.kind() == std::io::ErrorKind::PermissionDenied {
+            ApiError::forbidden(e.to_string())
+        } else {
+            ApiError::internal(e)
+        }
+    }
 }
 
 impl IntoResponse for ApiError {
@@ -326,7 +334,7 @@ async fn promote_handler(
         };
         let plan = mnemoa_core::promote::plan_with(&ws, &config, d.as_deref(), ast_grep.as_deref());
         let written = if req.apply {
-            mnemoa_core::promote::apply(&ws, &plan).map_err(ApiError::internal)?
+            mnemoa_core::promote::apply(&ws, &plan).map_err(ApiError::write)?
         } else {
             Vec::new()
         };
@@ -362,7 +370,7 @@ async fn forget_handler(
             ast_grep.as_deref(),
         );
         let written = if req.apply {
-            mnemoa_core::forget::apply(&ws, &plan).map_err(ApiError::internal)?
+            mnemoa_core::forget::apply(&ws, &plan).map_err(ApiError::write)?
         } else {
             Vec::new()
         };

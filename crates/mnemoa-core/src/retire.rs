@@ -228,7 +228,7 @@ pub fn plan(ws: &Workspace, config: &Config, today: &str, ast_grep: Option<&Path
 /// Write the plan's file changes.
 pub fn apply(ws: &Workspace, plan: &RetirePlan) -> std::io::Result<Vec<String>> {
     for (path, content) in &plan.files {
-        std::fs::write(ws.root.join(path), content)?;
+        std::fs::write(ws.writable_path(path)?, content)?;
     }
     Ok(plan.files.keys().cloned().collect())
 }
