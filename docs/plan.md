@@ -35,7 +35,7 @@ and `cargo test --workspace`.
 - [x] 26. feat(core,cli): mnemoa init scaffolding
 - [x] 27. feat(api): axum server with scan, budget, drift, promote, forget, rules, health and stats
 - [x] 28. feat: Dockerfile, docker-compose with optional Ollama, .env.example and mnemoa.example.toml
-- [ ] 29. feat(sdk): python sdk with sync and async clients, tests and examples/basic_usage.py
+- [x] 29. feat(sdk): python sdk with sync and async clients, tests and examples/basic_usage.py
 - [ ] 30. feat(bench): mnemoa-bench with 12 suites, --filter and --json
 - [ ] 31. test: fixture corpus, insta snapshots, proptest parser fuzzing and coverage target
 - [ ] 32. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
