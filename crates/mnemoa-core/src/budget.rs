@@ -1,25 +1,25 @@
 //! Always-loaded context cost per target agent.
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::discover::{Loading, Target};
 use crate::tokens::Tokenizer;
 use crate::workspace::{CODEX_MAX_BYTES, Workspace};
 
 /// Cost of one file as a target sees it.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FileCost {
     pub path: String,
     pub lines: usize,
     pub bytes: usize,
     pub tokens: usize,
     /// Set when the file arrives through an `@import`.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub via: Option<String>,
 }
 
 /// A file a target loads later, and what makes it load.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct OnDemandCost {
     pub path: String,
     pub trigger: String,
@@ -27,7 +27,7 @@ pub struct OnDemandCost {
 }
 
 /// Budget for one target.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TargetBudget {
     pub target: Target,
     pub always: Vec<FileCost>,
@@ -36,13 +36,13 @@ pub struct TargetBudget {
     pub total_tokens: usize,
     pub on_demand: Vec<OnDemandCost>,
     /// Bytes past the target's hard cap that the target drops (Codex only).
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dropped_bytes: Option<usize>,
     pub notes: Vec<String>,
 }
 
 /// Budget for several targets.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BudgetReport {
     pub tokenizer: String,
     pub targets: Vec<TargetBudget>,
