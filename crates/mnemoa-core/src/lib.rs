@@ -13,7 +13,9 @@ pub mod frontmatter;
 pub mod history;
 pub mod rationale;
 pub mod repo;
+pub mod report;
 pub mod rules;
+pub mod scan;
 pub mod tokens;
 pub mod workspace;
 
