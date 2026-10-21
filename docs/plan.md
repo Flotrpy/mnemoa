@@ -22,7 +22,7 @@ and `cargo test --workspace`.
 - [x] 13. feat(core): MNA003 skill-leakage and MNA004 conflicting-instructions
 - [x] 14. feat(core): git history trait with gix backend; MNA005 init-fossilization
 - [x] 15. feat(core): MNA010 cross-file-divergence, MNA013 unloaded-file and rationale parser (MNA011)
-- [ ] 16. feat(cli): mnemoa scan with pretty, json, sarif and github formats plus baseline
+- [x] 16. feat(cli): mnemoa scan with pretty, json, sarif and github formats plus baseline
 - [ ] 17. ci: dogfood mnemoa scan on this repo
 - [ ] 18. feat(core): reference drift and diff-aware --base mode
 - [ ] 19. feat(core): plan drift for Spec Kit, Kiro tasks and Cline memory bank

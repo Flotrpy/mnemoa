@@ -15,4 +15,12 @@ path = "src/main.rs"
 workspace = true
 
 [dependencies]
+anyhow = "1.0.104"
+clap = { version = "4.6.7", features = ["derive", "env"] }
 mnemoa-core = { version = "0.1.0", path = "../mnemoa-core" }
+serde_json = "1.0.154"
+
+[dev-dependencies]
+assert_cmd = "2.2.2"
+predicates = "3.1.4"
+tempfile = "3.27.0"
