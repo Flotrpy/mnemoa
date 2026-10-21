@@ -53,6 +53,8 @@ enum Command {
     Promote(PromoteArgs),
     /// Remove rules whose retire-when condition is met (dry run unless --apply).
     Retire(RetireArgs),
+    /// One prune plan: delete, move, promote, retire and fix, with before/after token cost.
+    Forget(ForgetArgs),
     /// List all rules.
     Rules {
         /// Output format: pretty or json.
@@ -144,6 +146,22 @@ struct RetireArgs {
     /// Delete the rules whose condition is met.
     #[arg(long)]
     apply: bool,
+    /// Output format: pretty or json.
+    #[arg(long, short, default_value = "pretty")]
+    format: String,
+}
+
+#[derive(Args, Debug)]
+struct ForgetArgs {
+    /// Repository root.
+    #[arg(default_value = ".")]
+    path: PathBuf,
+    /// Write the plan (needs --yes, or confirmation on a terminal).
+    #[arg(long)]
+    apply: bool,
+    /// Do not ask for confirmation.
+    #[arg(long, short)]
+    yes: bool,
     /// Output format: pretty or json.
     #[arg(long, short, default_value = "pretty")]
     format: String,
@@ -415,6 +433,72 @@ fn cmd_retire(a: &RetireArgs, g: &Global) -> Result<i32> {
     Ok(0)
 }
 
+fn cmd_forget(a: &ForgetArgs, g: &Global) -> Result<i32> {
+    if !a.path.is_dir() {
+        bail!("`{}` is not a directory", a.path.display());
+    }
+    let config = load_config(&a.path, g)?;
+    let ws = scan::load_workspace(&a.path, &config)?;
+    let ast_grep = mnemoa_core::drafter::find_ast_grep();
+    let plan = mnemoa_core::forget::plan(
+        &ws,
+        &config,
+        &mnemoa_core::ledger::today(),
+        ast_grep.as_deref(),
+    );
+    if a.format == "json" {
+        print(&(serde_json::to_string_pretty(&plan)? + "\n"))?;
+    } else {
+        let color = use_color(g.color);
+        let mut s = String::new();
+        for act in &plan.actions {
+            let kind = serde_json::to_value(act.kind)?
+                .as_str()
+                .unwrap_or_default()
+                .to_string();
+            s.push_str(&format!(
+                "{}:{}  {:<13} {}\n",
+                act.path, act.line, kind, act.summary
+            ));
+        }
+        if plan.actions.is_empty() {
+            s.push_str("Nothing to forget.\n");
+        }
+        s.push_str(&format!("\nAlways-loaded tokens ({}):\n", plan.tokenizer));
+        for t in &plan.tokens {
+            let delta = t.after as i64 - t.before as i64;
+            s.push_str(&format!(
+                "  {:<12} {:>6} -> {:>6}  ({delta:+})\n",
+                t.target.as_str(),
+                t.before,
+                t.after
+            ));
+        }
+        if !plan.diff.is_empty() && !a.apply {
+            s.push('\n');
+            s.push_str(&colorize_diff(&plan.diff, color));
+        }
+        print(&s)?;
+    }
+    if a.apply && !plan.files.is_empty() {
+        if !a.yes {
+            if !std::io::stdin().is_terminal() {
+                bail!("--apply needs --yes when not running in a terminal");
+            }
+            eprint!("Write {} file(s)? [y/N] ", plan.files.len());
+            let mut answer = String::new();
+            std::io::stdin().read_line(&mut answer)?;
+            if !matches!(answer.trim(), "y" | "Y" | "yes") {
+                eprintln!("aborted");
+                return Ok(1);
+            }
+        }
+        let written = mnemoa_core::forget::apply(&ws, &plan)?;
+        eprintln!("wrote {} file(s)", written.len());
+    }
+    Ok(0)
+}
+
 fn cmd_rules(format: &str) -> Result<i32> {
     if format == "json" {
         print(&(serde_json::to_string_pretty(&rules::RULES)? + "\n"))?;
@@ -465,6 +549,7 @@ fn run(cli: Cli) -> Result<i32> {
         Command::Budget(a) => cmd_budget(a, &cli.global),
         Command::Promote(a) => cmd_promote(a, &cli.global),
         Command::Retire(a) => cmd_retire(a, &cli.global),
+        Command::Forget(a) => cmd_forget(a, &cli.global),
         Command::Rules { format } => cmd_rules(format),
         Command::Explain { id } => cmd_explain(id),
     }
