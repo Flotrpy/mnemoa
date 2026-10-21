@@ -11,6 +11,7 @@ pub mod doc;
 pub mod drafter;
 pub mod drift;
 pub mod enforcers;
+pub mod forget;
 pub mod frontmatter;
 pub mod history;
 pub mod ledger;

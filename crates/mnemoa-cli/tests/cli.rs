@@ -272,3 +272,41 @@ fn retire_dry_run_then_apply() {
     let after = std::fs::read_to_string(dir.path().join("AGENTS.md")).unwrap();
     assert!(!after.contains("PRs tiny") && after.contains("prod data"));
 }
+
+#[test]
+fn forget_dry_run_and_apply() {
+    let dir = repo(&[(
+        "AGENTS.md",
+        "# P\n\n## Releasing\n\n1. Bump.\n2. Tag.\n3. Push.\n\n- Use 4 spaces for indentation.\n",
+    )]);
+    mnemoa()
+        .args(["forget", "--color", "never", "--targets", "claude-code"])
+        .arg(dir.path())
+        .assert()
+        .success()
+        .stdout(
+            predicate::str::contains("move")
+                .and(predicate::str::contains("claude-code"))
+                .and(predicate::str::contains("+++ b/docs/agents/releasing.md")),
+        );
+    mnemoa()
+        .args(["forget", "--apply"])
+        .arg(dir.path())
+        .assert()
+        .code(2)
+        .stderr(predicate::str::contains("--yes"));
+    mnemoa()
+        .args(["forget", "--apply", "--yes"])
+        .arg(dir.path())
+        .assert()
+        .success();
+    assert!(dir.path().join("docs/agents/releasing.md").is_file());
+    assert!(dir.path().join(".editorconfig").is_file());
+    let out = mnemoa()
+        .args(["forget", "-f", "json"])
+        .arg(dir.path())
+        .output()
+        .unwrap();
+    let v: serde_json::Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(v["actions"].as_array().unwrap().len(), 0);
+}

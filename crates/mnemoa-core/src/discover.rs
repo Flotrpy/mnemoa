@@ -641,6 +641,35 @@ pub(crate) fn classify(d: &mut Discovery, include: &GlobSet, read: &dyn Fn(&str)
     d.surfaces = surfaces;
 }
 
+/// Rebuild a discovery from a list of files and a reader (used to model edits before they
+/// are written).
+pub fn rebuild(
+    root: &Path,
+    mut files: Vec<String>,
+    include: &[String],
+    read: &dyn Fn(&str) -> String,
+) -> Result<Discovery, DiscoverError> {
+    files.sort();
+    files.dedup();
+    let mut dirs = std::collections::BTreeSet::new();
+    for f in &files {
+        let mut d = f.as_str();
+        while let Some(i) = d.rfind('/') {
+            d = &d[..i];
+            dirs.insert(d.to_string());
+        }
+    }
+    let mut d = Discovery {
+        root: root.to_path_buf(),
+        surfaces: Vec::new(),
+        files,
+        dirs: dirs.into_iter().collect(),
+    };
+    let inc = build_globset(include)?;
+    classify(&mut d, &inc, read);
+    Ok(d)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

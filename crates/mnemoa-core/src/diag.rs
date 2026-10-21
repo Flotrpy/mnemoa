@@ -66,6 +66,9 @@ pub struct Finding {
     pub help: Option<String>,
     /// Stable identity used by baselines: rule, path and normalized snippet.
     pub fingerprint: String,
+    /// Byte range in the document, when the finding points at text.
+    #[serde(skip)]
+    pub span: Option<Range<usize>>,
 }
 
 impl Finding {
@@ -90,9 +93,11 @@ impl Finding {
             .unwrap_or("")
             .trim()
             .to_string();
-        Finding::new(rule, name, severity, &doc.path, message)
+        let mut f = Finding::new(rule, name, severity, &doc.path, message)
             .with_position(line, column, end_line, end_column)
-            .with_snippet(snippet)
+            .with_snippet(snippet);
+        f.span = Some(span);
+        f
     }
 
     /// A finding on a whole file (line 1).
@@ -116,6 +121,7 @@ impl Finding {
             snippet: String::new(),
             help: None,
             fingerprint: String::new(),
+            span: None,
         };
         f.refresh_fingerprint();
         f

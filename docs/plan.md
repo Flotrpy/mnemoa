@@ -31,14 +31,15 @@ and `cargo test --workspace`.
 - [x] 22. feat(core): promotion catalog, artifact emitters and ledger; MNA012
 - [x] 23. feat(core): optional LLM drafter for ast-grep rules with sample validation
 - [x] 24. feat(cli): mnemoa promote (dry-run diff, --apply) and mnemoa retire
-- [ ] 25. feat(core,cli): mnemoa forget prune plan and mnemoa init scaffolding
-- [ ] 26. feat(api): axum server with scan, budget, drift, promote, forget, rules, health and stats
-- [ ] 27. feat: Dockerfile, docker-compose with optional Ollama, .env.example and mnemoa.example.toml
-- [ ] 28. feat(sdk): python sdk with sync and async clients, tests and examples/basic_usage.py
-- [ ] 29. feat(bench): mnemoa-bench with 12 suites, --filter and --json
-- [ ] 30. test: fixture corpus, insta snapshots, proptest parser fuzzing and coverage target
-- [ ] 31. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
-- [ ] 32. docs: architecture, api and rules docs; CONTRIBUTING; action.yml
-- [ ] 33. docs: README in mnemo format with real numbers and TBDs
+- [x] 25. feat(core,cli): mnemoa forget prune plan with before/after budget
+- [ ] 26. feat(core,cli): mnemoa init scaffolding
+- [ ] 27. feat(api): axum server with scan, budget, drift, promote, forget, rules, health and stats
+- [ ] 28. feat: Dockerfile, docker-compose with optional Ollama, .env.example and mnemoa.example.toml
+- [ ] 29. feat(sdk): python sdk with sync and async clients, tests and examples/basic_usage.py
+- [ ] 30. feat(bench): mnemoa-bench with 12 suites, --filter and --json
+- [ ] 31. test: fixture corpus, insta snapshots, proptest parser fuzzing and coverage target
+- [ ] 32. feat(notebooks): Colab notebook to build, run corpus study and chart benchmarks
+- [ ] 33. docs: architecture, api and rules docs; CONTRIBUTING; action.yml
+- [ ] 34. docs: README in mnemo format with real numbers and TBDs
 
 If an item splits, renumber this list and keep going.
