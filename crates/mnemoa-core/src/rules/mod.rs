@@ -6,6 +6,7 @@ pub mod commands;
 pub mod conflicts;
 pub mod history_rules;
 pub mod lint;
+pub mod loading;
 pub mod references;
 pub mod size;
 pub mod skills;
@@ -293,6 +294,9 @@ pub fn registry() -> Vec<Box<dyn Check>> {
         Box::new(references::BrokenReference),
         Box::new(commands::StaleCommand),
         Box::new(size::DiscoverableContent),
+        Box::new(loading::CrossFileDivergence),
+        Box::new(loading::MissingRationale),
+        Box::new(loading::UnloadedFile),
     ]
 }
 
