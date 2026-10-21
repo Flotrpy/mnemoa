@@ -26,7 +26,7 @@ and `cargo test --workspace`.
 - [x] 17. fix(core): treat existing directories in code spans as paths, not stale commands
 - [x] 18. ci: dogfood mnemoa scan on this repo
 - [x] 19. feat(core): reference drift and diff-aware --base mode
-- [ ] 20. feat(core): plan drift for Spec Kit, Kiro tasks and Cline memory bank
+- [x] 20. feat(core): plan drift for Spec Kit, Kiro tasks and Cline memory bank
 - [ ] 21. feat(cli): mnemoa drift and mnemoa budget
 - [ ] 22. feat(core): promotion catalog, artifact emitters and ledger; MNA012
 - [ ] 23. feat(core): optional LLM drafter for ast-grep rules with sample validation

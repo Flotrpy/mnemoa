@@ -352,6 +352,8 @@ pub fn drift(
         }
     }
 
+    items.extend(crate::plans::plan_drift(ws, config, history));
+
     // Freshness per doc.
     let mut freshness = Vec::new();
     if let Some(h) = history {

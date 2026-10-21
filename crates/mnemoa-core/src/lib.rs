@@ -12,6 +12,7 @@ pub mod drift;
 pub mod enforcers;
 pub mod frontmatter;
 pub mod history;
+pub mod plans;
 pub mod rationale;
 pub mod repo;
 pub mod report;
