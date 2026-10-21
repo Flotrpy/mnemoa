@@ -53,7 +53,7 @@ Four Rust crates and a Python SDK.
 
 ## Design rules
 
-- **Under-match.** A detector that is unsure stays silent or reports `info`. Examples: lint leakage needs a configured enforcer (and for opt-in lints, the lint itself); stale commands are skipped when a Makefile includes other files; inline-code paths are only checked when their top-level directory exists.
+- **Under-match.** A detector that is unsure stays silent or reports `info`. Examples: lint leakage needs a configured enforcer (and for opt-in lints, the lint itself); stale commands are skipped when a Makefile includes other files; inline-code paths are only checked when their top-level directory exists. This is the goal, not yet the result: on 77 public repositories most rules fell well short of it (see [Measured on real repositories](../README.md#measured-on-real-repositories)).
 - **Offline by default.** Only `llm.rs` (feature `llm`) and the CLI's `--server` client make HTTP calls. A drafted rule is used only after ast-grep validates it against the model's own positive and negative samples.
 - **Dry run first.** `promote`, `retire` and `forget` compute full new file contents and a unified diff; nothing is written until `--apply` (and `--yes` for forget). The API refuses writes unless `MNEMOA_API_ALLOW_WRITE=true`.
 - **Never overwrite blindly.** Merges into `.editorconfig`, TOML, Prettier JSON and pre-commit YAML fall back to a manual snippet on conflict; `init` creates files with `create_new`.
