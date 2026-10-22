@@ -9,6 +9,12 @@
 #
 # `named = true` means only enforcers whose name appears in the rule count.
 #
+# `exclude` lists patterns for rules that match but are about something else (a commit
+# message's length, not code's). A rule matching any of them skips the topic.
+#
+# `restates = false` marks topics whose rules tell the agent which tool to run rather than
+# restate what it checks: MNA002 ignores them and `promote` keeps their prose.
+#
 # MNA002 (lint-leakage) fires when a rule matches a topic and one of its enforcers is configured.
 # `mnemoa promote` uses the same topics to emit a check when no enforcer is configured yet.
 
@@ -16,12 +22,16 @@
 id = "indentation"
 summary = "indentation width or tabs versus spaces"
 patterns = ['\bindent(ation|ed|s)?\b', '\b(two|four|eight|2|4|8)[- ]spaces?\b', '\btabs?\b.{0,30}\bspaces?\b', '\bspaces?\b.{0,30}\btabs?\b']
+# "Reduce indentation" with early returns is about nesting, not indent style.
+exclude = ['\b(reduce|reducing|minimi[sz]e|deep(ly)?|nesting|nested)\b.{0,40}\bindent', '\bindent(ation)?\s+(level|depth)s?\b']
 enforcers = ["editorconfig:indent_(style|size)", "prettier", "biome", "rustfmt", "black", "ruff", "gofmt", "clang-format"]
 
 [[topic]]
 id = "line-length"
 summary = "maximum line length"
-patterns = ['\bline[- ]length\b', '\bmax(imum)?\s+line\b', '\blines?\s+(under|over|longer than|shorter than|at most|no more than|max(imum)?( of)?)\s+\d+', '\b\d+\s+(char|character|column)s?\b']
+patterns = ['\bline[- ]length\b', '\bmax(imum)?\s+line\b', '\blines?\s+(under|over|longer than|shorter than|at most|no more than|max(imum)?( of)?)\s+\d+', '\blines?\b.{0,40}\b\d+\s+(char|character|column)s?\b']
+# Commit messages, titles and summaries have their own length limits that no formatter checks.
+exclude = ['\b(commit|subject|summary|summaries|title|heading|message|changelog|branch|tweet)s?\b', '\bpull\s+request\b', '\bPR\s+(title|description|body)\b']
 enforcers = ["editorconfig:max_line_length", "prettier", "biome", "rustfmt", "black", "ruff", "clang-format", "eslint:max-len"]
 
 [[topic]]
@@ -58,6 +68,8 @@ enforcers = ["rustfmt", "isort", "ruff:([\"']I[\"']|isort)", "biome", "eslint:(i
 id = "unused"
 summary = "unused imports, variables or code"
 patterns = ['\bunused\s+(imports?|variables?|vars?|code|functions?|parameters?|params?|locals?)\b', '\b(dead|unused)\s+code\b']
+# "Don't delete unrelated dead code" limits a change's scope; it is the opposite of the lint.
+exclude = ['\b(unrelated|pre-?existing|existing|other)\s+(dead|unused)\s+code\b', "\\b(don't|dont|do\\s+not|never)\\s+(delete|remove|touch|clean\\s+up)\\b"]
 enforcers = ["ruff", "eslint:(no-unused-vars|recommended)", "rustc-deny-warnings", "go", "tsc:noUnused(Locals|Parameters)"]
 
 [[topic]]
@@ -88,6 +100,8 @@ enforcers = ["ruff:([\"']T20|[\"']T201)"]
 id = "explicit-any"
 summary = "the TypeScript any type"
 patterns = ['\b(explicit|implicit)\s+any\b', '\bany\s+type\b', '\btype\s+any\b', '\b(no|never|avoid|don.t\s+use)\s+any\b']
+# Python's typing.Any is checked by mypy or pyright, not the TypeScript tools below.
+exclude = ['\b(python|mypy|pyright|pydantic|TYPE_CHECKING)\b', '\btyping\.Any\b']
 enforcers = ["eslint:no-explicit-any", "tsc:\"(strict|noImplicitAny)\"\\s*:\\s*true", "biome:noExplicitAny"]
 
 [[topic]]
@@ -99,7 +113,8 @@ enforcers = ["mypy:(disallow_untyped_defs|strict)", "ruff:[\"']ANN"]
 [[topic]]
 id = "strict-equality"
 summary = "=== instead of =="
-patterns = ['===', '\bstrict\s+equality\b', '\btriple[- ]equals\b']
+# `===` alone also appears in code examples; only a rule asking for it counts.
+patterns = ['\b(use|prefer|always)\s+===', '===\s+(instead\s+of|over|rather\s+than|not)\s+==', '\bstrict\s+equality\b', '\btriple[- ]equals\b']
 enforcers = ["eslint:eqeqeq", "biome"]
 
 [[topic]]
@@ -113,5 +128,7 @@ id = "format-with-tool"
 summary = "formatting with a named formatter"
 # Only the formatter named in the rule counts.
 named = true
+# "Format with Prettier" tells the agent which tool to run; the formatter cannot say that itself.
+restates = false
 patterns = ['\bformat(ted|ting)?\b.{0,40}\b(prettier|black|rustfmt|gofmt|ruff|biome|clang-format)\b', '\b(prettier|black|rustfmt|gofmt|biome|clang-format)\b.{0,20}\bformat(ted|ting|s)?\b']
 enforcers = ["prettier", "black", "rustfmt", "gofmt", "ruff", "biome", "clang-format"]
