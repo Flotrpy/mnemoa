@@ -75,6 +75,8 @@ The image has not been published; `docker compose up` builds it locally. Writes 
 
 ### Path B — Binary
 
+Prebuilt `mnemoa` and `mnemoa-api` binaries for Linux (x86_64, arm64) and macOS (Apple silicon) are attached to each [GitHub release](https://github.com/Flotrpy/mnemoa/releases), with SHA-256 checksums. They include the LLM drafter, which stays off unless you enable it. Or build from source:
+
 ```bash
 cargo install --path crates/mnemoa-cli                  # add --features llm for the drafter
 mnemoa scan .
@@ -215,6 +217,8 @@ Precedence, highest first: `MNEMOA_*` environment variables, the `--config` file
 
 ## CLI
 
+Download a binary from the [releases page](https://github.com/Flotrpy/mnemoa/releases), or build it:
+
 ```bash
 cargo install --path crates/mnemoa-cli
 ```
@@ -234,7 +238,7 @@ mnemoa --server http://localhost:8080 scan repo   # run against mnemoa-api (path
 # global: --targets claude-code,codex,cursor,copilot,kiro,cline,gemini  --config FILE  --color auto|always|never
 ```
 
-In GitHub Actions: `uses: Flotrpy/mnemoa@main` (see [`action.yml`](action.yml)) runs scan and diff-aware drift with annotations.
+In GitHub Actions: `uses: Flotrpy/mnemoa@v0.1.0` (see [`action.yml`](action.yml)) runs scan and diff-aware drift with annotations.
 
 ---
 

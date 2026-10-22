@@ -263,18 +263,22 @@ impl GixHistory {
             .all()
             .map_err(git_err)?;
         for info in walk.take(max_commits) {
-            let info = info.map_err(git_err)?;
+            // A shallow clone ends at commits whose parents were never fetched. Their changes
+            // are unknown, so history stops there instead of failing.
+            let info = match info {
+                Ok(info) => info,
+                Err(_) if shallow => break,
+                Err(e) => return Err(git_err(e)),
+            };
             let commit = info.object().map_err(git_err)?;
             let time = commit.time().map_err(git_err)?.seconds;
             let tree = commit.tree().map_err(git_err)?;
             let parent_tree = match info.parent_ids().next() {
-                Some(pid) => Some(
-                    pid.object()
-                        .map_err(git_err)?
-                        .into_commit()
-                        .tree()
-                        .map_err(git_err)?,
-                ),
+                Some(pid) => match pid.object() {
+                    Ok(parent) => Some(parent.into_commit().tree().map_err(git_err)?),
+                    Err(_) if shallow => break,
+                    Err(e) => return Err(git_err(e)),
+                },
                 None => None,
             };
             let changes = diff_trees(&repo, parent_tree.as_ref(), &tree, None, &prefix)?;
@@ -568,6 +572,35 @@ pub(crate) mod tests {
             .map(|c| c.path.as_str())
             .collect();
         assert_eq!(paths, vec!["AGENTS.md"]);
+    }
+
+    #[test]
+    fn gix_stops_at_the_shallow_boundary() {
+        let dir = git_repo(&[
+            &[("AGENTS.md", Some("a"))],
+            &[("src/a.rs", Some("x"))],
+            &[("src/b.rs", Some("y"))],
+        ]);
+        let url = format!("file://{}", dir.path().display());
+        for (depth, expected) in [("1", 0), ("2", 1)] {
+            let clone = tempfile::tempdir().unwrap();
+            let st = Command::new("git")
+                .args(["clone", "-q", "--depth", depth, &url])
+                .arg(clone.path().join("r"))
+                .output()
+                .unwrap();
+            assert!(
+                st.status.success(),
+                "{}",
+                String::from_utf8_lossy(&st.stderr)
+            );
+            let h = GixHistory::open(&clone.path().join("r"), 100)
+                .unwrap()
+                .unwrap();
+            assert!(h.is_shallow());
+            // The oldest fetched commit has no parent to diff against, so it is left out.
+            assert_eq!(h.commits().len(), expected, "depth {depth}");
+        }
     }
 
     #[test]
