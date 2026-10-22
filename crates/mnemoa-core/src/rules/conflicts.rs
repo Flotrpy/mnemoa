@@ -64,6 +64,12 @@ fn negated_on_line(doc: &Doc, span: &std::ops::Range<usize>) -> bool {
     NEGATION_RE.is_match(&doc.text[line_start..span.start])
 }
 
+/// Phrases that point at a document rather than place something ("Refer to …", "See …").
+static REFERENCE_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)^(refer|see|read|check|follow|consult|review|look|visit|open|find|per|as\s+(described|documented|defined|shown))\b")
+        .unwrap()
+});
+
 static USE_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?i)\b(use|using|prefer|run\s+with|with)\s+`?([a-z][a-z0-9-]*)`?").unwrap()
 });
@@ -291,8 +297,12 @@ fn placement_conflicts(info: &RuleInfo, docs: &[&Doc], out: &mut Vec<Finding>) {
     for d in docs {
         for r in &d.rules {
             if let Some(c) = PLACE_RE.captures(&r.text) {
-                // "Refer to the guidelines in `x`" mentions a path but places nothing.
-                if c.name("verb").is_none() && c.name("be").is_none() {
+                // "Refer to the guidelines in `x`" mentions a path but places nothing. A noun
+                // phrase ("New tests in `x`") still prescribes a location.
+                if c.name("verb").is_none()
+                    && c.name("be").is_none()
+                    && REFERENCE_RE.is_match(&c["concept"])
+                {
                     continue;
                 }
                 let concept: String = c["concept"]
@@ -498,6 +508,19 @@ mod tests {
         );
         assert!(!f.is_empty(), "{f:?}");
         assert!(f.iter().all(|x| x.message.contains("yarn")), "{f:?}");
+    }
+
+    #[test]
+    fn noun_phrase_placements_still_conflict() {
+        // Codex review on this change: "New tests in `x`" prescribes a location.
+        let f = check(
+            &ConflictingInstructions,
+            &[(
+                "AGENTS.md",
+                "- New tests in `tests/unit`.\n- New tests in `src/__tests__`.\n",
+            )],
+        );
+        assert_eq!(f.len(), 1, "{f:?}");
     }
 
     #[test]

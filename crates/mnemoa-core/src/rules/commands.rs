@@ -33,6 +33,13 @@ pub(crate) static NEGATION_RE: LazyLock<Regex> = LazyLock::new(|| {
     .unwrap()
 });
 
+/// Evidence that a line creates a file: a download, a build, a copy, an output flag or a
+/// redirect. A bare mention of a script's name is not enough.
+static CREATES_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)\b(wget|curl|cp|mv|install|touch|unzip|tar|cmake|make|build|go\s+build|cargo\s+build|gcc|clang|download|generate|git\s+clone|chmod)\b|\s-o\s|--output\b|>")
+        .unwrap()
+});
+
 /// Directories named near a command: in a backticked path or after "from"/"in" ("from the
 /// `build` folder", "VS Code extension (`apps/vscode`)").
 static DIR_HINT_RE: LazyLock<Regex> = LazyLock::new(|| {
@@ -528,9 +535,10 @@ fn stale(
         let created_earlier = |name: &str| {
             let base = name.rsplit('/').next().unwrap_or(name);
             let rel = name.trim_start_matches("./");
+            let creates = |l: &str| l.contains(base) && CREATES_RE.is_match(l);
             !base.is_empty()
-                && (earlier.iter().any(|e| e.contains(base))
-                    || around.prior.contains(base)
+                && (earlier.iter().any(|e| creates(e))
+                    || around.prior.lines().any(creates)
                     || [join(&cwd, rel), join("", rel)]
                         .into_iter()
                         .flatten()
@@ -1313,6 +1321,23 @@ mod tests {
         );
         assert_eq!(f.len(), 1, "{f:?}");
         assert!(f[0].message.contains("missing.sh"));
+    }
+
+    #[test]
+    fn mentioning_a_script_is_not_creating_it() {
+        // Codex review on this change: a prose mention must not hide a missing script.
+        let f = check(
+            &StaleCommand,
+            &[
+                ("src/main.go", ""),
+                (
+                    "AGENTS.md",
+                    "Run setup.sh to configure the tools:\n\n```sh\n./setup.sh\n```\n\n```sh\ncurl -o setup2.sh https://x/setup2.sh\n./setup2.sh\n```\n",
+                ),
+            ],
+        );
+        assert_eq!(f.len(), 1, "{f:?}");
+        assert!(f[0].message.contains("`./setup.sh`"), "{f:?}");
     }
 
     #[test]
