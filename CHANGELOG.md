@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **MNA008 stale-command reports far fewer false positives:** 180 findings down to 18 on 38 public repositories, and all 18 hand-labeled correct.
+  - Commands start in the instruction file's own directory, and directories named in its headings or next to the command also count.
+  - Placeholders, globs, import and export paths, directory listings, negated commands, scripts built or downloaded just before, gitignored build outputs and cargo plugins are no longer reported.
+- **MNA004 conflicting-instructions no longer treats non-choices as choosing a package manager:** 28 findings down to 0 on the same repositories.
+  - Global tool installs (`npm i -g pnpm`) and running scripts (`npm run lint`) don't count.
+  - "never X" on the same line cancels a mention.
+  - "Refer to the guidelines in `x`" is not a placement rule.
+- **MNA002 lint-leakage matches rules in context:** 23 findings down to 1, which is correct.
+  - Commit-message length limits (also judged by section headings), "reduce indentation", "don't delete dead code" and Python's `Any` no longer match.
+  - ESLint and Biome lints set to `warn` or `off` don't count as enforcing.
+  - "Format with X" is treated as an instruction to run X, so `promote` keeps that prose.
+
 ## v0.1.0 — 2026-10-22
 
 First release of mnemoa: an offline Rust CLI and HTTP API that keeps repo memory for coding agents small, true and enforced.
