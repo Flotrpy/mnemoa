@@ -8,7 +8,7 @@ use regex::Regex;
 use super::{Check, Context, RULES, RuleInfo, finding_at};
 use crate::diag::Finding;
 use crate::doc::{Doc, Polarity, Rule};
-use crate::rules::commands::commands;
+use crate::rules::commands::{NEGATION_RE, commands};
 
 /// Tool families where using two members is contradictory.
 const FAMILIES: &[(&str, &[&str])] = &[
@@ -49,14 +49,6 @@ const MANAGER_VERBS: &[&str] = &[
     "up",
     "upgrade",
 ];
-
-/// Words that turn a mention into a "don't use this" (`bun install` (never `npm install`)).
-static NEGATION_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(
-        r"(?i)\b(never|not|don't|dont|avoid|instead\s+of|rather\s+than|no\s+longer|deprecated)\b",
-    )
-    .unwrap()
-});
 
 /// Whether a command installs a tool globally (`npm i -g pnpm`), which says nothing about the
 /// project's package manager.
