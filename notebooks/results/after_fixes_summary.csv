@@ -1,0 +1,4 @@
+rule,findings_v0.1.0,findings_after,correct_after
+MNA002,23,1,1
+MNA004,28,0,0
+MNA008,180,18,18

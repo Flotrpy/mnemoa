@@ -338,7 +338,7 @@ cd sdk/python && pip install -e '.[test]' && pytest -q
 cargo run -p mnemoa-bench --release -- --quick
 ```
 
-Current test counts: **265 Rust tests** (269 with `--features llm`) · **9 Python tests** · **12 benchmarks**. Line coverage: **90.5%** (cargo-llvm-cov, same machine).
+Current test counts: **296 Rust tests** (300 with `--features llm`) · **9 Python tests** · **12 benchmarks**. Line coverage: **91.0%** (cargo-llvm-cov, same machine).
 
 ---
 
@@ -380,15 +380,33 @@ Overall, 86 of 256 labeled findings (33.6%) were correct. MNA005 needs git histo
 - The repos were read a few minutes after the scan, at their newest commit.
 - Raw data is in [notebooks/results/](notebooks/results/).
 
-**Main false-positive causes, to fix next:**
+**Main false-positive causes in v0.1.0.** The first three are fixed on `main` (see below):
 - **MNA008 stale-command:** commands in a nested AGENTS.md are checked against the root `package.json`, not the package the file lives in. Paths and `<placeholder>` arguments are also treated as commands.
 - **MNA004 conflicting-instructions:** `npm install -g pnpm` and `npm run <script>` are read as choosing npm. A "never X" inside a command line is ignored.
 - **MNA002 lint-leakage:** keywords are matched out of context, e.g. a commit-message length limit is taken as code line length. A rule also counts as enforced when the tool is configured but doesn't enforce that rule, or only warns.
+
+Still to fix:
 - **MNA006 blind-reference:** it flags table-of-contents anchors and inline code that isn't a pointer, and ignores triggers given in a lead-in sentence or heading.
 - **MNA007 broken-reference:** paths written relative to a sub-project root, paths in the user's own project, and other repos are reported as missing.
 - **MNA013 unloaded-file:** Copilot `.instructions.md` files with only a `description` are reported as never loaded, but VS Code loads them on demand. Nested AGENTS.md files are flagged even when an always-loaded file tells the agent to read them.
 - **MNA010 cross-file-divergence:** a CLAUDE.md that tells the agent in prose to read AGENTS.md (rather than importing it) counts as divergence.
 - **MNA003 skill-leakage:** any numbered list of 8+ items is flagged, as are generic "new ..." headings.
+
+#### After fixing MNA002, MNA004 and MNA008 (on `main`, not yet released)
+
+On 2026-10-22, 38 of the 77 repositories had a v0.1.0 finding for one of these three rules. I shallow-cloned each one and scanned it at the same commit with the v0.1.0 release binary and with the fixed code:
+
+| Rule | v0.1.0 findings | After the fixes | Correct after |
+|---|---|---|---|
+| MNA002 lint-leakage | 23 | 1 | 1 |
+| MNA004 conflicting-instructions | 28 | 0 | — |
+| MNA008 stale-command | 180 | 18 | 18 |
+
+How to read this:
+- **Labels:** every finding that remains is hand-labeled, with the same labeler and standard as above. The original sample's labeled true positives all still fire, and the fixes added no new findings.
+- **Bias:** the fixes were designed from these same repositories' false positives (two rounds: the original sample, then a full label of what was left). So this shows the known causes are gone, not the precision you should expect on repositories the rules have never seen. Expect lower numbers there.
+- **Recall:** dropping findings can also drop real problems. Among the labeled findings no true positive was lost, but the unlabeled v0.1.0 findings that disappeared were not all checked.
+- **Data:** [`after_fixes_summary.csv`](notebooks/results/after_fixes_summary.csv), [`after_fixes_findings.csv`](notebooks/results/after_fixes_findings.csv) (each remaining finding with its label and reason) and [`after_fixes_commits.csv`](notebooks/results/after_fixes_commits.csv) (the scanned commit of each repository).
 
 ---
 
