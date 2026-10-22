@@ -1,6 +1,9 @@
 //! MNA008 stale-command.
 
 use std::collections::BTreeMap;
+use std::sync::LazyLock;
+
+use regex::Regex;
 
 use super::{Check, Context, RULES, RuleInfo, finding_at};
 use crate::diag::Finding;
@@ -18,6 +21,109 @@ fn is_placeholder(name: &str) -> bool {
     name.contains(['<', '>', '*', '{', '}', '$', '[', ']', '|'])
         || name.eq_ignore_ascii_case("...")
         || name.chars().all(|c| c == '.' || c == '_')
+        // `bun run X`
+        || (name.len() == 1 && name.chars().all(|c| c.is_ascii_uppercase()))
+}
+
+/// Words that turn a mention into a "don't run this" (`**Never** use \`npm run build\``).
+pub(crate) static NEGATION_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(
+        r"(?i)\b(never|not|don't|dont|avoid|instead\s+of|rather\s+than|no\s+longer|deprecated)\b",
+    )
+    .unwrap()
+});
+
+/// Directories named near a command: in a backticked path or after "from"/"in" ("from the
+/// `build` folder", "VS Code extension (`apps/vscode`)").
+static DIR_HINT_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"`\.?/?([A-Za-z0-9_@][A-Za-z0-9_@./-]*)/?`|\b(?:from|in|inside|under|within)\s+(?:the\s+)?([A-Za-z0-9_@.-]+/[A-Za-z0-9_@./-]*)")
+        .unwrap()
+});
+
+/// What a command's surroundings say about it.
+struct Around<'a> {
+    /// The command is a whole inline code span, not a line of a shell block.
+    inline: bool,
+    /// Directories with a task runner that the nearby text or headings name.
+    hints: Vec<String>,
+    /// The lines just before the command (a step there may download or build a script).
+    prior: &'a str,
+    /// The text before the command on its own line.
+    line_before: &'a str,
+    /// Simple entries of the root .gitignore (build outputs such as `/ollama`).
+    ignored: &'a [String],
+}
+
+/// Simple root `.gitignore` entries: names and paths, plus `*.ext` suffixes.
+fn gitignore_entries(cx: &Context<'_>) -> Vec<String> {
+    cx.ws
+        .read_file(".gitignore")
+        .unwrap_or_default()
+        .lines()
+        .map(str::trim)
+        .filter(|l| !l.is_empty() && !l.starts_with('#') && !l.starts_with('!'))
+        .map(|l| l.trim_start_matches('/').trim_end_matches('/').to_string())
+        .filter(|l| !l.contains(['[', '?']) && (!l.contains('*') || l.starts_with("*.")))
+        .collect()
+}
+
+/// Whether `path` (repository-relative) or one of its parent directories is gitignored.
+fn is_ignored(ignored: &[String], path: &str) -> bool {
+    let base = path.rsplit('/').next().unwrap_or(path);
+    let mut prefix = String::new();
+    for comp in path.split('/') {
+        if !prefix.is_empty() {
+            prefix.push('/');
+        }
+        prefix.push_str(comp);
+        if ignored
+            .iter()
+            .any(|e| *e == prefix || (!e.contains('/') && e == comp))
+        {
+            return true;
+        }
+    }
+    ignored
+        .iter()
+        .any(|e| e.strip_prefix('*').is_some_and(|ext| base.ends_with(ext)))
+}
+
+/// Directories with a task runner that the text around a command (before it, and the rest of
+/// its line), or its headings, name.
+fn dir_hints(cx: &Context<'_>, doc: &Doc, span_start: usize, span_end: usize) -> Vec<String> {
+    let facts = cx.facts();
+    let section = doc
+        .headings
+        .iter()
+        .rposition(|h| h.span.start <= span_start);
+    let section_start = section.map_or(0, |i| doc.headings[i].span.start);
+    let mut from = span_start.saturating_sub(600).max(section_start);
+    while !doc.text.is_char_boundary(from) {
+        from += 1;
+    }
+    let mut text = doc.section_path(section).join("\n");
+    text.push('\n');
+    text.push_str(&doc.text[from..span_start]);
+    text.push('\n');
+    let line_end = doc.text[span_end..]
+        .find('\n')
+        .map_or(doc.text.len(), |i| span_end + i);
+    text.push_str(&doc.text[span_end..line_end]);
+    let doc_dir = parent_of(&doc.path);
+    let mut out: Vec<String> = Vec::new();
+    for c in DIR_HINT_RE.captures_iter(&text) {
+        let raw = c.get(1).or_else(|| c.get(2)).map_or("", |m| m.as_str());
+        let raw = raw.trim_end_matches(['/', '.', ',', ')']);
+        for d in [join(doc_dir, raw), join("", raw)].into_iter().flatten() {
+            let has_runner = facts.npm.contains_key(&d)
+                || facts.make.contains_key(&d)
+                || facts.just.contains_key(&d);
+            if !d.is_empty() && has_runner && !out.contains(&d) {
+                out.push(d);
+            }
+        }
+    }
+    out
 }
 
 const SHELL_LANGS: &[&str] = &[
@@ -174,10 +280,32 @@ pub(crate) fn stale_commands(
     let any_makefile = !facts.make.is_empty();
     let any_justfile = !facts.just.is_empty();
     let doc_dir = parent_of(&doc.path);
+    let ignored = gitignore_entries(cx);
     commands(doc)
         .into_iter()
         .filter_map(|(cmd, span)| {
-            let msg = stale(cx, facts, doc_dir, &cmd, any_makefile, any_justfile)?;
+            let line_start = doc.text[..span.start].rfind('\n').map_or(0, |i| i + 1);
+            let prior_start = doc.text[..line_start]
+                .match_indices('\n')
+                .rev()
+                .nth(6)
+                .map_or(0, |(i, _)| i + 1);
+            let around = Around {
+                inline: doc.code_spans.iter().any(|c| c.span == span),
+                hints: dir_hints(cx, doc, span.start, span.end),
+                prior: &doc.text[prior_start..line_start],
+                line_before: &doc.text[line_start..span.start],
+                ignored: &ignored,
+            };
+            let msg = stale(
+                cx,
+                facts,
+                doc_dir,
+                &cmd,
+                any_makefile,
+                any_justfile,
+                &around,
+            )?;
             Some((cmd, span, msg))
         })
         .collect()
@@ -300,6 +428,7 @@ fn candidates<'a>(
     dir: &str,
     explicit_dir: bool,
     walk_up: bool,
+    hints: &[String],
 ) -> Vec<(&'a str, &'a Runner)> {
     let find = |d: &str| {
         if walk_up {
@@ -310,9 +439,12 @@ fn candidates<'a>(
     };
     let mut out: Vec<(&str, &Runner)> = find(dir).into_iter().collect();
     if !explicit_dir {
-        if let Some(root) = find("") {
-            if !out.iter().any(|(d, _)| *d == root.0) {
-                out.push(root);
+        // The root, and directories the surrounding text names ("from `apps/vscode`").
+        for d in std::iter::once("").chain(hints.iter().map(String::as_str)) {
+            if let Some(found) = find(d)
+                && !out.iter().any(|(k, _)| *k == found.0)
+            {
+                out.push(found);
             }
         }
     }
@@ -360,7 +492,22 @@ fn stale(
     line: &str,
     any_make: bool,
     any_just: bool,
+    around: &Around<'_>,
 ) -> Option<String> {
+    // "**Never** use `npm run build:production`" is not an instruction to run it.
+    if NEGATION_RE.is_match(around.line_before) {
+        return None;
+    }
+    // A span that is one path with spaces in it (`docs/architecture docs/x.md`) is a reference.
+    let whole = line.trim().trim_start_matches("./");
+    if whole.contains(' ')
+        && [join(doc_dir, whole), join("", whole)]
+            .into_iter()
+            .flatten()
+            .any(|p| cx.ws.discovery.exists(&p))
+    {
+        return None;
+    }
     let mut cwd = doc_dir.to_string();
     let mut explicit_dir = false;
     let mut earlier: Vec<String> = Vec::new();
@@ -376,9 +523,18 @@ fn stale(
             toks.remove(0);
         }
         let seg_text = seg.clone();
+        // A script fetched or built by an earlier step on this line or the lines above, or a
+        // gitignored build output (`./ollama` after `cmake --build`).
         let created_earlier = |name: &str| {
             let base = name.rsplit('/').next().unwrap_or(name);
-            !base.is_empty() && earlier.iter().any(|e| e.contains(base))
+            let rel = name.trim_start_matches("./");
+            !base.is_empty()
+                && (earlier.iter().any(|e| e.contains(base))
+                    || around.prior.contains(base)
+                    || [join(&cwd, rel), join("", rel)]
+                        .into_iter()
+                        .flatten()
+                        .any(|p| is_ignored(around.ignored, &p)))
         };
         let Some(&prog) = toks.first() else {
             earlier.push(seg_text);
@@ -438,7 +594,7 @@ fn stale(
                 if targets.iter().any(|t| is_placeholder(t)) || MAKE_PROSE.contains(&targets[0]) {
                     return None;
                 }
-                let cands = candidates(&facts.make, &dir, explicit_make_dir, false);
+                let cands = candidates(&facts.make, &dir, explicit_make_dir, false, &around.hints);
                 if cands.is_empty() {
                     if !any_make {
                         return Some(format!("`{seg}` runs make, but the repo has no Makefile."));
@@ -460,7 +616,7 @@ fn stale(
                 {
                     return None;
                 }
-                let cands = candidates(&facts.just, &cwd, explicit_dir, false);
+                let cands = candidates(&facts.just, &cwd, explicit_dir, false, &around.hints);
                 if cands.is_empty() {
                     if !any_just {
                         return Some(format!("`{seg}` runs just, but the repo has no justfile."));
@@ -503,7 +659,7 @@ fn stale(
                     earlier.push(seg_text);
                     continue;
                 }
-                let cands = candidates(&facts.npm, &cwd, explicit_dir, true);
+                let cands = candidates(&facts.npm, &cwd, explicit_dir, true, &around.hints);
                 if cands.is_empty() {
                     return None;
                 }
@@ -516,7 +672,13 @@ fn stale(
                     .iter()
                     .find(|a| !a.starts_with('-') && !a.starts_with('+'))?;
                 let aliases = facts.cargo_aliases.as_ref()?;
-                if !CARGO_BUILTIN.contains(sub) && !aliases.has(sub) {
+                // Unknown subcommands may be installed plugins (`cargo xwin`). Only one that
+                // looks like a renamed alias (`cargo xtask` with alias `xt`) is reported.
+                let like_alias = aliases
+                    .names
+                    .iter()
+                    .any(|a| a.len() >= 2 && (sub.starts_with(a.as_str()) || a.starts_with(*sub)));
+                if !CARGO_BUILTIN.contains(sub) && !aliases.has(sub) && like_alias {
                     return Some(format!(
                         "`{seg}`: `{sub}` is not a cargo command or an alias in .cargo/config.toml."
                     ));
@@ -585,7 +747,18 @@ fn stale(
                 let shell_script = matches!(ext, Some("sh" | "bash" | "zsh"));
                 let dot_exec = p.starts_with("./")
                     && matches!(ext, None | Some("sh" | "bash" | "zsh" | "py" | "rb" | "pl"));
-                if args.is_empty() && (p.ends_with('/') || !(shell_script || dot_exec)) {
+                // In prose, `./pg` or `./helpers` is an import or export path; only a shell
+                // script is clearly a command there. A shell block line can run `./tool`.
+                let runnable = if around.inline {
+                    shell_script
+                } else {
+                    shell_script || dot_exec
+                };
+                // Directory listings (`entities/   entity classes`), tool output
+                // (`extensions/copilot: 329 packages`) and lists of paths are not commands.
+                let not_a_program = p.ends_with(['/', ':', ',', ';'])
+                    || args.iter().any(|a| a.contains('/') && !a.starts_with('-'));
+                if not_a_program || (args.is_empty() && !runnable) {
                     earlier.push(seg_text);
                     continue;
                 }
@@ -1053,12 +1226,125 @@ mod tests {
                 ("e2e/helpers/assertions.ts", ""),
                 (
                     "e2e/AGENTS.md",
-                    "- Import from `./helpers/assertions`.\n- Run `./helpers/setup`.\n",
+                    "- Import from `./helpers/assertions`.\n\n```bash\n./helpers/assertions\n./helpers/setup\n```\n",
                 ),
             ],
         );
         assert_eq!(f.len(), 1, "{f:?}");
         assert!(f[0].message.contains("setup"));
+    }
+
+    // Round two: findings labeled wrong after the first fixes, re-scanning 38 repositories.
+
+    #[test]
+    fn directories_named_in_headings_or_text_count() {
+        // cline AGENTS.md "VS Code extension (`apps/vscode`)"; vscode "from the `build`
+        // folder"; sst/opencode "from `packages/client`".
+        let files = [
+            ("package.json", r#"{"scripts":{"build":"x"}}"#),
+            (
+                "apps/vscode/package.json",
+                r#"{"scripts":{"protos":"x","package":"y"}}"#,
+            ),
+            ("build/package.json", r#"{"scripts":{"typecheck":"x"}}"#),
+            (
+                "AGENTS.md",
+                "## VS Code extension (`apps/vscode`)\n\n- `bun run protos` (from `apps/vscode`)\n- `bun run package`\n\n## Build scripts\n\nRun `npm run typecheck` from the `build` folder.\n\n## Other\n\n- `bun run protos`\n",
+            ),
+        ];
+        let f = check(&StaleCommand, &files);
+        // Only the last one: nothing near it names apps/vscode, and the root lacks `protos`.
+        assert_eq!(f.len(), 1, "{f:?}");
+        assert_eq!(f[0].line, 12);
+    }
+
+    #[test]
+    fn negated_commands_are_not_instructions() {
+        // dotnet/aspnetcore src/Components/AGENTS.md.
+        let f = check(
+            &StaleCommand,
+            &[
+                ("package.json", r#"{"scripts":{"build":"x"}}"#),
+                (
+                    "AGENTS.md",
+                    "- **Never** use `npm run build:production` here.\n",
+                ),
+            ],
+        );
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn prose_paths_and_listings_are_not_commands() {
+        // medusa exports subpaths, trpc test helper imports, n8n layout block, vscode tool
+        // output, prisma link text for a folder with a space in its name.
+        let f = check(
+            &StaleCommand,
+            &[
+                ("packages/deps/src/index.ts", ""),
+                ("docs/architecture docs/patterns/x.md", ""),
+                ("extensions/a.ts", ""),
+                (
+                    "packages/deps/AGENTS.md",
+                    "Subpaths: `./pg`, `./zod`, `./awilix`.\nImport `./__testHelpers`.\n\n```\nentities/        entity classes\n```\n\n- `extensions/copilot: 329 packages`\n",
+                ),
+                (
+                    "AGENTS.md",
+                    "See [`docs/architecture docs/patterns/x.md`](x).\n",
+                ),
+            ],
+        );
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn scripts_built_or_downloaded_just_before_are_not_stale() {
+        // ollama AGENTS.md (gitignored /ollama), autogen (wget on the line before).
+        let f = check(
+            &StaleCommand,
+            &[
+                (".gitignore", "build\n/ollama\n"),
+                ("src/main.go", ""),
+                (
+                    "AGENTS.md",
+                    "```sh\ncmake -B build .\ncmake --build build --parallel 8\n./ollama serve\nwget https://dot.net/v1/dotnet-install.sh\n./dotnet-install.sh --channel 8.0\n./missing.sh\n```\n",
+                ),
+            ],
+        );
+        assert_eq!(f.len(), 1, "{f:?}");
+        assert!(f[0].message.contains("missing.sh"));
+    }
+
+    #[test]
+    fn placeholder_letter_and_cargo_plugins() {
+        // cline `bun run X`; uv `cargo xwin clippy` with only a `dev` alias.
+        let f = check(
+            &StaleCommand,
+            &[
+                ("package.json", r#"{"scripts":{"build":"x"}}"#),
+                (".cargo/config.toml", "[alias]\ndev = \"run -p dev\"\n"),
+                (
+                    "AGENTS.md",
+                    "- `bun run X`\n- `cargo xwin clippy`\n- `cargo devtool`\n",
+                ),
+            ],
+        );
+        // `cargo devtool` looks like the renamed `dev` alias.
+        assert_eq!(f.len(), 1, "{f:?}");
+        assert!(f[0].message.contains("devtool"));
+    }
+
+    #[test]
+    fn missing_script_with_arguments_is_still_flagged() {
+        // zed .rules: `script/crash-to-prompt <issue-id>` no longer exists; labeled correct.
+        let f = check(
+            &StaleCommand,
+            &[
+                ("script/sentry-fetch", ""),
+                ("AGENTS.md", "- Run `script/crash-to-prompt <issue-id>`.\n"),
+            ],
+        );
+        assert_eq!(f.len(), 1, "{f:?}");
     }
 
     #[test]
