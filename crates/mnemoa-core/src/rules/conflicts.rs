@@ -32,17 +32,51 @@ const LOCKFILES: &[(&str, &str)] = &[
     ("pdm.lock", "pdm"),
 ];
 
-/// Subcommands that show a package manager is actually being used.
+/// Subcommands that change the project's dependencies, so they show which package manager the
+/// project uses. Running scripts (`npm run lint` in a yarn repo) works with any lockfile and
+/// says nothing about that choice.
 const MANAGER_VERBS: &[&str] = &[
-    "install", "i", "add", "ci", "run", "remove", "sync", "lock", "exec", "dlx", "test", "update",
-    "build",
+    "install",
+    "i",
+    "add",
+    "ci",
+    "remove",
+    "rm",
+    "uninstall",
+    "sync",
+    "lock",
+    "update",
+    "up",
+    "upgrade",
 ];
+
+/// Words that turn a mention into a "don't use this" (`bun install` (never `npm install`)).
+static NEGATION_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(
+        r"(?i)\b(never|not|don't|dont|avoid|instead\s+of|rather\s+than|no\s+longer|deprecated)\b",
+    )
+    .unwrap()
+});
+
+/// Whether a command installs a tool globally (`npm i -g pnpm`), which says nothing about the
+/// project's package manager.
+fn is_global_install(toks: &[&str]) -> bool {
+    toks.iter()
+        .any(|t| matches!(*t, "-g" | "--global" | "--location=global"))
+        || (toks.first() == Some(&"yarn") && toks.get(1) == Some(&"global"))
+}
+
+/// Whether the text before `span` on the same line negates it.
+fn negated_on_line(doc: &Doc, span: &std::ops::Range<usize>) -> bool {
+    let line_start = doc.text[..span.start].rfind('\n').map_or(0, |i| i + 1);
+    NEGATION_RE.is_match(&doc.text[line_start..span.start])
+}
 
 static USE_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?i)\b(use|using|prefer|run\s+with|with)\s+`?([a-z][a-z0-9-]*)`?").unwrap()
 });
 static PLACE_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?i)^(?:always\s+)?(?:put|place|keep|store|add|write|create)?\s*(?:all\s+|new\s+|the\s+)?([a-z][a-z \-]{2,40}?)\s+(?:(?:go|goes|live|lives|belong|belongs|are|is|should\s+be|must\s+be|are\s+kept|are\s+stored)\s+)?(?:in|under|into|inside)\s+`([^`]+)`").unwrap()
+    Regex::new(r"(?i)^(?:always\s+)?(?P<verb>put|place|keep|store|add|write|create)?\s*(?:all\s+|new\s+|the\s+)?(?P<concept>[a-z][a-z \-]{2,40}?)\s+(?:(?P<be>go|goes|live|lives|belong|belongs|are|is|should\s+be|must\s+be|are\s+kept|are\s+stored)\s+)?(?:in|under|into|inside)\s+`(?P<path>[^`]+)`").unwrap()
 });
 
 const STOP: &[&str] = &[
@@ -100,13 +134,22 @@ fn tool_uses<'a>(docs: &[&'a Doc]) -> Vec<Use<'a>> {
     for doc in docs {
         // Commands such as `pnpm install`.
         for (cmd, span) in commands(doc) {
-            let mut toks = cmd.split_whitespace();
-            let (Some(prog), second) = (toks.next(), toks.next()) else {
+            let toks: Vec<&str> = cmd
+                .split(['&', '|', ';'])
+                .next()
+                .unwrap_or("")
+                .split_whitespace()
+                .collect();
+            let (Some(&prog), second) = (toks.first(), toks.get(1)) else {
                 continue;
             };
             if let Some(tool) = all_tools.iter().find(|t| **t == prog) {
                 let is_runner = matches!(*tool, "jest" | "vitest" | "mocha");
-                if is_runner || second.is_some_and(|s| MANAGER_VERBS.contains(&s)) {
+                let manages = second.is_some_and(|s| MANAGER_VERBS.contains(s));
+                if (is_runner || manages)
+                    && !is_global_install(&toks)
+                    && !negated_on_line(doc, &span)
+                {
                     uses.push(Use { doc, span, tool });
                 }
             }
@@ -245,14 +288,18 @@ fn placement_conflicts(info: &RuleInfo, docs: &[&Doc], out: &mut Vec<Finding>) {
     for d in docs {
         for r in &d.rules {
             if let Some(c) = PLACE_RE.captures(&r.text) {
-                let concept: String = c[1]
+                // "Refer to the guidelines in `x`" mentions a path but places nothing.
+                if c.name("verb").is_none() && c.name("be").is_none() {
+                    continue;
+                }
+                let concept: String = c["concept"]
                     .split_whitespace()
                     .filter(|w| !matches!(*w, "the" | "all" | "new" | "our" | "your"))
                     .map(|w| w.strip_suffix('s').unwrap_or(w))
                     .collect::<Vec<_>>()
                     .join(" ")
                     .to_lowercase();
-                let path = c[2]
+                let path = c["path"]
                     .trim_end_matches('/')
                     .trim_start_matches("./")
                     .to_string();
@@ -365,6 +412,82 @@ mod tests {
                     "---\npaths:\n  - a/**\n---\n- Never commit the lockfile.\n",
                 ),
             ],
+        );
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    // Near misses below come from findings labeled wrong in notebooks/results/labels.csv.
+
+    #[test]
+    fn global_tool_installs_are_not_a_package_manager_choice() {
+        // vercel/ai AGENTS.md, electron, astro.
+        let f = check(
+            &ConflictingInstructions,
+            &[
+                ("pnpm-lock.yaml", ""),
+                (
+                    "AGENTS.md",
+                    "- **pnpm**: v12+ (`npm install -g pnpm@12`)\n- `npm i -g @electron/build-tools`\n- `npm install -g agent-browser && agent-browser install`\n- `yarn global add x`\n\n```bash\npnpm install        # Install all dependencies\npnpm build\n```\n",
+                ),
+            ],
+        );
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn running_scripts_is_not_a_package_manager_choice() {
+        // electron CLAUDE.md and copilot-instructions with yarn.lock.
+        let f = check(
+            &ConflictingInstructions,
+            &[
+                ("yarn.lock", ""),
+                (
+                    "AGENTS.md",
+                    "- Invoke via `yarn <tool>` or `yarn run <tool>`.\n\n```bash\nnpm run lint              # Run all linters\nnpm run test -- -g \"pattern\"\n```\n",
+                ),
+            ],
+        );
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn never_on_the_same_line_negates_the_command() {
+        // cline .clinerules/bun-and-node.md.
+        let f = check(
+            &ConflictingInstructions,
+            &[(
+                "AGENTS.md",
+                "## Use bun for tooling\n\n- `bun install` (never `npm install` / `npm ci`)\n- `bun run <script>` (never `npm run <script>`)\n",
+            )],
+        );
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn install_commands_with_two_managers_still_conflict() {
+        let f = check(
+            &ConflictingInstructions,
+            &[
+                ("pnpm-lock.yaml", ""),
+                (
+                    "AGENTS.md",
+                    "- Run `pnpm install`.\n- Add packages with `yarn add x`.\n",
+                ),
+            ],
+        );
+        assert!(!f.is_empty(), "{f:?}");
+        assert!(f.iter().all(|x| x.message.contains("yarn")), "{f:?}");
+    }
+
+    #[test]
+    fn referring_to_a_file_is_not_placing_something() {
+        // vercel/next.js AGENTS.md.
+        let f = check(
+            &ConflictingInstructions,
+            &[(
+                "AGENTS.md",
+                "- Refer to the guidelines in `.github/pull_request_template.md`.\n- Refer to the guidelines in `.github/ISSUE_TEMPLATE/1.bug_report.yml`.\n",
+            )],
         );
         assert!(f.is_empty(), "{f:?}");
     }
