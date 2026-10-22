@@ -319,6 +319,11 @@ fn candidates<'a>(
     out
 }
 
+/// Extensions a module path may leave off (`./helpers/assertions` for `assertions.ts`).
+const MODULE_EXTS: &[&str] = &[
+    "ts", "tsx", "js", "jsx", "mjs", "cjs", "mts", "cts", "vue", "svelte", "py", "rs", "go",
+];
+
 /// Whether `p` (relative to `dir`, or to the root when no `cd` was given) is missing while its
 /// parent directory exists, so the path looks wrong rather than generated or external.
 fn path_missing(cx: &Context<'_>, dir: &str, p: &str, explicit_dir: bool) -> Option<bool> {
@@ -330,6 +335,15 @@ fn path_missing(cx: &Context<'_>, dir: &str, p: &str, explicit_dir: bool) -> Opt
     for base in bases {
         let path = join(base, p)?;
         if cx.ws.discovery.exists(&path) {
+            return Some(false);
+        }
+        // An extensionless path that names a source module is an import, not a missing program.
+        let extensionless = !path.rsplit('/').next().unwrap_or("").contains('.');
+        if extensionless
+            && MODULE_EXTS
+                .iter()
+                .any(|e| cx.ws.discovery.exists(&format!("{path}.{e}")))
+        {
             return Some(false);
         }
         parent_seen |= cx.ws.discovery.has_dir(parent_of(&path));
@@ -380,7 +394,18 @@ fn stale(
                 if target.contains(['$', '~', '<']) || target.starts_with('/') {
                     return None;
                 }
-                cwd = join(&cwd, target)?;
+                // `cd x` in a nested instruction file usually means `x` next to that file, but
+                // some files give paths from the repository root. Use whichever exists.
+                let here = join(&cwd, target)?;
+                cwd = if cx.ws.discovery.has_dir(&here) {
+                    here
+                } else {
+                    let from_root = join("", target)?;
+                    if !cx.ws.discovery.has_dir(&from_root) {
+                        return None;
+                    }
+                    from_root
+                };
                 explicit_dir = true;
             }
             "make" | "gmake" => {
@@ -997,6 +1022,43 @@ mod tests {
         );
         assert_eq!(f.len(), 1, "{f:?}");
         assert!(f[0].message.contains("setup.sh"));
+    }
+
+    #[test]
+    fn cd_falls_back_to_a_root_relative_directory() {
+        // PostHog proto/AGENTS.md: `cd nodejs` means the repository's nodejs/, not proto/nodejs/.
+        let files = [
+            ("package.json", r#"{"scripts":{"build":"x"}}"#),
+            (
+                "nodejs/package.json",
+                r#"{"scripts":{"generate:proto":"x"}}"#,
+            ),
+            ("proto/x.proto", ""),
+            (
+                "proto/AGENTS.md",
+                "```bash\ncd nodejs && pnpm run generate:proto\ncd nodejs && pnpm run gone\ncd missing && pnpm run whatever\n```\n",
+            ),
+        ];
+        let f = check(&StaleCommand, &files);
+        assert_eq!(f.len(), 1, "{f:?}");
+        assert!(f[0].message.contains("gone"));
+    }
+
+    #[test]
+    fn module_import_paths_are_not_missing_programs() {
+        // grafana e2e-playwright/dashboard-new-layouts/AGENTS.md.
+        let f = check(
+            &StaleCommand,
+            &[
+                ("e2e/helpers/assertions.ts", ""),
+                (
+                    "e2e/AGENTS.md",
+                    "- Import from `./helpers/assertions`.\n- Run `./helpers/setup`.\n",
+                ),
+            ],
+        );
+        assert_eq!(f.len(), 1, "{f:?}");
+        assert!(f[0].message.contains("setup"));
     }
 
     #[test]
