@@ -33,7 +33,12 @@ Installing `ast-grep` (`pip install ast-grep-cli`) lets the draft-validation tes
 
 ## How to add a promotion
 
-1. Add a `[[topic]]` to `rules/promotions.toml`: `id`, `summary`, case-insensitive `patterns`, and the `enforcers` that cover it. Write `"tool:regex"` when the enforcer only covers the topic with an opt-in setting (the regex must match its config). Set `named = true` when the rule must name the tool.
+1. Add a `[[topic]]` to `rules/promotions.toml`:
+   - `id`, `summary`, case-insensitive `patterns`, and the `enforcers` that cover it.
+   - Write `"tool:regex"` when the enforcer only covers the topic with an opt-in setting. The regex must match its config. For ESLint and Biome, a lint set to `warn` or `off` there does not count.
+   - Set `named = true` when the rule must name the tool.
+   - Add `exclude` patterns for rules that match but are about something else (a commit message's length rather than code's). Excludes also see the rule's enclosing headings.
+   - Set `restates = false` when matching rules say which tool to run rather than restate what it checks.
 2. This alone makes MNA002 flag the prose when an enforcer is configured, and `promote` remove the prose in that case.
 3. To emit a check when nothing enforces it yet, add a branch to `Planner::emit_topic` in `crates/mnemoa-core/src/promote.rs` that returns artifacts (EditorConfig keys, a TOML key, Prettier JSON, an ast-grep rule, or a pre-commit hook). Merge into existing files and fall back to `Action::Manual` on conflict.
 4. Test with `plan_for(...)` in `promote.rs`: the artifact content, the prose removal and a near miss. If the artifact is an ast-grep rule, check it with real ast-grep.

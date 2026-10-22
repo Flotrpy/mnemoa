@@ -21,7 +21,13 @@ impl Check for LintLeakage {
         let catalog = Catalog::builtin();
         for doc in cx.always_docs() {
             for rule in doc.rules.iter().filter(|r| r.imperative) {
-                for topic in catalog.matches(&rule.text) {
+                // Topics that only say which tool to run ("format with Prettier") are not leaks.
+                let headings = doc.section_path(rule.section);
+                for topic in catalog
+                    .matches_in(&rule.text, &headings)
+                    .into_iter()
+                    .filter(|t| t.restates)
+                {
                     let by = topic.covered_by(&rule.text, &configured);
                     let Some(first) = by.first() else { continue };
                     let names: Vec<&str> = by.iter().map(|e| e.name.as_str()).collect();
@@ -131,18 +137,87 @@ mod tests {
     }
 
     #[test]
-    fn named_formatter_rule() {
+    fn naming_the_formatter_to_run_is_not_a_leak() {
+        // cal.com "Use Biome for formatting and linting"; airflow "format ... with ruff";
+        // rust-lang/rust "use ./x fmt; do not invoke rustfmt directly".
         let f = check(
             &LintLeakage,
             &[
                 (".prettierrc", "{}"),
                 (
                     "AGENTS.md",
-                    "- Always format code with Prettier.\n- Always format Python with Black.\n",
+                    "- Always format code with Prettier.\n- Use Biome for formatting and linting.\n",
                 ),
             ],
         );
-        assert_eq!(f.len(), 1);
-        assert!(f[0].snippet.contains("Prettier"));
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    // Near misses below come from findings labeled wrong in notebooks/results/labels.csv.
+
+    #[test]
+    fn commit_message_length_is_not_code_line_length() {
+        // PostHog AGENTS.md "Commits and Pull Requests > Rules".
+        let f = check(
+            &LintLeakage,
+            &[
+                (".editorconfig", "[*]\nmax_line_length = 120\n"),
+                (
+                    "AGENTS.md",
+                    "## Commits and Pull Requests\n\n### Rules\n\n- Keep the first line under 72 characters\n",
+                ),
+            ],
+        );
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn code_line_length_rule_is_still_flagged() {
+        let f = check(
+            &LintLeakage,
+            &[
+                (".editorconfig", "[*]\nmax_line_length = 120\n"),
+                (
+                    "AGENTS.md",
+                    "## Style\n\n- Keep lines under 120 characters.\n",
+                ),
+            ],
+        );
+        assert_eq!(f.len(), 1, "{f:?}");
+    }
+
+    #[test]
+    fn warn_only_lint_does_not_enforce() {
+        // cal.com: biome.json sets noExplicitAny to warn.
+        let f = check(
+            &LintLeakage,
+            &[
+                (
+                    "biome.json",
+                    r#"{"linter":{"rules":{"suspicious":{"noExplicitAny":"warn"}}}}"#,
+                ),
+                ("AGENTS.md", "- Never use the any type.\n"),
+            ],
+        );
+        assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn scope_rules_about_dead_code_are_not_the_unused_lint() {
+        // withastro/astro AGENTS.md.
+        let f = check(
+            &LintLeakage,
+            &[
+                (
+                    "eslint.config.js",
+                    "export default [{ rules: { 'no-unused-vars': 'error' } }];",
+                ),
+                (
+                    "AGENTS.md",
+                    "- If you notice unrelated dead code, mention it - don't delete it.\n- Don't remove pre-existing dead code unless asked.\n",
+                ),
+            ],
+        );
+        assert!(f.is_empty(), "{f:?}");
     }
 }
