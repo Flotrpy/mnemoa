@@ -1,13 +1,21 @@
 name: Release
 
-# Push a tag like v0.1.0 (matching [workspace.package] version in Cargo.toml) to build
-# prebuilt binaries and publish a GitHub release. Run it by hand (workflow_dispatch) for a
-# dry run that builds and packages every target without publishing. Nothing is published
-# to crates.io, PyPI or a container registry.
+# Two ways to publish a GitHub release with prebuilt binaries:
+# - push a tag like v0.1.0 that matches [workspace.package] version in Cargo.toml, or
+# - Actions > Release > Run workflow on `main` with "Publish" ticked: the release is tagged
+#   at that commit, named after the Cargo.toml version.
+# A manual run without "Publish" (or from any other branch or tag) is a dry run that builds
+# and packages every target without publishing. Nothing is published to crates.io, PyPI or
+# a container registry.
 on:
   push:
     tags: ["v*"]
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the release (main only). Leave unticked for a dry run.
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -21,8 +29,27 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.version.outputs.tag }}
+      publish: ${{ steps.mode.outputs.publish }}
     steps:
       - uses: actions/checkout@v4
+      - name: decide whether this run publishes
+        id: mode
+        env:
+          EVENT: ${{ github.event_name }}
+          PUBLISH_INPUT: ${{ inputs.publish }}
+        run: |
+          publish=false
+          if [ "$EVENT" = "push" ] && [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            publish=true
+          elif [ "$EVENT" = "workflow_dispatch" ] && [ "$PUBLISH_INPUT" = "true" ]; then
+            if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+              echo "::error::Publish is only allowed from main (this run is on $GITHUB_REF)"
+              exit 1
+            fi
+            publish=true
+          fi
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+          echo "publish: $publish"
       - name: tag matches the workspace version
         id: version
         run: |
@@ -39,6 +66,20 @@ jobs:
         run: |
           if ! grep -q "^## $TAG\b" CHANGELOG.md; then
             echo "::error::CHANGELOG.md has no '## $TAG' section"
+            exit 1
+          fi
+      - name: no release exists for the version yet
+        if: github.event_name == 'workflow_dispatch' && steps.mode.outputs.publish == 'true'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null; then
+            echo "::error::tag $TAG already exists; bump [workspace.package] version in Cargo.toml and add a CHANGELOG.md section first"
+            exit 1
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::error::a release named $TAG already exists"
             exit 1
           fi
 
@@ -93,12 +134,14 @@ jobs:
 
   release:
     name: publish GitHub release
-    needs: build
-    # Only a tag push publishes; a manual run is a dry run even when started from a tag.
-    if: github.event_name == 'push' && github.ref_type == 'tag'
+    needs: [check, build]
+    # A tag push, or a manual run on main with "Publish" ticked; anything else is a dry run.
+    if: needs.check.outputs.publish == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      TAG: ${{ needs.check.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -107,7 +150,7 @@ jobs:
           merge-multiple: true
       - name: release notes from CHANGELOG.md
         run: |
-          awk -v tag="## $GITHUB_REF_NAME" '
+          awk -v tag="## $TAG" '
             index($0, tag) == 1 { found = 1; next }
             found && /^## / { exit }
             found { print }
@@ -117,7 +160,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/* \
-            --title "mnemoa $GITHUB_REF_NAME" \
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            # The pushed tag already exists.
+            target=(--verify-tag)
+          else
+            # Creates the tag at the commit this run built.
+            target=(--target "$GITHUB_SHA")
+          fi
+          gh release create "$TAG" dist/* \
+            --title "mnemoa $TAG" \
             --notes-file notes.md \
-            --verify-tag
+            "${target[@]}"
