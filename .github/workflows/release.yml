@@ -1,0 +1,122 @@
+name: Release
+
+# Push a tag like v0.1.0 (matching [workspace.package] version in Cargo.toml) to build
+# prebuilt binaries and publish a GitHub release. Run it by hand (workflow_dispatch) for a
+# dry run that builds and packages every target without publishing. Nothing is published
+# to crates.io, PyPI or a container registry.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: check tag and changelog
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: tag matches the workspace version
+        id: version
+        run: |
+          version=$(sed -n '/^\[workspace.package\]/,/^\[/s/^version = "\(.*\)"/\1/p' Cargo.toml)
+          tag="v$version"
+          if [ "$GITHUB_REF_TYPE" = "tag" ] && [ "$tag" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match Cargo.toml version $version"
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - name: changelog has a section for the version
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if ! grep -q "^## $TAG\b" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no '## $TAG' section"
+            exit 1
+          fi
+
+  build:
+    name: build (${{ matrix.target }})
+    needs: check
+    runs-on: ${{ matrix.os }}
+    env:
+      TAG: ${{ needs.check.outputs.tag }}
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+          - os: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+          - os: macos-latest
+            target: aarch64-apple-darwin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+      - name: build
+        run: >
+          cargo build --release --locked --target ${{ matrix.target }}
+          -p mnemoa-cli -p mnemoa-api --features mnemoa-cli/llm,mnemoa-api/llm
+      - name: smoke test
+        run: |
+          bin=target/${{ matrix.target }}/release
+          "$bin/mnemoa" --version | grep -q "${TAG#v}"
+          "$bin/mnemoa" scan .
+          test -x "$bin/mnemoa-api"
+      - name: package
+        run: |
+          name="mnemoa-${TAG}-${{ matrix.target }}"
+          mkdir -p "dist/$name"
+          cp "target/${{ matrix.target }}/release/mnemoa" "target/${{ matrix.target }}/release/mnemoa-api" \
+            LICENSE README.md CHANGELOG.md "dist/$name/"
+          tar -C dist -czf "dist/$name.tar.gz" "$name"
+          (cd dist && shasum -a 256 "$name.tar.gz" > "$name.tar.gz.sha256")
+          rm -r "dist/$name"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    name: publish GitHub release
+    needs: build
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: release notes from CHANGELOG.md
+        run: |
+          awk -v tag="## $GITHUB_REF_NAME" '
+            index($0, tag) == 1 { found = 1; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          test -s notes.md
+      - name: create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --title "mnemoa $GITHUB_REF_NAME" \
+            --notes-file notes.md \
+            --verify-tag
