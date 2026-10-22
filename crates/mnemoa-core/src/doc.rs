@@ -201,6 +201,23 @@ static NEGATIVE_RE: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 impl Doc {
+    /// Titles of the heading `section` and the headings enclosing it, outermost first.
+    pub fn section_path(&self, section: Option<usize>) -> Vec<&str> {
+        let Some(i) = section.filter(|i| *i < self.headings.len()) else {
+            return Vec::new();
+        };
+        let mut path = vec![self.headings[i].text.as_str()];
+        let mut level = self.headings[i].level;
+        for h in self.headings[..i].iter().rev() {
+            if h.level < level {
+                path.push(h.text.as_str());
+                level = h.level;
+            }
+        }
+        path.reverse();
+        path
+    }
+
     /// Parse `text` as the document at relative path `path`.
     pub fn parse(path: &str, text: &str) -> Doc {
         let front_matter = frontmatter::split(text);

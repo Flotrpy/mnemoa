@@ -935,13 +935,18 @@ pub fn plan_with(
                 });
             };
 
-            let topics = catalog.matches(&rule.text);
+            let topics = catalog.matches_in(&rule.text, &doc.section_path(rule.section));
             let mut handled = false;
             for topic in topics {
                 let covered = topic
                     .covered_by(&rule.text, &p.configured)
                     .first()
                     .map(|e| e.id.clone());
+                if covered.is_some() && !topic.restates {
+                    // The rule tells the agent which configured tool to run; keep the prose.
+                    handled = true;
+                    break;
+                }
                 if let Some(enforcer) = covered {
                     let id = p.id(&topic.id);
                     push(
