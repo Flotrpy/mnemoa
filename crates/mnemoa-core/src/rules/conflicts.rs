@@ -161,6 +161,17 @@ fn tool_uses<'a>(docs: &[&'a Doc]) -> Vec<Use<'a>> {
             .filter(|r| r.imperative && r.polarity == Polarity::Do)
         {
             for c in USE_RE.captures_iter(&r.text) {
+                // "Install with `npm i -g x`" names a global tool install, not the project's
+                // package manager.
+                let rest = r.text[c.get(2).map_or(0, |m| m.end())..]
+                    .split('`')
+                    .next()
+                    .unwrap_or("");
+                let mut toks = vec![&c[2]];
+                toks.extend(rest.split_whitespace());
+                if is_global_install(&toks) {
+                    continue;
+                }
                 if let Some(tool) = all_tools.iter().find(|t| **t == c[2].to_lowercase()) {
                     uses.push(Use {
                         doc,
@@ -432,6 +443,24 @@ mod tests {
             ],
         );
         assert!(f.is_empty(), "{f:?}");
+    }
+
+    #[test]
+    fn prose_about_a_global_install_is_not_a_choice() {
+        // electron .github/copilot-instructions.md.
+        let f = check(
+            &ConflictingInstructions,
+            &[
+                ("yarn.lock", ""),
+                (
+                    "AGENTS.md",
+                    "Electron uses `@electron/build-tools` (`e` CLI). Install with `npm i -g @electron/build-tools`.\n- Use npm for dependencies.\n",
+                ),
+            ],
+        );
+        assert_eq!(f.len(), 1, "{f:?}");
+        assert!(f[0].message.contains("yarn.lock"), "{f:?}");
+        assert_eq!(f[0].line, 2);
     }
 
     #[test]
