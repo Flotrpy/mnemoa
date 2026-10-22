@@ -38,6 +38,20 @@ Installing `ast-grep` (`pip install ast-grep-cli`) lets the draft-validation tes
 3. To emit a check when nothing enforces it yet, add a branch to `Planner::emit_topic` in `crates/mnemoa-core/src/promote.rs` that returns artifacts (EditorConfig keys, a TOML key, Prettier JSON, an ast-grep rule, or a pre-commit hook). Merge into existing files and fall back to `Action::Manual` on conflict.
 4. Test with `plan_for(...)` in `promote.rs`: the artifact content, the prose removal and a near miss. If the artifact is an ast-grep rule, check it with real ast-grep.
 
+## How to release
+
+1. On a branch, bump `version` under `[workspace.package]` in `Cargo.toml` and add a `## vX.Y.Z — YYYY-MM-DD` section at the top of `CHANGELOG.md`. That section becomes the release notes. Merge to `main`.
+2. Publish in one of two ways:
+   - **From GitHub:** go to Actions › Release › Run workflow, choose `main`, tick **Publish**, and run. The workflow tags the commit `vX.Y.Z` itself.
+   - **From a clone:** `git tag -a vX.Y.Z -m "mnemoa vX.Y.Z" && git push origin vX.Y.Z`.
+3. Either way, the workflow builds Linux (x86_64, arm64) and macOS (Apple silicon) binaries, smoke-tests them, and publishes a GitHub release with archives, checksums and the changelog section.
+
+What the workflow checks:
+- A run without **Publish** is a dry run: it builds and packages but doesn't publish.
+- It refuses to publish if the version's tag or release already exists, if `CHANGELOG.md` has no section for the version, or if a pushed tag doesn't match `Cargo.toml`.
+
+Releases go to GitHub only; nothing is published to crates.io, PyPI or a container registry.
+
 ## Research claims
 
 `docs/research.md` labels every claim primary, search or unverified. Cite sources, paraphrase, and keep quotes to short phrases.
