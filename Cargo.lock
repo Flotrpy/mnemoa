@@ -2195,7 +2195,7 @@ dependencies = [
 
 [[package]]
 name = "mnemoa-api"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "axum",
@@ -2212,7 +2212,7 @@ dependencies = [
 
 [[package]]
 name = "mnemoa-bench"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "mnemoa-core",
@@ -2223,7 +2223,7 @@ dependencies = [
 
 [[package]]
 name = "mnemoa-cli"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -2240,7 +2240,7 @@ dependencies = [
 
 [[package]]
 name = "mnemoa-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "gix",
  "globset",
