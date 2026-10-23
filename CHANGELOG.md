@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## v0.1.1 — 2026-10-23
+
+Precision fixes for the three rules with the most false positives in v0.1.0. Install as for v0.1.0: download the archive for your platform below, check it with its `.sha256` file, and put `mnemoa` on your `PATH`.
 
 ### Fixed
 

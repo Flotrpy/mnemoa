@@ -36,7 +36,7 @@ Errors are `{"error": "<message>"}` with status `400` (bad input), `403` (outsid
 ```json
 {
   "status": "ok",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "config_source": "defaults+env:MNEMOA_PORT,MNEMOA_ROOT",
   "root": "/srv/repos",
   "allow_write": false,
@@ -51,7 +51,7 @@ Errors are `{"error": "<message>"}` with status `400` (bad input), `403` (outsid
 { "path": "my-repo", "targets": ["claude-code", "codex"], "rules": ["MNA007"], "strict": true }
 // response
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "root": "/srv/repos/my-repo",
   "targets": ["claude-code", "codex"],
   "config_source": "file:/srv/repos/my-repo/.mnemoa.toml",
@@ -100,7 +100,7 @@ Send `"history": false` to skip git history (and with it MNA005), as `scan --no-
 { "path": "my-repo", "base": "origin/main" }
 // response
 {
-  "version": "0.1.0", "root": "/srv/repos/my-repo", "base": "origin/main", "history": true,
+  "version": "0.1.1", "root": "/srv/repos/my-repo", "base": "origin/main", "history": true,
   "items": [{
     "kind": "renamed-in-diff", "severity": "error", "path": "AGENTS.md", "line": 4, "column": 10,
     "reference": "src/old.rs", "message": "`src/old.rs` was renamed to `src/new.rs` since origin/main."
