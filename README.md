@@ -238,7 +238,7 @@ mnemoa --server http://localhost:8080 scan repo   # run against mnemoa-api (path
 # global: --targets claude-code,codex,cursor,copilot,kiro,cline,gemini  --config FILE  --color auto|always|never
 ```
 
-In GitHub Actions: `uses: Flotrpy/mnemoa@v0.1.0` (see [`action.yml`](action.yml)) runs scan and diff-aware drift with annotations.
+In GitHub Actions: `uses: Flotrpy/mnemoa@v0.1.1` (see [`action.yml`](action.yml)) runs scan and diff-aware drift with annotations.
 
 ---
 
@@ -380,7 +380,7 @@ Overall, 86 of 256 labeled findings (33.6%) were correct. MNA005 needs git histo
 - The repos were read a few minutes after the scan, at their newest commit.
 - Raw data is in [notebooks/results/](notebooks/results/).
 
-**Main false-positive causes in v0.1.0.** The first three are fixed on `main` (see below):
+**Main false-positive causes in v0.1.0.** The first three are fixed in v0.1.1 (see below):
 - **MNA008 stale-command:** commands in a nested AGENTS.md are checked against the root `package.json`, not the package the file lives in. Paths and `<placeholder>` arguments are also treated as commands.
 - **MNA004 conflicting-instructions:** `npm install -g pnpm` and `npm run <script>` are read as choosing npm. A "never X" inside a command line is ignored.
 - **MNA002 lint-leakage:** keywords are matched out of context, e.g. a commit-message length limit is taken as code line length. A rule also counts as enforced when the tool is configured but doesn't enforce that rule, or only warns.
@@ -392,7 +392,7 @@ Still to fix:
 - **MNA010 cross-file-divergence:** a CLAUDE.md that tells the agent in prose to read AGENTS.md (rather than importing it) counts as divergence.
 - **MNA003 skill-leakage:** any numbered list of 8+ items is flagged, as are generic "new ..." headings.
 
-#### After fixing MNA002, MNA004 and MNA008 (on `main`, not yet released)
+#### After fixing MNA002, MNA004 and MNA008 (v0.1.1)
 
 On 2026-10-22, 38 of the 77 repositories had a v0.1.0 finding for one of these three rules. I shallow-cloned each one and scanned it at the same commit with the v0.1.0 release binary and with the fixed code:
 
